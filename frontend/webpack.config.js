@@ -4,8 +4,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const apiServerPort = 3000
-
 module.exports = (env, argv) => {
   const { mode } = argv
   const additionalPlugins = mode === 'production' ? [new UglifyJsPlugin()] : [] // Make JS smaller
@@ -62,11 +60,10 @@ module.exports = (env, argv) => {
       }),
       ...additionalPlugins,
     ],
-    devServer: [
-      {
-        context: ['/api/**'],
-        target: `http://localhost:${apiServerPort}`
+    devServer: {
+      proxy: {
+        '/api': 'http://localhost:3000'
       }
-    ]
+    }
   }
 }
