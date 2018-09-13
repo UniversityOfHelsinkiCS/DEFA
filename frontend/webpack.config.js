@@ -60,5 +60,10 @@ module.exports = (env, argv) => {
       }),
       ...additionalPlugins,
     ],
+    devServer: {
+      proxy: {
+        '/api': 'http://localhost:3000'
+      }
+    }
   }
 }
