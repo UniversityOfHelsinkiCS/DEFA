@@ -5,7 +5,7 @@ const RootQuery = new GraphQLObjectType({
   name: 'RootQuery',
   // Models have their queries automatically included
   fields: Object.values(models).reduce(
-    (acc: Object, model: { queries: Object }) => ({ ...acc, ...model.queries }),
+    (acc: object, model: { queries: { queries: object } }) => ({ ...acc, ...model.queries }),
     {}
   )
 })

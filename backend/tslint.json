@@ -12,7 +12,7 @@
              "array-simple"
           ]
        },
-       "arrow-parens": true,
+       "arrow-parens": [true, "ban-single-arg-parens"],
        "arrow-return-shorthand": true,
        "ban-types": {
           "options": [
@@ -90,7 +90,6 @@
        "no-bitwise": true,
        "no-conditional-assignment": true,
        "no-consecutive-blank-lines": true,
-       "no-console": true,
        "no-construct": true,
        "no-debugger": true,
        "no-duplicate-super": true,
@@ -121,7 +120,6 @@
           ]
        },
        "object-literal-shorthand": true,
-       "object-literal-sort-keys": true,
        "one-line": {
           "options": [
              "check-catch",
@@ -141,13 +139,6 @@
              "allow-declarations",
              "allow-named-functions"
           ]
-       },
-       "ordered-imports": {
-          "options": {
-             "import-sources-order": "case-insensitive",
-             "module-source-path": "full",
-             "named-imports-order": "case-insensitive"
-          }
        },
        "prefer-const": true,
        "prefer-for-of": true,

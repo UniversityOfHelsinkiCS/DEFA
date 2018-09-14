@@ -1,6 +1,5 @@
-const express = require('express')   
+import express from 'express'
 import { DefaultController, GraphQLController } from './controllers'
-
 
 const app = express()
 
