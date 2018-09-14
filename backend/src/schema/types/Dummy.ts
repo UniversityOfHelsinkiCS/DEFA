@@ -1,10 +1,15 @@
 // This Dummy type is just for demonstration purposes.
 // Remove this when real types are added.
 
-import { GraphQLObjectType, GraphQLString, GraphQLList } from 'graphql'
+interface IDummy {
+  id: string,
+  name: string
+}
+
+import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
 
 // Dummy data.
-const dummies: Array<{ id: string, name: string }> = [
+const dummies: IDummy[] = [
   { id: '1', name: 'AAA' },
   { id: '2', name: 'BBB' },
   { id: '3', name: 'CCC' }
@@ -36,8 +41,8 @@ const getMany = {
     name: { type: GraphQLString }
   },
   resolve(parent: null, args: { id: string, name: string }) {
-    return dummies.filter(dummy => Object.keys(args).filter(key => args[key]).reduce(
-        (acc, key) => {
+    return dummies.filter((dummy: IDummy) => Object.keys(args).filter((key: string) => args[key]).reduce(
+        (acc: boolean, key: string) => {
           if (dummy[key] !== args[key]) { return false }
           return acc
         },
@@ -47,11 +52,57 @@ const getMany = {
   }
 }
 
+// Define a mutation
+const create = {
+  type,
+  args: {
+    name: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  resolve(parent: null, args: { name: string }) {
+    const newDummy: IDummy = {
+      id: (dummies.length + 1).toString(),
+      name: args.name
+    }
+    dummies.push(newDummy)
+    return newDummy
+  }
+}
+
+const update = {
+  type,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLString) },
+    name: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  resolve(parent: null, args: { id: string, name: string }) {
+    const toUpdate: IDummy | null = dummies.find(dummy => dummy.id === args.id)
+    if (toUpdate) { toUpdate.name = args.name }
+    return toUpdate
+  }
+}
+
+const deleteDummy = {
+  type,
+  args: {
+    id: { type: new GraphQLNonNull(GraphQLString) }
+  },
+  resolve(parent: null, args: { id: string }) {
+    const index: number = dummies.findIndex(dummy => dummy.id === args.id)
+    const toDelete: IDummy | undefined = dummies[index]
+    if (toDelete) { dummies.splice(index, 1) }
+    return toDelete
+  }
+}
+
 // Export the type in the form that schema.ts expects.
 export const Dummy = {
   queries: {
     dummy: getOne,
     dummies: getMany
   },
-  mutations: {}
+  mutations: {
+    createDummy: create,
+    updateDummy: update,
+    deleteDummy
+  }
 }
