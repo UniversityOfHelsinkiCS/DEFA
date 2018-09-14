@@ -2,7 +2,8 @@
 // Remove this when real types are added.
 
 interface IDummy {
-  id: string,
+  [key: string]: string
+  id: string
   name: string
 }
 
@@ -40,7 +41,7 @@ const getMany = {
     id: { type: GraphQLString },
     name: { type: GraphQLString }
   },
-  resolve(parent: null, args: { id: string, name: string }) {
+  resolve(parent: null, args: { [key: string]: string, id: string, name: string }) {
     return dummies.filter((dummy: IDummy) => Object.keys(args).filter((key: string) => args[key]).reduce(
         (acc: boolean, key: string) => {
           if (dummy[key] !== args[key]) { return false }
