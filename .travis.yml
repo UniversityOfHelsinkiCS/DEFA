@@ -17,7 +17,7 @@ jobs:
         - cd frontend
         - npm install
       script:
-        - npm test
+        - npm run lint
     - stage: tests
       cache:
         directories:
@@ -26,4 +26,4 @@ jobs:
         - cd backend
         - npm install
       script:
-        - npm run test-ci
+        - npm run lint
