@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_BASE_PATH } from '../constants'
+import { API_BASE_PATH } from '../constants'
 
 const getAxios = () => axios.create({ baseURL: API_BASE_PATH })
 
@@ -28,8 +28,8 @@ export default (route, prefix, data, method = 'get', query) => (
       method,
       data,
       prefix,
-      query,
-    },
+      query
+    }
   }
 )
 
@@ -38,7 +38,7 @@ export const handleRequest = store => next => async (action) => {
   const { requestSettings } = action
   if (requestSettings) {
     const {
-      route, method, data, prefix, query,
+      route, method, data, prefix, query
     } = requestSettings
     try {
       const res = await callApi(route, method, data, store.getState().user)

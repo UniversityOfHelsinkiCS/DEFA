@@ -11,13 +11,13 @@ export default (state = { data: [] }, action) => {
     case 'GET_SOMETHING_ATTEMPT':
       return {
         ...state,
-        pending: true,
+        pending: true
       }
     case 'GET_SOMETHING_FAILURE':
       return {
         ...state,
         pending: false,
-        error: true,
+        error: true
       }
     case 'GET_SOMETHING_SUCCESS':
       return {
