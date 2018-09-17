@@ -9,17 +9,17 @@ module.exports = (env, argv) => {
   const additionalPlugins = mode === 'production' ? [new UglifyJsPlugin()] : [] // Make JS smaller
   const additionalOptimizations = mode === 'production' ? {
     splitChunks: {
-      chunks: 'all',
+      chunks: 'all'
     },
     minimizer: [
       // Make CSS smaller
-      new OptimizeCssAssetsPlugin(),
-    ],
+      new OptimizeCssAssetsPlugin()
+    ]
   } : {}
   return {
     entry: [
       '@babel/polyfill', // babel-polyfill so we don't need to import it anywhere
-      './src',
+      './src'
     ],
     module: {
       rules: [
@@ -27,38 +27,38 @@ module.exports = (env, argv) => {
           test: /\.js$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader',
-          },
+            loader: 'babel-loader'
+          }
         },
         { // Load CSS files
           test: /\.css$/,
           use: [
             MiniCssExtractPlugin.loader,
-            'css-loader',
-          ],
+            'css-loader'
+          ]
         },
         { // Load other files
           test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-          use: ['file-loader'],
-        },
-      ],
+          use: ['file-loader']
+        }
+      ]
     },
     optimization: {
-      ...additionalOptimizations,
+      ...additionalOptimizations
     },
     plugins: [
       // Skip the part where we would make a html template
       new HtmlWebpackPlugin({
         inject: false,
         template: htmlTemplate,
-        appMountId: 'root',
+        appMountId: 'root'
       }),
       // Extract css
       new MiniCssExtractPlugin({
         filename: '[name].css',
-        chunkFilename: '[name]-[id].css',
+        chunkFilename: '[name]-[id].css'
       }),
-      ...additionalPlugins,
+      ...additionalPlugins
     ],
     devServer: {
       proxy: {
