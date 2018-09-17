@@ -1,17 +1,13 @@
 language: node_js
 node_js:
   - "8"
+install:
+  - cd frontend && npm install
+script:
+  - npm run lint
+
 matrix:
-  before_install:
-    - cd frontend
-    - npm install
-  script:
-   - npm run lint
-  env:
-    global:
-      - JOBS=1
-  before_install:
-    - cd backend
-    - npm install
+  install:
+    - cd backend && npm install
   script:
     - npm run lint
