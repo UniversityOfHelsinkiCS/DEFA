@@ -1,13 +1,29 @@
+sudo: required
+dist: trusty
+notifications:
+  email: false
 language: node_js
 node_js:
-  - "8"
-install:
-  - cd frontend && npm install
-script:
-  - npm run lint
-
-matrix:
-  install:
-    - cd backend && npm install
-  script:
-    - npm run lint
+  - '8'
+before_install:
+  - npm install -g npm
+jobs:
+  include:
+    - stage: tests
+      cache:
+        directories:
+          - frontend/node_modules
+      install:
+        - cd frontend
+        - npm install
+      script:
+        - npm test
+    - stage: tests
+      cache:
+        directories:
+          - backend/node_modules
+      install:
+        - cd backend
+        - npm install
+      script:
+        - npm run test-ci
