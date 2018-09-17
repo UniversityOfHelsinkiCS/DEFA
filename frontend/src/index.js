@@ -8,7 +8,7 @@ import App from './components/container/App'
 
 render(
   <Provider store={store}>
-      <App />
+    <App />
   </Provider>,
   document.getElementById('root'),
 )
