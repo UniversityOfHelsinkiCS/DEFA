@@ -7,7 +7,7 @@
   "scripts": {
     "build": "rimraf dist && webpack ---mode production",
     "dev": "webpack-dev-server --mode development --hot",
-    "lint": "eslint ./ --ext .js",
+    "lint": "eslint ./src --ext .js",
     "precommit": "npm run lint",
     "prepush": "npm run lint",
     "start": "serve -s -l 5000 dist",
