@@ -16,19 +16,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-<<<<<<< HEAD
     "body-parser": "^1.18.3",
-    "express": "^4.16.3",
-    "express-graphql": "^0.6.12",
-    "graphql": "^14.0.2",
     "saml2-js": "^2.0.3",
-=======
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "graphql": "^14.0.2",
     "mongoose": "^5.2.15",
->>>>>>> trunk
     "tslint": "^5.11.0"
   },
   "devDependencies": {
