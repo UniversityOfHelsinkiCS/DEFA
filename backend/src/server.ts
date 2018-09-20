@@ -1,9 +1,6 @@
 import express from 'express'
-import dotenv from 'dotenv'
 import { DefaultController, GraphQLController } from './controllers'
 import { connect } from './mongo/connection'
-
-dotenv.config()
 
 const app = express()
 

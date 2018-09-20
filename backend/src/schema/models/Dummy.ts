@@ -1,7 +1,7 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Document, Model } from 'mongoose'
 
-const schema = new Schema({
+const schema: Schema = new Schema({
   name: String
 })
 
-export const DummyModel = model('Dummy', schema)
+export const DummyModel: Model<Document> = model('Dummy', schema)
