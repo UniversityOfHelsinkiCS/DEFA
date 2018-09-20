@@ -8,8 +8,8 @@ const options: ConnectionOptions = {
   authSource: 'admin',
   user: process.env.DATABASE_USER,
   pass: process.env.DATABASE_PASS,
-  dbName: process.env.DATABASE_NAME
+  dbName: process.env.NODE_ENV === 'test' ? process.env.TEST_DATABASE_NAME : process.env.DATABASE_NAME
 }
-export const connect: () => Promise<typeof mongoose> = (
-  () => mongoose.connect(`mongodb://${process.env.DATABASE_URI}`, options)
+export const connect: (extraOptions?: ConnectionOptions) => Promise<typeof mongoose> = (
+  (extraOptions = {}) => mongoose.connect(`mongodb://${process.env.DATABASE_URI}`, { ...options, ...extraOptions})
 )
