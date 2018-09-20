@@ -3,12 +3,7 @@
 
 import { DummyModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
-
-interface IDummy {
-  [key: string]: string
-  id: string
-  name: string
-}
+import { IEditableDummyDocument, IQuery } from './interface'
 
 // Defining the Dummy type.
 const type = new GraphQLObjectType({
@@ -20,16 +15,15 @@ const type = new GraphQLObjectType({
 })
 
 // Defining a query.
-const getOne = {
+const getOne: IQuery = {
   type,
   args: { id: { type: GraphQLString } },
   resolve(parent: null, args: { id: string }) {
-    // For most types this would be some kind of database query.
     return DummyModel.findById(args.id)
   }
 }
 
-const getMany = {
+const getMany: IQuery = {
   type: new GraphQLList(type),
   args: {
     id: { type: GraphQLString },
@@ -37,19 +31,11 @@ const getMany = {
   },
   resolve(parent: null, args: { [key: string]: string, id: string, name: string }) {
     return DummyModel.find({})
-    /* return dummies.filter((dummy: IDummy) => Object.keys(args).filter((key: string) => args[key]).reduce(
-        (acc: boolean, key: string) => {
-          if (dummy[key] !== args[key]) { return false }
-          return acc
-        },
-        true
-      )
-    )*/
   }
 }
 
 // Define a mutation
-const create = {
+const create: IQuery = {
   type,
   args: {
     name: { type: new GraphQLNonNull(GraphQLString) }
@@ -60,21 +46,21 @@ const create = {
   }
 }
 
-const update = {
+const update: IQuery = {
   type,
   args: {
     id: { type: new GraphQLNonNull(GraphQLString) },
     name: { type: new GraphQLNonNull(GraphQLString) }
   },
   async resolve(parent: null, args: { id: string, name: string }) {
-    const toUpdate = await DummyModel.findById(args.id)
+    const toUpdate: IEditableDummyDocument = await DummyModel.findById(args.id)
     if (!toUpdate) { return null }
     toUpdate.name = args.name
     return toUpdate.save()
   }
 }
 
-const deleteDummy = {
+const deleteDummy: IQuery = {
   type,
   args: {
     id: { type: new GraphQLNonNull(GraphQLString) }
