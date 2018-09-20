@@ -43,7 +43,8 @@ navigate to backend/
 
 configure the .env file to include the following fields
 
-```DATABASE_URI=localhost:27017
+```
+DATABASE_URI=localhost:27017
 DATABASE_USER=user
 DATABASE_PASS=pass
 DATABASE_NAME=db
