@@ -2,7 +2,7 @@ import express from 'express'
 import { DefaultController, GraphQLController } from './controllers'
 import { connect } from './mongo/connection'
 
-const app = express()
+const app: express.Express = express()
 
 const port: number = 3000
 
