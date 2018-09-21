@@ -7,7 +7,7 @@ type IqueryReducer = (field: string) => (
   type: { [field: string]: IQueries }
 ) => IQueries
 
-const queryReducer: IqueryReducer = (field: string) => (
+export const queryReducer: IqueryReducer = (field: string) => (
   acc: IQueries,
   type: { [field: string]: IQueries }
 ) => ({ ...acc, ...type[field] })

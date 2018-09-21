@@ -1,4 +1,4 @@
-import schema from '../../src/schema/schema'
+import schema, { queryReducer } from '../../src/schema/schema'
 import * as types from '../../src/schema/types'
 
 describe('GraphQL schema', () => {
@@ -7,7 +7,7 @@ describe('GraphQL schema', () => {
       Object.keys(schema.getQueryType().getFields())
     ).toMatchObject(
       Object.keys(Object.values(types).reduce(
-        (acc, type) => ({ ...acc, ...type.queries }),
+        queryReducer('queries'),
         {}
       ))
     )
@@ -18,7 +18,7 @@ describe('GraphQL schema', () => {
       Object.keys(schema.getMutationType().getFields())
     ).toMatchObject(
       Object.keys(Object.values(types).reduce(
-        (acc, type) => ({ ...acc, ...type.mutations }),
+        queryReducer('mutations'),
         {}
       ))
     )
