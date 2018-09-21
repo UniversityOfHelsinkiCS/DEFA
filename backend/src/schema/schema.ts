@@ -12,7 +12,7 @@ const queryReducer: IqueryReducer = (field: string) => (
   type: { [field: string]: IQueries }
 ) => ({ ...acc, ...type[field] })
 
-const RootQuery = new GraphQLObjectType({
+const RootQuery: GraphQLObjectType = new GraphQLObjectType({
   name: 'RootQuery',
   // Types have their queries automatically included
   fields: Object.values(types).reduce(
@@ -21,7 +21,7 @@ const RootQuery = new GraphQLObjectType({
   )
 })
 
-const Mutation = new GraphQLObjectType({
+const Mutation: GraphQLObjectType = new GraphQLObjectType({
   name: 'Mutation',
   // Types have their mutations automatically included
   fields: Object.values(types).reduce(
@@ -30,7 +30,7 @@ const Mutation = new GraphQLObjectType({
   )
 })
 
-const schema = new GraphQLSchema({
+const schema: GraphQLSchema = new GraphQLSchema({
   query: RootQuery,
   mutation: Mutation
 })
