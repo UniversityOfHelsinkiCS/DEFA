@@ -2,25 +2,35 @@ import { GraphQLSchema, GraphQLObjectType, GraphQLList } from 'graphql'
 import * as types from './types' // All types are imported.
 import { IQueries } from './types/interface'
 
-const RootQuery = new GraphQLObjectType({
+type IqueryReducer = (field: string) => (
+  acc: IQueries,
+  type: { [field: string]: IQueries }
+) => IQueries
+
+export const queryReducer: IqueryReducer = (field: string) => (
+  acc: IQueries,
+  type: { [field: string]: IQueries }
+) => ({ ...acc, ...type[field] })
+
+const RootQuery: GraphQLObjectType = new GraphQLObjectType({
   name: 'RootQuery',
   // Types have their queries automatically included
   fields: Object.values(types).reduce(
-    (acc: IQueries, type: { queries: IQueries }) => ({ ...acc, ...type.queries }),
+    queryReducer('queries'),
     {}
   )
 })
 
-const Mutation = new GraphQLObjectType({
+const Mutation: GraphQLObjectType = new GraphQLObjectType({
   name: 'Mutation',
   // Types have their mutations automatically included
   fields: Object.values(types).reduce(
-    (acc: IQueries, type: { mutations: IQueries }) => ({ ...acc, ...type.mutations }),
+    queryReducer('mutations'),
     {}
   )
 })
 
-const schema = new GraphQLSchema({
+const schema: GraphQLSchema = new GraphQLSchema({
   query: RootQuery,
   mutation: Mutation
 })

@@ -59,6 +59,19 @@ npm i
 npm run dev
 ```
 
+### Backend tests
+
+Add the following line to the .env file.
+
+```
+TEST_DATABASE_NAME=test
+```
+
+run
+
+```
+npm test
+```
 
 ### Frontend
 
