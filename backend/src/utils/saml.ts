@@ -36,9 +36,9 @@ const sp_options: Isp_options = {
 
 // tslint:disable-next-line:variable-name
 const idp_options = {
-  sso_login_url: 'http://localhost:4000/saml/auth',
-  sso_logout_url: 'http://localhost:4000/saml/auth',
-  certificates: [fs.readFileSync('./src/utils/cert.pem').toString()]
+  sso_login_url: 'http://localhost:7000',
+  sso_logout_url: 'http://localhost:7000',
+  certificates: [fs.readFileSync('./src/utils/idp-public-cert.pem').toString()]
 }
 
 export const idp = new saml2.IdentityProvider(idp_options)

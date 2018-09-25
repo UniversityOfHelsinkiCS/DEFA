@@ -18,12 +18,9 @@ router.post('/assert', (req, res) => {
   // tslint:disable-next-line:variable-name
   sp.post_assert(idp, options, (err: object, saml_response: object) => {
     if (err != null) {
-      console.log(err)
+      console.log(err, idp, options)
     }
-    return res.sendStatus(500)
-
-    console.log(saml_response)
-    res.send('Hello #{saml_response.user.name_id}!')
+    res.send(`Hello!`)
   })
 })
 

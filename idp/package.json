@@ -1,0 +1,16 @@
+{
+  "name": "idp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "idp.js",
+  "dependencies": {
+    "saml-idp": "^1.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node idp.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
