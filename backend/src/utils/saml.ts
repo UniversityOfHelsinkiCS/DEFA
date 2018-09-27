@@ -1,5 +1,7 @@
 import saml2 from 'saml2-js'
 import fs from 'fs'
+import dotenv from 'dotenv'
+dotenv.config()
 
 // tslint:disable-next-line:class-name
 interface Isp_options {
