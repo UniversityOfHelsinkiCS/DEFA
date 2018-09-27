@@ -22,8 +22,39 @@ jobs:
       cache:
         directories:
           - backend/node_modules
+      before_install:
+        - >
+            printf "version: '2'\nservices:\n    mongodb:\n        image: mongo:latest\n        container_name: "mongodb"\n        environment:\n          - MONGO_INITDB_ROOT_USERNAME=travis\n          - MONGO_INITDB_ROOT_PASSWORD=travispass\n          - MONGO_INITDB_DATABASE=db\n          - MONGO_DATA_DIR=/data/db\n          - MONGO_LOG_DIR=/dev/null\n        volumes:\n          - ./data/db:/data/db\n        ports:\n            - 27017:27017\n        command: mongod --smallfiles --logpath=/dev/null" >> docker-compose.yml
+        - docker-compose up -d
       install:
         - cd backend
         - npm install
       script:
+        - npm test
         - npm run lint
+      env:
+        - DATABASE_URI=localhost:27017
+        - DATABASE_USER=travis
+        - DATABASE_PASS=travispass
+        - TEST_DATABASE_NAME=test
+services:
+ - docker
+after_success:
+  - cd ../frontend
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-frontend:staging ."
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-frontend:staging"
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker build -t toska/defa-frontend:latest ."
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker push toska/defa-frontend:latest"
+  - cd ../backend
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-backend:staging ."
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-backend:staging"
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker build -t toska/defa-backend:latest ."
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker push toska/defa-backend:latest"
+  - cd ../idp
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-backend:idp ."
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-backend:idp"
