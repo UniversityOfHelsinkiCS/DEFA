@@ -37,3 +37,24 @@ jobs:
         - DATABASE_USER=travis
         - DATABASE_PASS=travispass
         - TEST_DATABASE_NAME=test
+services:
+ - docker
+after_success:
+  - cd ../frontend
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-frontend:staging ."
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-frontend:staging"
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker build -t toska/defa-frontend:latest ."
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker push toska/defa-frontend:latest"
+  - cd ../backend
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-backend:staging ."
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-backend:staging"
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker build -t toska/defa-backend:latest ."
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker push toska/defa-backend:latest"
+  - cd ../idp
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-backend:idp ."
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
+  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-backend:idp"
