@@ -15,7 +15,7 @@ export interface Irelay {
 const allowedRedirects: RegExp[] = process.env.ALLOWED_REDIRECTS.split(',').map(
   (str: string): RegExp => str[0] === '^' ? RegExp(str) : RegExp(`^${str}`)
 )
-const defaultRedirect: string = process.env.DEFAULT_REDIRECT
+export const defaultRedirect: string = '/todo-404-page'
 const validateRedirect = (url: string | void): boolean => url ? allowedRedirects.reduce(
   (acc: boolean, regex: RegExp) => acc || Boolean(url.match(regex)),
   false

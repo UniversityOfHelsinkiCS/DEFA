@@ -48,6 +48,8 @@ DATABASE_URI=localhost:27017
 DATABASE_USER=user
 DATABASE_PASS=pass
 DATABASE_NAME=db
+SECRET=long0string1of2random3alphanumerical4characters5
+ALLOWED_REDIRECTS=https://localhost,http://localhost
 ```
 
 Make sure the fields in .env match the environment varables set in the docker-compose.yml file for the database.

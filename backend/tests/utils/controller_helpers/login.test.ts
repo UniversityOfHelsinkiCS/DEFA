@@ -1,7 +1,7 @@
 import { URL } from 'url'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
-import { responseUrl } from '../../../src/utils/controller_helpers/login'
+import { responseUrl, defaultRedirect } from '../../../src/utils/controller_helpers/login'
 
 dotenv.config()
 
@@ -71,6 +71,6 @@ describe('responseUrl function', () => {
 
   it('uses the default redirect when no redirect url is provided by relay.', () => {
     const urlString = responseUrl(samlResponse, { ...relay, redirect_url: undefined })
-    expect(urlString).toMatch(RegExp(`^${process.env.DEFAULT_REDIRECT}`))
+    expect(urlString).toMatch(RegExp(`^${defaultRedirect}`))
   })
 })
