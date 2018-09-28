@@ -28,7 +28,7 @@ const sp_options: Isp_options = {
   entity_id: 'http://localhost:3000/',
   private_key: fs.readFileSync('./src/utils/key.pem').toString(),
   certificate: fs.readFileSync('./src/utils/cert.pem').toString(),
-  assert_endpoint: 'http://localhost:3000/api/assert',
+  assert_endpoint: 'http://localhost:3000/api/login/assert',
   force_authn: true,
   auth_context: { comparison: 'exact', class_refs: ['urn:oasis:names:tc:SAML:1.0:am:password'] },
   nameid_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',

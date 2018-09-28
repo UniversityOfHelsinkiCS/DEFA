@@ -1,2 +1,2 @@
-export * from './defaultController'
+export * from './loginController'
 export * from './graphQLController'

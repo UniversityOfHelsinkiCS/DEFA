@@ -15,7 +15,7 @@ class Login extends PureComponent {
   render() {
     return (
       <div>
-        <a href="http://127.0.0.1:3000/api?redirect_url=http://localhost:8080/login">Kirjaudu sisään</a>
+        <a href="http://127.0.0.1:3000/api/login?redirect_url=http://localhost:8080/login">Kirjaudu sisään</a>
       </div>
     )
   }
