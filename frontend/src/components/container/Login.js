@@ -7,11 +7,14 @@ import { parseUser } from '../../util/actions/user'
 
 class Login extends PureComponent {
   componentDidMount() {
-    const { location, dispatchParseUser } = this.props
+    const { location, dispatchParseUser, token } = this.props
     const queryParams = parseQueryParams(location).query_params
     if (queryParams.token) {
       window.localStorage.setItem('DEFA-token', queryParams.token)
-      dispatchParseUser()
+    }
+    const storageToken = window.localStorage.getItem('DEFA-token')
+    if (storageToken) {
+      if (storageToken !== token) { dispatchParseUser() }
     }
   }
 
@@ -40,15 +43,18 @@ Login.propTypes = {
   user: PropTypes.shape({
     name_id: PropTypes.string.isRequired
   }),
-  dispatchParseUser: PropTypes.func.isRequired
+  dispatchParseUser: PropTypes.func.isRequired,
+  token: PropTypes.string
 }
 
 Login.defaultProps = {
-  user: null
+  user: null,
+  token: null
 }
 
 const mapStateToProps = state => ({
-  user: state.user.user
+  user: state.user.user,
+  token: state.user.token
 })
 
 const mapDispatchToProps = {
