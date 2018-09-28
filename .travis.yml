@@ -37,6 +37,8 @@ jobs:
         - DATABASE_USER=travis
         - DATABASE_PASS=travispass
         - TEST_DATABASE_NAME=test
+        - DEFAULT_REDIRECT=/default
+        - ALLOWED_REDIRECTS=https://www.example.com/login
 services:
  - docker
 after_success:
