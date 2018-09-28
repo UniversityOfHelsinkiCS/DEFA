@@ -1,4 +1,4 @@
-const parseQueryParams = (location) => {
+const parseQueryParams = location => {
   if (location.search[0] !== '?') {
     return {
       ...location,
