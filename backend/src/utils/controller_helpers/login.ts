@@ -10,7 +10,6 @@ export interface ISamlResponse {
 export interface Irelay {
   redirect_url?: string
 }
-
 // Possible redirects must be limited so as not to allow reflected XSS attacks.
 const allowedRedirects: RegExp[] = process.env.ALLOWED_REDIRECTS.split(',').map(
   (str: string): RegExp => str[0] === '^' ? RegExp(str) : RegExp(`^${str}`)

@@ -25,10 +25,10 @@ interface Isp_options {
 
 // tslint:disable-next-line:variable-name
 const sp_options: Isp_options = {
-  entity_id: 'http://localhost:3000/',
+  entity_id: process.env.ENTITY_ID,
   private_key: fs.readFileSync('./src/utils/key.pem').toString(),
   certificate: fs.readFileSync('./src/utils/cert.pem').toString(),
-  assert_endpoint: 'http://localhost:3000/api/login/assert',
+  assert_endpoint: process.env.ASSERT_ENDPOINT,
   force_authn: true,
   auth_context: { comparison: 'exact', class_refs: ['urn:oasis:names:tc:SAML:1.0:am:password'] },
   nameid_format: 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
@@ -38,8 +38,8 @@ const sp_options: Isp_options = {
 
 // tslint:disable-next-line:variable-name
 const idp_options = {
-  sso_login_url: 'http://localhost:7000',
-  sso_logout_url: 'http://localhost:7000',
+  sso_login_url: process.env.SSO_LOGIN_URL,
+  sso_logout_url: process.env.SSO_LOGOUT_URL,
   certificates: [fs.readFileSync('./src/utils/idp-public-cert.pem').toString()]
 }
 
