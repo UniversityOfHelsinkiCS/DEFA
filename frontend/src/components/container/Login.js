@@ -20,8 +20,7 @@ class Login extends PureComponent {
 
   render() {
     const { user } = this.props
-    const { API_URL, REDIRECT_URL } = process.env
-    const url = `${API_URL}/login?redirect_url=${REDIRECT_URL}`
+    const url = `${process.env.API_URL}/login?redirect_url=${process.env.REDIRECT_URL}`
     if (!user) {
       return (
         <div>

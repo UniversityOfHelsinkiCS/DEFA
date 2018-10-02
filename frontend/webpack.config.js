@@ -7,10 +7,9 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const dotenv = require('dotenv')
 
 module.exports = (env, argv) => {
-  const { mode } = argv
+ const { mode } = argv
   const additionalPlugins = mode === 'production' ? [new UglifyJsPlugin()] : [] // Make JS smaller
   env = dotenv.config().parsed
-
   const envKeys = Object.keys(env).reduce((prev, next) => {
     prev[`process.env.${next}`] = JSON.stringify(env[next])
     return prev
@@ -24,6 +23,7 @@ module.exports = (env, argv) => {
       new OptimizeCssAssetsPlugin()
     ]
   } : {}
+
   return {
     entry: [
       '@babel/polyfill', // babel-polyfill so we don't need to import it anywhere
