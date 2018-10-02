@@ -33,7 +33,7 @@ export default (route, prefix, data, method = 'get', query) => (
   }
 )
 
-export const handleRequest = store => next => async (action) => {
+export const handleRequest = store => next => async action => {
   next(action)
   const { requestSettings } = action
   if (requestSettings) {

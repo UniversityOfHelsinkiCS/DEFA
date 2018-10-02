@@ -6,10 +6,16 @@
     "browser": true
   },
   "rules": {
+    "arrow-parens": [
+      2,
+      "as-needed"
+    ],
     "comma-dangle": [
       2,
       "never"
     ],
+    "no-console": 0,
+    "no-extra-parens": 2,
     "no-param-reassign": [
       2,
       {

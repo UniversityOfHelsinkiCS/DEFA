@@ -1,6 +1,8 @@
 const { runServer } = require('saml-idp');
+const { dotenv } = require('dotenv').config()
 
+console.log(process.env.ASCURL, process.env.AUDIENCE)
 runServer({
-  acsUrl: `http://localhost:3000/api/assert`,
-  audience: `http://localhost:3000/`,
+  acsUrl: process.env.ASCURL,
+  audience: process.env.AUDIENCE,
 });

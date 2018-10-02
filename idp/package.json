@@ -4,6 +4,7 @@
   "description": "",
   "main": "idp.js",
   "dependencies": {
+    "dotenv": "^6.0.0",
     "saml-idp": "^1.1.0"
   },
   "devDependencies": {},
