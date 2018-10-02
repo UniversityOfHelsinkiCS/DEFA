@@ -99,6 +99,12 @@ npm test
 
 navigate to frontend/
 
+Create an .env file and add the following to it
+
+```
+API_URL=http://127.0.0.1:3000/api
+REDIRECT_URL=http://localhost:8080/login
+```
 run
 
 ```
@@ -117,7 +123,7 @@ Set up an .env file with the following
 
 ```
 ASCURL=http://localhost:3000/api/login/assert
-AUDIENCE=http://localhost:3000/
+AUDIENCE=http://localhost:3000
 
 ```
 
