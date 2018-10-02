@@ -20,10 +20,12 @@ class Login extends PureComponent {
 
   render() {
     const { user } = this.props
+    const { API_URL, REDIRECT_URL } = process.env
+    const url = `${API_URL}/login?redirect_url=${REDIRECT_URL}`
     if (!user) {
       return (
         <div>
-          <a href="http://127.0.0.1:3000/api/login?redirect_url=http://localhost:8080/login">Kirjaudu sisään</a>
+          <a href={url}> Kirjaudu sisään</a>
         </div>
       )
     }
