@@ -29,3 +29,12 @@ echo "
   ASCURL=http://localhost:3000/api/login/assert
   AUDIENCE=http://localhost:3000" > ./idp/.env
 
+cd ./backend
+npm install
+
+cd ../frontend
+npm install
+
+cd ../idp
+npm install
+

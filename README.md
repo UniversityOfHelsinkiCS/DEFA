@@ -14,11 +14,7 @@ run:
 ./init_dev_environment.sh
 ```
 
-### DB
-
-create a new folder outside the project and navigate to it.
-
-create a file `docker-compose.yml` and paste the following into it:
+create a file `docker-compose.yml` outside the project folder and paste the following into it:
 
 ```
 version: '2'
@@ -39,7 +35,19 @@ services:
         command: mongod --smallfiles --logpath=/dev/null
 ```
 
-run
+### Running in dev
+
+If the docker-compose file exists  ../ from the DEFA-repostory, run: 
+
+```
+./start_dev.sh
+```
+
+If not:
+
+#### DB
+
+Locate to the folder the `docker-compose.yml` file is and run
 
 ```
 docker-compose up -d
@@ -47,30 +55,27 @@ docker-compose up -d
 
 The database should now be running in a docker container.
 
-### Backend
+#### Backend
 
 navigate to ./backend and run
 
 ```
-npm install
 npm run dev
 ```
 
 If you defined your own values for the DB, fix your ./backend/.env values to match those. 
 
-### Frontend
+#### Frontend
 
 navigate to ./frontend and run
 
 ```
-npm install
 npm run dev
 ```
-### Idp
+#### Idp
 
 navigate to ./idp and run
 ```
-npm install
 npm start
 ```
 
