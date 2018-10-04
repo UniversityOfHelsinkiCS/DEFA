@@ -1,18 +1,10 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import Button from '@material-ui/core/Button'
 import { logout } from '../../util/actions/user'
 
-class Nav extends PureComponent {
-  logoutButton = (
-    <button
-      type="button"
-      onClick={() => this.handleLogout()}
-    >
-      Kirjaudu ulos
-    </button>
-  )
-
+class LogOut extends PureComponent {
   handleLogout = () => {
     console.log('AAAA')
     const { dispatchLogout } = this.props
@@ -23,14 +15,19 @@ class Nav extends PureComponent {
     const { loggedIn } = this.props
     return (
       <nav>
-        <span>DEFA on valmis!</span>
-        {loggedIn ? this.logoutButton : null}
+        {loggedIn ? (
+          <Button
+            color="inherit"
+            onClick={() => this.handleLogout()}
+          >
+            Log out
+          </Button>) : null}
       </nav>
     )
   }
 }
 
-Nav.propTypes = {
+LogOut.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   dispatchLogout: PropTypes.func.isRequired
 }
@@ -43,4 +40,4 @@ const mapDispatchToProps = {
   dispatchLogout: logout
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Nav)
+export default connect(mapStateToProps, mapDispatchToProps)(LogOut)

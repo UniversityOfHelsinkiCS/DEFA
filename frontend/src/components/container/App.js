@@ -1,19 +1,29 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { getHello } from '../../util/redux/reducer'
 import Main from './Main'
-import Nav from './Nav'
+
+const palette = {
+  primary: { main: '#4DD0E1' },
+  secondary: { main: '#B2DFDB' }
+}
+
+const themeName = 'Turquoise Blue Aqua Island Gayal'
+
+const theme = createMuiTheme({ palette, themeName })
 
 const { func } = PropTypes
 
 const App = ({ getHelloFn }) => {
   getHelloFn()
+
   return (
-    <div>
-      <Nav />
+    <MuiThemeProvider theme={theme}>
       <Main />
-    </div>
+    </MuiThemeProvider>
   )
 }
 

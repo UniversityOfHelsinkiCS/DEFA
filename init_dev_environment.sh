@@ -23,7 +23,7 @@ echo "
 
 echo "
   API_URL=http://127.0.0.1:3000/api
-  REDRECT_URL=http://localhost:8080/login" > ./frontend/.env
+  REDIRECT_URL=http://localhost:8080/login" > ./frontend/.env
 
 echo "
   ASCURL=http://localhost:3000/api/login/assert
