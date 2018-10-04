@@ -2,6 +2,9 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+
 import parseQueryParams from '../../util/parseQueryParams'
 import { parseUser } from '../../util/actions/user'
 
@@ -23,15 +26,12 @@ class Login extends PureComponent {
     const url = `${process.env.API_URL}/login?redirect_url=${process.env.REDIRECT_URL}`
     if (!user) {
       return (
-        <div>
-          <a href={url}> Kirjaudu sisään</a>
-        </div>
+        <Button href={url} color="inherit">Login</Button>
       )
     }
     return (
       <div>
-        <h2>Olet kirjautunut sisään.</h2>
-        <p>{user.name_id}</p>
+        <Typography variant="subheading">{user.name_id}</Typography>
       </div>
     )
   }
