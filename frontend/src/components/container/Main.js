@@ -1,15 +1,18 @@
 import React from 'react'
 import { withRouter, Switch, Route } from 'react-router-dom'
-import Login from './Login'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import NavBar from './NavBar'
-import LogOut from './LogOut'
 
 const Main = () => (
   <main>
+    <ToastContainer
+      position="top-center"
+      autoClose={5000}
+      hideProgressBar
+    />
     <NavBar />
-    <LogOut />
     <Switch>
-      <Route exact path="/login" component={Login} />
       <Route component={null} />
     </Switch>
   </main>
