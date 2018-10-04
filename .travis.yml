@@ -43,12 +43,14 @@ services:
  - docker
 after_success:
   - cd ../frontend
+  - printf "API_URL=$API_URL\nREDIRECT_URL=$REDIRECT_URL" >> .env
   - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-frontend:staging ."
   - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
   - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-frontend:staging"
   - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker build -t toska/defa-frontend:latest ."
   - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
   - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker push toska/defa-frontend:latest"
+  - rm .env
   - cd ../backend
   - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-backend:staging ."
   - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
