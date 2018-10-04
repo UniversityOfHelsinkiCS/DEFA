@@ -6,7 +6,15 @@ trunk:[![Build Status](https://travis-ci.org/UniversityOfHelsinkiCS/DEFA.svg?bra
 
 ## Development
 
-### Backend
+### Init
+
+run:
+
+```
+./init_dev_environment.sh
+```
+
+### DB
 
 create a new folder outside the project and navigate to it.
 
@@ -38,6 +46,38 @@ docker-compose up -d
 ```
 
 The database should now be running in a docker container.
+
+### Backend
+
+navigate to ./backend and run
+
+```
+npm install
+npm run dev
+```
+
+If you defined your own values for the DB, fix your ./backend/.env values to match those. 
+
+### Frontend
+
+navigate to ./frontend and run
+
+```
+npm install
+npm run dev
+```
+### Idp
+
+navigate to ./idp and run
+```
+npm install
+npm start
+```
+
+Now DEFA should be running at http://localhost:8080
+# All below: depracated, unnecessary? 
+
+### Backend
 
 navigate to backend/
 
