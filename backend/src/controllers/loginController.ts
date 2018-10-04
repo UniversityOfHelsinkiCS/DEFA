@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 import { GetAssertOptions, CreateLoginRequestUrlOptions } from 'saml2-js'
 import { sp, idp } from '../utils/saml'
-import { responseUrl, Irelay, ISamlResponse } from '../utils/controller_helpers/login'
+import { responseUrl, errorUrl, Irelay, ISamlResponse } from '../utils/controller_helpers/login'
 
 const router: Router = Router()
 
@@ -16,8 +16,9 @@ router.get('/', (req: Request, res: Response): void => {
     idp,
     options,
     (err: object, loginUrl: string, requestId: string): void => {
-      if (err != null) {
-        res.send(500)
+      console.log(err)
+      if (err !== null) {
+        res.status(500).send('The login service is currently unavailable.')
         return
       }
       res.redirect(loginUrl)
@@ -28,9 +29,10 @@ router.get('/', (req: Request, res: Response): void => {
 router.post('/assert', (req: Request, res: Response): void => {
   const relay: Irelay = JSON.parse(req.body.RelayState)
   const options: GetAssertOptions = { request_body: req.body }
-  sp.post_assert(idp, options, (err: object, samlResponse: ISamlResponse): void => {
-    if (err != null) {
-      console.log(err, idp, options)
+  sp.post_assert(idp, options, (err: { message: string }, samlResponse: ISamlResponse): void => {
+    if (err !== null) {
+      res.redirect(errorUrl(err, relay))
+      return
     }
     res.redirect(responseUrl(samlResponse, relay))
   })

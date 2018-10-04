@@ -20,7 +20,11 @@ const validateRedirect = (url: string | void): boolean => url ? allowedRedirects
   false
 ) : false
 
-const applyToken = (url: string, token: string | void): string => token ? `${url}?token=${token}` : url
+const applyToken = (url: string, token: string | void): string => token ? (
+    `${url}?token=${token}`
+  ) : (
+    `${url}?error=Kirjautuminen epäonnistui. Kirjautumispalvelu antoi epämuodostuneita tietoja.`
+  )
 const signToken = (samlResponse: ISamlResponse): string | void => {
   if (samlResponse.type !== 'authn_response') {
     console.warn(`Expected saml response to be of type 'authn_response', but was '${samlResponse.type}'`)
@@ -40,4 +44,16 @@ export const responseUrl = (samlResponse: ISamlResponse, relay: Irelay): string 
     defaultRedirect
   )
   return applyToken(redirectUrl, token)
+}
+
+const defaultErrorMessage: string = 'Yllättävä virhe tapahtui.'
+const applyError = (redirectUrl: string, errorMessage: string): string => `${redirectUrl}?error=${errorMessage}`
+export const errorUrl = (error: { message: string }, relay: Irelay): string => {
+  const errorMessage = `Kirjautuminen epäonnistui. Kirjautumispalvelun virheilmoitus: ${error.message}`
+  const redirectUrl: string = validateRedirect(relay.redirect_url) ? (
+    relay.redirect_url
+  ) : (
+    defaultRedirect
+  )
+  return applyError(redirectUrl, errorMessage)
 }

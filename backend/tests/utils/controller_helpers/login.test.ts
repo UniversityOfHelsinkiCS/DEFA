@@ -60,12 +60,13 @@ describe('responseUrl function', () => {
   })
 
   it('includes a token that can be verified.', done => {
-    let token
+    let token: string
     try {
       const url = new URL(responseUrl(samlResponse, relay))
       token = url.search.split('=')[1]
     } catch (e) { done(e) }
     expect(jwt.verify(token, process.env.SECRET)).toMatchObject(samlResponse.user)
+    expect(() => jwt.verify(token, 'WRONGSECRETTHISSHALLNEVERWORK')).toThrowError('invalid signature')
     done()
   })
 
