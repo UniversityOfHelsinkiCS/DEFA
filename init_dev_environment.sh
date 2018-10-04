@@ -29,3 +29,7 @@ echo "
   ASCURL=http://localhost:3000/api/login/assert
   AUDIENCE=http://localhost:3000" > ./idp/.env
 
+x-terminal-emulator -e 'bash -c "cd ./backend; npm run dev; bash"'
+x-terminal-emulator -e 'bash -c "cd ../; docker-compose up; bash"'
+x-terminal-emulator -e 'bash -c "cd ./frontend; npm run dev; bash"'
+x-terminal-emulator -e 'bash -c "cd ./idp; npm run start; bash"'
