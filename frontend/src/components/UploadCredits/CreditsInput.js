@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import Papa from 'papaparse'
+import { Button, Typography } from '@material-ui/core'
 import { changeCredits } from '../../util/actions/credits'
 import { file } from '../../util/propTypes'
 
@@ -21,13 +22,15 @@ class CreditsInput extends PureComponent {
     const { csvFile } = this.props
     return (
       <div>
-        <button
+        <Button
           type="button"
           disabled={!csvFile}
           onClick={this.handlePreview}
+          variant="contained"
+          color="secondary"
         >
-          Parse
-        </button>
+          <Typography>Parse</Typography>
+        </Button>
       </div>
     )
   }

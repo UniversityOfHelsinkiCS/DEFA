@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
 import { func } from 'prop-types'
 import { connect } from 'react-redux'
+import { FormControlLabel, Typography } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 import { changeFile } from '../../util/actions/credits'
+import { parseClasses } from '../../util/propTypes'
+
+const styles = {
+  input: {
+    marginLeft: '10px'
+  }
+}
 
 class FileInput extends Component {
   handleChange = event => {
@@ -10,25 +19,32 @@ class FileInput extends Component {
   }
 
   render() {
+    const { classes } = this.props
     return (
-      <div>
-        <input
-          type="file"
-          name="credits"
-          accept=".csv"
-          onChange={this.handleChange}
-        />
-      </div>
+      <FormControlLabel
+        label={<Typography>Upload .csv file: </Typography>}
+        labelPlacement="start"
+        control={(
+          <input
+            type="file"
+            name="credits"
+            accept=".csv"
+            onChange={this.handleChange}
+            className={classes.input}
+          />
+        )}
+      />
     )
   }
 }
 
 FileInput.propTypes = {
-  changeValue: func.isRequired
+  changeValue: func.isRequired,
+  classes: parseClasses(styles).isRequired
 }
 
 const mapDispatchToProps = {
   changeValue: changeFile
 }
 
-export default connect(null, mapDispatchToProps)(FileInput)
+export default withStyles(styles)(connect(null, mapDispatchToProps)(FileInput))

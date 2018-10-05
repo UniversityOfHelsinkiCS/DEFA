@@ -1,7 +1,17 @@
 import React, { Component } from 'react'
 import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
+import { Input, FormControlLabel, Typography } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
 import { changeDelimiter } from '../../util/actions/credits'
+import { parseClasses } from '../../util/propTypes'
+
+const styles = {
+  input: {
+    width: '35px',
+    marginLeft: '5px'
+  }
+}
 
 class DelimiterInput extends Component {
   handleChange = event => {
@@ -10,14 +20,22 @@ class DelimiterInput extends Component {
   }
 
   render() {
-    const { value } = this.props
+    const { value, classes } = this.props
     return (
       <div>
-        <input
-          type="text"
-          name="delimiter"
-          value={value}
-          onChange={this.handleChange}
+        <FormControlLabel
+          label={<Typography>Delimiter: </Typography>}
+          labelPlacement="start"
+          control={(
+            <Input
+              type="text"
+              name="delimiter"
+              value={value}
+              onChange={this.handleChange}
+              error={value.length > 1}
+              className={classes.input}
+            />
+          )}
         />
       </div>
     )
@@ -26,7 +44,8 @@ class DelimiterInput extends Component {
 
 DelimiterInput.propTypes = {
   value: string.isRequired,
-  changeValue: func.isRequired
+  changeValue: func.isRequired,
+  classes: parseClasses(styles).isRequired
 }
 
 const mapStateToProps = state => ({
@@ -37,4 +56,4 @@ const mapDispatchToProps = {
   changeValue: changeDelimiter
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DelimiterInput)
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(DelimiterInput))

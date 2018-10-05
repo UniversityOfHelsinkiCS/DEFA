@@ -1,6 +1,5 @@
 import { shape, string, number } from 'prop-types'
 
-// eslint-disable-next-line import/prefer-default-export
 export const file = shape({
   name: string.isRequired,
   lastModified: number.isRequired,
@@ -8,3 +7,13 @@ export const file = shape({
   size: number.isRequired,
   type: string.isRequired
 })
+
+export const parseClasses = styles => shape(
+  Object.keys(styles).reduce(
+    (acc, key) => ({
+      ...acc,
+      [key]: string.isRequired
+    }),
+    {}
+  )
+)

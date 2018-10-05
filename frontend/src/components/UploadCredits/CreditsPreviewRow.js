@@ -1,17 +1,15 @@
 import React from 'react'
 import { shape } from 'prop-types'
+import { TableCell, TableRow, Typography } from '@material-ui/core'
 
 const CreditsPreview = ({ credit }) => (
-  <div>
+  <TableRow>
     {Object.keys(credit).map(key => (
-      <div key={key}>
-        <span>{key}</span>
-        <span>: </span>
-        <span>{credit[key]}</span>
-      </div>
+      <TableCell key={key}>
+        <Typography>{credit[key]}</Typography>
+      </TableCell>
     ))}
-    <br />
-  </div>
+  </TableRow>
 )
 
 CreditsPreview.propTypes = {
