@@ -11,7 +11,7 @@
     "precommit": "npm run lint",
     "prepush": "npm run lint",
     "start": "serve -s -l 5000 dist",
-    "test": "jest --no-cache"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
