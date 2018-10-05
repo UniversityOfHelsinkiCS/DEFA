@@ -38,3 +38,9 @@ npm install
 cd ../idp
 npm install
 
+cd ..
+
+x-terminal-emulator -e 'bash -c "cd ./backend; npm run dev; bash"'
+x-terminal-emulator -e 'bash -c "cd ../; docker-compose up; bash"'
+x-terminal-emulator -e 'bash -c "cd ./frontend; npm run dev; bash"'
+x-terminal-emulator -e 'bash -c "cd ./idp; npm run start; bash"'
