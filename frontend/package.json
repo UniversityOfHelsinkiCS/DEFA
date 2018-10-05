@@ -11,7 +11,7 @@
     "precommit": "npm run lint",
     "prepush": "npm run lint",
     "start": "serve -s -l 5000 dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --no-cache"
   },
   "author": "",
   "license": "ISC",
@@ -46,9 +46,11 @@
   "devDependencies": {
     "@babel/core": "^7.0.1",
     "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^9.0.0",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.2",
     "eslint": "^5.5.0",
     "eslint-config-airbnb": "^17.1.0",
@@ -57,7 +59,8 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-react": "^7.11.1",
-    "husky": "^0.14.3"
+    "husky": "^0.14.3",
+    "jest": "^23.6.0"
   },
   "babel": {
     "presets": [
@@ -65,7 +68,16 @@
       "@babel/preset-react"
     ],
     "plugins": [
-      "@babel/proposal-class-properties"
+      "@babel/plugin-proposal-class-properties"
     ]
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/tests/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/tests/__mocks__/styleMock.js"
+    }
   }
 }

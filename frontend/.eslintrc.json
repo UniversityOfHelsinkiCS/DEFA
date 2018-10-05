@@ -57,5 +57,8 @@
     "import",
     "prefer-object-spread",
     "babel"
-  ]
+  ],
+  "globals": {
+    "shallow": false
+  }
 }
