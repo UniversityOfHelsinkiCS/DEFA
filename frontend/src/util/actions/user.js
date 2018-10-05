@@ -1,13 +1,14 @@
 import { toast } from 'react-toastify'
+import * as types from '../actionTypes'
 
 export const parseUser = () => dispatch => dispatch({
-  type: 'USER_PARSE_USER'
+  type: types.USER_PARSE_USER
 })
 
 export const logout = () => dispatch => {
   window.localStorage.removeItem('DEFA-token')
   dispatch({
-    type: 'USER_LOG_OUT',
+    type: types.USER_LOG_OUT,
     toast: {
       message: 'Logged out',
       options: {

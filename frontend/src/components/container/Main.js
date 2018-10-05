@@ -14,7 +14,7 @@ const Main = () => (
     />
     <NavBar />
     <Switch>
-      <Route exact path="/credits" component={UploadCredits} />
+      <Route exact path="/upload-credits" component={UploadCredits} />
       <Route component={null} />
     </Switch>
   </main>

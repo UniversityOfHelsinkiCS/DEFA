@@ -14,7 +14,10 @@ class CreditsInput extends PureComponent {
       delimiter,
       header: true,
       skipEmptyLines: true,
-      complete: result => changeValue(result.data)
+      complete: result => changeValue({
+        credits: result.data,
+        headers: result.meta.fields
+      })
     })
   }
 
@@ -47,9 +50,9 @@ CreditsInput.defaultProps = {
 }
 
 const mapStateToProps = state => ({
-  delimiter: state.credits.delimiter,
-  csvFile: state.credits.file,
-  value: state.credits.credits
+  delimiter: state.uploadCredits.delimiter,
+  csvFile: state.uploadCredits.file,
+  value: state.uploadCredits.credits
 })
 
 const mapDispatchToProps = {

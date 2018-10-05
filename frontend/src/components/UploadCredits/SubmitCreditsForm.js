@@ -70,7 +70,7 @@ SubmitCreditsForm.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  credits: state.credits.credits
+  credits: state.uploadCredits.credits
 })
 
 const mapDispatchToProps = {

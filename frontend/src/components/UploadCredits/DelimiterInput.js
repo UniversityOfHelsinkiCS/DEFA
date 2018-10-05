@@ -49,7 +49,7 @@ DelimiterInput.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  value: state.credits.delimiter
+  value: state.uploadCredits.delimiter
 })
 
 const mapDispatchToProps = {

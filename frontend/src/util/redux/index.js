@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import reducer from './reducer'
 import user from './user'
-import credits from './credits'
+import uploadCredits from './uploadCredits'
 
 export default combineReducers({
   reducer,
   user,
-  credits
+  uploadCredits
 })
