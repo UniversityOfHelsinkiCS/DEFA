@@ -9,7 +9,7 @@
     "dev": "webpack-dev-server --mode development --hot",
     "lint": "eslint ./src --ext .js",
     "precommit": "npm run lint",
-    "prepush": "npm run lint",
+    "prepush": "npm run lint && npm test",
     "start": "serve -s -l 5000 dist",
     "test": "jest"
   },
