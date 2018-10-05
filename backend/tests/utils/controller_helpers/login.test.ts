@@ -43,7 +43,7 @@ describe('responseUrl function', () => {
       try {
         url = new URL(responseUrl({ ...samlResponse, type: 'wrong_type' }, relay))
       } catch (e) { done(e) }
-      expect(url.search).toEqual('')
+      expect(url.search).not.toMatch('token=')
       expect(warnings.length).toBeGreaterThan(0)
       done()
     })
@@ -53,7 +53,7 @@ describe('responseUrl function', () => {
       try {
         url = new URL(responseUrl({ ...samlResponse, user: undefined }, relay))
       } catch (e) { done(e) }
-      expect(url.search).toEqual('')
+      expect(url.search).not.toMatch('token=')
       expect(warnings.length).toBeGreaterThan(0)
       done()
     })
