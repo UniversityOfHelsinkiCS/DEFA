@@ -3,6 +3,7 @@ import { withRouter, Switch, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import NavBar from './NavBar'
+import Credits from './Credits'
 
 const Main = () => (
   <main>
@@ -13,6 +14,7 @@ const Main = () => (
     />
     <NavBar />
     <Switch>
+      <Route exact path="/credits" component={Credits} />
       <Route component={null} />
     </Switch>
   </main>

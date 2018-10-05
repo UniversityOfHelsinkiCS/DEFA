@@ -1,7 +1,6 @@
 import axios from 'axios'
-import { API_BASE_PATH } from '../constants'
 
-const getAxios = () => axios.create({ baseURL: API_BASE_PATH })
+const getAxios = () => axios.create({ baseURL: process.env.API_URL })
 
 const callApi = async (url, method = 'get', data) => {
   const options = { headers: {} }
