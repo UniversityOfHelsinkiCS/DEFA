@@ -1,5 +1,5 @@
 import React from 'react'
-import SubmitCreditsForm from '../Credits/SubmitCreditsForm'
+import SubmitCreditsForm from '../UploadCredits/SubmitCreditsForm'
 
 const Credits = () => (
   <div>

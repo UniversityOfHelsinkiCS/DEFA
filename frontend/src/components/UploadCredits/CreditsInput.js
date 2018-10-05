@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react'
-import { string, arrayOf, object, func } from 'prop-types'
+import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import Papa from 'papaparse'
 import { changeCredits } from '../../util/actions/credits'
-import CreditsPreview from './CreditsPreview'
 import { file } from '../../util/propTypes'
 
 class CreditsInput extends PureComponent {
@@ -19,7 +18,7 @@ class CreditsInput extends PureComponent {
   }
 
   render() {
-    const { csvFile, value } = this.props
+    const { csvFile } = this.props
     return (
       <div>
         <button
@@ -29,14 +28,6 @@ class CreditsInput extends PureComponent {
         >
           Parse
         </button>
-        <div>
-          {value.map(credit => (
-            <CreditsPreview
-              key={Object.values(credit).reduce((acc, curr) => acc + curr, '')}
-              credit={credit}
-            />
-          ))}
-        </div>
       </div>
     )
   }
@@ -45,7 +36,6 @@ class CreditsInput extends PureComponent {
 CreditsInput.propTypes = {
   delimiter: string.isRequired,
   csvFile: file,
-  value: arrayOf(object).isRequired,
   changeValue: func.isRequired
 }
 

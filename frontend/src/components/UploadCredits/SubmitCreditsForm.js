@@ -5,6 +5,7 @@ import { submitCredits } from '../../util/actions/credits'
 import DelimiterInput from './DelimiterInput'
 import FileInput from './FileInput'
 import CreditsInput from './CreditsInput'
+import CreditsPreview from './CreditsPreview'
 
 class SubmitCreditsForm extends Component {
   handleSubmit = event => {
@@ -20,6 +21,7 @@ class SubmitCreditsForm extends Component {
         <DelimiterInput />
         <FileInput />
         <CreditsInput />
+        <CreditsPreview />
         <button type="submit" disabled={credits.length === 0}>Submit</button>
       </form>
     )
