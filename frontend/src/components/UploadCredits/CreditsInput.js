@@ -3,7 +3,7 @@ import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import Papa from 'papaparse'
 import { Button, Typography } from '@material-ui/core'
-import { changeCredits } from '../../util/actions/credits'
+import { changeCredits } from '../../util/actions/uploadCredits'
 import { file } from '../../util/propTypes'
 
 export class CreditsInputComponent extends PureComponent {

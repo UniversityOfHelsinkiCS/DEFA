@@ -6,18 +6,13 @@ const INITIAL_STATE = {
   user: null
 }
 
-const parseUser = () => {
-  const token = window.localStorage.getItem('DEFA-token')
-  return {
-    token,
-    user: jwt.decode(token)
-  }
-}
-
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.USER_PARSE_USER:
-      return parseUser()
+      return {
+        token: action.token,
+        user: jwt.decode(action.token)
+      }
     case types.USER_LOG_OUT:
       return INITIAL_STATE
     default:

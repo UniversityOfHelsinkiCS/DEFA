@@ -3,7 +3,7 @@ import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import { Input, FormControlLabel, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { changeDelimiter } from '../../util/actions/credits'
+import { changeDelimiter } from '../../util/actions/uploadCredits'
 import { parseClasses } from '../../util/propTypes'
 
 const styles = {

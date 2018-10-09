@@ -1,4 +1,4 @@
-import * as actions from '../../../src/util/actions/credits'
+import * as actions from '../../../src/util/actions/uploadCredits'
 import * as types from '../../../src/util/actionTypes'
 import { testAction, testApiConnectionAction } from '../../testUtils'
 
