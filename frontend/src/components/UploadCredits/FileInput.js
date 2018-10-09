@@ -12,7 +12,7 @@ const styles = {
   }
 }
 
-class FileInput extends Component {
+export class FileInputComponent extends Component {
   handleChange = event => {
     const { changeValue } = this.props
     changeValue(event.target.files[0])
@@ -21,24 +21,26 @@ class FileInput extends Component {
   render() {
     const { classes } = this.props
     return (
-      <FormControlLabel
-        label={<Typography>Upload .csv file: </Typography>}
-        labelPlacement="start"
-        control={(
-          <input
-            type="file"
-            name="credits"
-            accept=".csv"
-            onChange={this.handleChange}
-            className={classes.input}
-          />
-        )}
-      />
+      <div>
+        <FormControlLabel
+          label={<Typography>Upload .csv file: </Typography>}
+          labelPlacement="start"
+          control={(
+            <input
+              type="file"
+              name="credits"
+              accept=".csv"
+              onChange={this.handleChange}
+              className={classes.input}
+            />
+          )}
+        />
+      </div>
     )
   }
 }
 
-FileInput.propTypes = {
+FileInputComponent.propTypes = {
   changeValue: func.isRequired,
   classes: parseClasses(styles).isRequired
 }
@@ -47,4 +49,4 @@ const mapDispatchToProps = {
   changeValue: changeFile
 }
 
-export default withStyles(styles)(connect(null, mapDispatchToProps)(FileInput))
+export default withStyles(styles)(connect(null, mapDispatchToProps)(FileInputComponent))

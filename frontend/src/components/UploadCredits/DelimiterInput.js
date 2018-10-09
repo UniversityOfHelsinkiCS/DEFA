@@ -13,7 +13,7 @@ const styles = {
   }
 }
 
-class DelimiterInput extends Component {
+export class DelimiterInputComponent extends Component {
   handleChange = event => {
     const { changeValue } = this.props
     changeValue(event.target.value)
@@ -42,7 +42,7 @@ class DelimiterInput extends Component {
   }
 }
 
-DelimiterInput.propTypes = {
+DelimiterInputComponent.propTypes = {
   value: string.isRequired,
   changeValue: func.isRequired,
   classes: parseClasses(styles).isRequired
@@ -56,4 +56,8 @@ const mapDispatchToProps = {
   changeValue: changeDelimiter
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(DelimiterInput))
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(
+    DelimiterInputComponent
+  )
+)

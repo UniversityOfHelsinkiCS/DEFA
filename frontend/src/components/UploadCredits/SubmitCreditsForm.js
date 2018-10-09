@@ -26,7 +26,7 @@ const styles = {
   }
 }
 
-class SubmitCreditsForm extends Component {
+export class SubmitCreditsFormComponent extends Component {
   handleSubmit = event => {
     const { dispatchSubmitCredits, credits } = this.props
     event.preventDefault()
@@ -63,7 +63,7 @@ class SubmitCreditsForm extends Component {
   }
 }
 
-SubmitCreditsForm.propTypes = {
+SubmitCreditsFormComponent.propTypes = {
   dispatchSubmitCredits: func.isRequired,
   credits: arrayOf(shape({})).isRequired,
   classes: parseClasses(styles).isRequired
@@ -77,4 +77,8 @@ const mapDispatchToProps = {
   dispatchSubmitCredits: submitCredits
 }
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SubmitCreditsForm))
+export default withStyles(styles)(
+  connect(mapStateToProps, mapDispatchToProps)(
+    SubmitCreditsFormComponent
+  )
+)

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Table, TableHead, TableBody, TableCell, TableRow, Typography } from '@material-ui/core'
 import CreditsPreviewRow from './CreditsPreviewRow'
 
-const CreditsPreview = ({ credits, headers }) => (
+export const CreditsPreviewComponent = ({ credits, headers }) => (
   <div>
     <Table>
       <TableHead>
@@ -29,7 +29,7 @@ const CreditsPreview = ({ credits, headers }) => (
   </div>
 )
 
-CreditsPreview.propTypes = {
+CreditsPreviewComponent.propTypes = {
   credits: arrayOf(shape({})).isRequired,
   headers: arrayOf(string).isRequired
 }
@@ -39,4 +39,4 @@ const mapStateToProps = state => ({
   headers: state.uploadCredits.headers
 })
 
-export default connect(mapStateToProps, null)(CreditsPreview)
+export default connect(mapStateToProps, null)(CreditsPreviewComponent)

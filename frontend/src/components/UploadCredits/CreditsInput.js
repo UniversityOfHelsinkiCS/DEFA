@@ -6,7 +6,7 @@ import { Button, Typography } from '@material-ui/core'
 import { changeCredits } from '../../util/actions/credits'
 import { file } from '../../util/propTypes'
 
-class CreditsInput extends PureComponent {
+export class CreditsInputComponent extends PureComponent {
   handlePreview = () => {
     const { csvFile, delimiter, changeValue } = this.props
     if (!csvFile) { return }
@@ -39,13 +39,13 @@ class CreditsInput extends PureComponent {
   }
 }
 
-CreditsInput.propTypes = {
+CreditsInputComponent.propTypes = {
   delimiter: string.isRequired,
   csvFile: file,
   changeValue: func.isRequired
 }
 
-CreditsInput.defaultProps = {
+CreditsInputComponent.defaultProps = {
   csvFile: null
 }
 
@@ -59,4 +59,4 @@ const mapDispatchToProps = {
   changeValue: changeCredits
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreditsInput)
+export default connect(mapStateToProps, mapDispatchToProps)(CreditsInputComponent)
