@@ -8,13 +8,11 @@ const csvFile = { totally_a_csv: true }
 const delimiter = ';'
 
 describe('CreditsInput component', () => {
+  const parse = jest.fn()
+  const changeValue = jest.fn()
   let wrapper
-  let changeValue
   let realParse
-  let parse
-
-  beforeEach(() => {
-    parse = jest.fn()
+  beforeAll(() => {
     const testParse = (file, options) => {
       parse(file, options)
       options.complete({
@@ -22,9 +20,12 @@ describe('CreditsInput component', () => {
         meta: {}
       })
     }
-    changeValue = jest.fn()
     realParse = Papa.parse
     Papa.parse = testParse
+  })
+  beforeEach(() => {
+    parse.mockReset()
+    changeValue.mockReset()
     wrapper = shallow(<CreditsInputComponent
       delimiter={delimiter}
       csvFile={csvFile}

@@ -5,11 +5,10 @@ import { FileInputComponent } from '../../../src/components/UploadCredits/FileIn
 FileInputComponent.propTypes = {}
 
 describe('FileInput component', () => {
+  const changeValue = jest.fn()
   let input
-  let changeValue
-
-  beforeAll(() => {
-    changeValue = jest.fn()
+  beforeEach(() => {
+    changeValue.mockReset()
     const wrapper = shallow(<FileInputComponent
       changeValue={changeValue}
       classes={{}}

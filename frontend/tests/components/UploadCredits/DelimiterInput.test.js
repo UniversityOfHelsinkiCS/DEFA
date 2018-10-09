@@ -5,11 +5,10 @@ import { DelimiterInputComponent } from '../../../src/components/UploadCredits/D
 DelimiterInputComponent.propTypes = {}
 
 describe('DelimiterInput component', () => {
+  const changeValue = jest.fn()
   let input
-  let changeValue
-
   beforeAll(() => {
-    changeValue = jest.fn()
+    changeValue.mockReset()
     const wrapper = shallow(<DelimiterInputComponent
       changeValue={changeValue}
       value="value"

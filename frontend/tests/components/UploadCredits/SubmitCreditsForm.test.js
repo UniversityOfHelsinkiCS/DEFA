@@ -13,11 +13,10 @@ const credits = [
 ]
 
 describe('SubmitCreditsForm component', () => {
+  const dispatchSubmitCredits = jest.fn()
   let wrapper
-  let dispatchSubmitCredits
-
   beforeEach(() => {
-    dispatchSubmitCredits = jest.fn()
+    dispatchSubmitCredits.mockReset()
     wrapper = shallow(<SubmitCreditsFormComponent
       dispatchSubmitCredits={dispatchSubmitCredits}
       credits={credits}
