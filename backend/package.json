@@ -11,9 +11,7 @@
     "start": "node dist/src/server.js",
     "test": "jest",
     "watch-node": "nodemon",
-    "watch-ts": "tsc --watch",
-    "precommit": "npm run lint",
-    "prepush": "npm run lint && npm test"
+    "watch-ts": "tsc --watch"
   },
   "author": "",
   "license": "ISC",
@@ -46,5 +44,11 @@
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3",
     "typescript-eslint-parser": "^18.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint && npm test"
+    }
   }
 }
