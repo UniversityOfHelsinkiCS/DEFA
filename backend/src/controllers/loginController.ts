@@ -2,7 +2,9 @@ import { Request, Response, Router } from 'express'
 import { GetAssertOptions, CreateLoginRequestUrlOptions } from 'saml2-js'
 // import { sp, idp } from '../utils/saml'
 import { responseUrl, errorUrl, Irelay, ISamlResponse, getMetadata } from '../utils/controller_helpers/login'
-import * as samlify from 'samlify'
+
+// tslint:disable-next-line:no-var-requires
+const samlify = require('samlify')
 import fs from 'fs'
 
 const router: Router = Router()
@@ -10,8 +12,9 @@ const router: Router = Router()
 const sp = samlify.ServiceProvider({
   metadata: fs.readFileSync('./src/utils/metadata.xml')
 })
+let idp = null
 
-router.get('/', async (req: Request, res: Response): void => {
+router.get('/', async (req: Request, res: Response): Promise<void> => {
   // const relay: Irelay = {
   //   redirect_url: req.query.redirect_url
   // }
@@ -19,7 +22,7 @@ router.get('/', async (req: Request, res: Response): void => {
   //   relay_state: JSON.stringify(relay)
   // }
   const metadata = await getMetadata(req.query.entityID)
-  const idp = samlify.IdentityProvider({
+  idp = samlify.IdentityProvider({
     metadata
   })
   sp.entitySetting.relayState = process.env.RELAY_STATE

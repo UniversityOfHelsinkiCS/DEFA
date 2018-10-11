@@ -29,7 +29,7 @@ describe('responseUrl function', () => {
     const oldWarn = console.warn
     let warnings: string[] = []
     beforeAll(() => {
-      console.warn = warning => warnings.push(warning)
+      console.warn = (warning: string) => warnings.push(warning)
     })
     beforeEach(() => {
       warnings = []
