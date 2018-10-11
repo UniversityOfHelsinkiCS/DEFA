@@ -1,16 +1,15 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { connect } from './mongo/connection'
-import routes from './routes'
+import { noParseRoutes, bodyParseRoutes } from './routes'
 
 const app: express.Express = express()
+
+noParseRoutes(app)
 
 app.use(bodyParser.urlencoded({
   extended: true
 }))
 
-routes(app)
-
-connect()
+bodyParseRoutes(app)
 
 export default app
