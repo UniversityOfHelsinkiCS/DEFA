@@ -13,7 +13,7 @@ const palette = {
 
 const themeName = 'Turquoise Blue Aqua Island Gayal'
 
-const theme = createMuiTheme({ palette, themeName })
+const theme = createMuiTheme({ palette, themeName, typography: { useNextVariants: true } })
 
 const { func } = PropTypes
 
