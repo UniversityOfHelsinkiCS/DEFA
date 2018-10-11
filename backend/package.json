@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
@@ -24,6 +25,7 @@
     "jsonwebtoken": "^8.3.0",
     "mongoose": "^5.2.15",
     "saml2-js": "^2.0.3",
+    "samlify": "^2.4.0-rc5",
     "tslint": "^5.11.0"
   },
   "devDependencies": {

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import axios, { AxiosResponse } from 'axios'
 
 dotenv.config()
 
@@ -41,9 +42,14 @@ export const responseUrl = (samlResponse: ISamlResponse, relay: Irelay): string 
   const redirectUrl: string = validateRedirect(relay.redirect_url) ? (
     relay.redirect_url
   ) : (
-    defaultRedirect
-  )
+      defaultRedirect
+    )
   return applyToken(redirectUrl, token)
+}
+
+export const getMetadata = async (entityId: string): Promise<string> => {
+  const response = await axios.get(entityId)
+  return response.data
 }
 
 const defaultErrorMessage: string = 'Yllättävä virhe tapahtui.'

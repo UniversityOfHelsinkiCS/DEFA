@@ -23,7 +23,8 @@ class Login extends PureComponent {
 
   render() {
     const { user } = this.props
-    const url = `${process.env.API_URL}/login?redirect_url=${process.env.REDIRECT_URL}`
+    // const url = `${process.env.API_URL}/login?redirect_url=${process.env.REDIRECT_URL}`
+    const url = `${process.env.DS_URL}?entityID=${process.env.ENTITY_ID}&return=${process.env.LOGIN_URL}`
     if (!user) {
       return (
         <Button href={url} color="inherit">Login</Button>
