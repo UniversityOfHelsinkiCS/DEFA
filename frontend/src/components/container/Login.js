@@ -17,7 +17,7 @@ class Login extends PureComponent {
     }
     const storageToken = window.localStorage.getItem('DEFA-token')
     if (storageToken) {
-      if (storageToken !== token) { dispatchParseUser() }
+      if (storageToken !== token) { dispatchParseUser(storageToken) }
     }
   }
 

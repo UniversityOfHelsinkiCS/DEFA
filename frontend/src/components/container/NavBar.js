@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -7,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 
 import Login from './Login'
 import LogOut from './LogOut'
+import { parseClasses } from '../../util/propTypes'
 
 const styles = {
   root: {
@@ -35,7 +35,7 @@ const NavBar = props => {
   )
 }
 NavBar.propTypes = {
-  classes: PropTypes.object.isRequired // eslint-disable-line react/forbid-prop-types
+  classes: parseClasses(styles).isRequired
 }
 
 export default withStyles(styles)(NavBar)

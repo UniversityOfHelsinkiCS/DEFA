@@ -3,7 +3,8 @@
   "parser": "babel-eslint",
   "extends": "airbnb",
   "env": {
-    "browser": true
+    "browser": true,
+    "jest": true
   },
   "rules": {
     "arrow-parens": [
@@ -57,5 +58,8 @@
     "import",
     "prefer-object-spread",
     "babel"
-  ]
+  ],
+  "globals": {
+    "shallow": false
+  }
 }

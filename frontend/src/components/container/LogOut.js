@@ -6,7 +6,6 @@ import { logout } from '../../util/actions/user'
 
 class LogOut extends PureComponent {
   handleLogout = () => {
-    console.log('AAAA')
     const { dispatchLogout } = this.props
     dispatchLogout()
   }
@@ -21,7 +20,8 @@ class LogOut extends PureComponent {
             onClick={() => this.handleLogout()}
           >
             Log out
-          </Button>) : null}
+          </Button>
+        ) : null}
       </nav>
     )
   }
