@@ -31,7 +31,7 @@ class Login extends PureComponent {
     }
     return (
       <div>
-        <Typography variant="subheading">{user.name_id}</Typography>
+        <Typography variant="subtitle1">{user.name_id}</Typography>
       </div>
     )
   }

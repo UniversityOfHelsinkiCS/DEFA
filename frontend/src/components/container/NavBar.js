@@ -24,7 +24,7 @@ const NavBar = props => {
     <div className={classes.root}>
       <AppBar position="static" color="primary">
         <Toolbar>
-          <Typography variant="title" color="inherit" className={classes.grow}>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
             DEFA
           </Typography>
           <Login />
