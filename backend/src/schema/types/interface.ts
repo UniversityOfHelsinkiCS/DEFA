@@ -1,15 +1,16 @@
-import { GraphQLObjectType, GraphQLList, GraphQLScalarType, GraphQLNonNull } from 'graphql'
+import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull } from 'graphql'
 import { Document, DocumentQuery } from 'mongoose'
 
 type Iresolve = (
   parent: null,
-  args: { [key: string]: string }
+  // tslint:disable-next-line:no-any
+  args: { [key: string]: any | any[] }
 ) => DocumentQuery<Document[] | Document, Document> | Promise<Document | Document[]>
 
 export interface IQuery {
   [key: string]: object
   type: GraphQLObjectType | GraphQLList<GraphQLObjectType>
-  args: { [key: string]: { type: GraphQLScalarType | GraphQLNonNull<GraphQLScalarType> } }
+  args: { [key: string]: { type: GraphQLInputType | GraphQLNonNull<GraphQLInputType> } }
   resolve: Iresolve
 }
 
