@@ -1,11 +1,8 @@
 import * as actions from '../../../src/util/actions/uploadCredits'
 import * as types from '../../../src/util/actionTypes'
-import { testAction, testApiConnectionAction } from '../../testUtils'
+import { testAction } from '../../testUtils'
 
 let input
-
-input = [{ totally_a_credit_object: true }]
-testApiConnectionAction(actions.submitCredits, input)
 
 input = ';'
 testAction(actions.changeDelimiter, {

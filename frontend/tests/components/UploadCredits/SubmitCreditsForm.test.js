@@ -7,19 +7,14 @@ import CreditsPreview from '../../../src/components/UploadCredits/CreditsPreview
 
 SubmitCreditsFormComponent.propTypes = {}
 
-const credits = [
-  { totally_a_credit_object: true },
-  { totally_a_credit_object: true }
-]
-
 describe('SubmitCreditsForm component', () => {
-  const dispatchSubmitCredits = jest.fn()
+  const onSubmit = jest.fn()
   let wrapper
   beforeEach(() => {
-    dispatchSubmitCredits.mockReset()
+    onSubmit.mockReset()
     wrapper = shallow(<SubmitCreditsFormComponent
-      dispatchSubmitCredits={dispatchSubmitCredits}
-      credits={credits}
+      onSubmit={onSubmit}
+      ready
       classes={{}}
     />)
   })
@@ -32,12 +27,12 @@ describe('SubmitCreditsForm component', () => {
     expect(form.find(CreditsInput).exists()).toEqual(true)
     expect(form.find(CreditsPreview).exists()).toEqual(true)
   })
-  it('calls dispatchSubmitCredits prop on submit with credits prop.', () => {
+  it('calls onSubmit prop on submit.', () => {
     const event = {
       preventDefault: () => {}
     }
-    expect(dispatchSubmitCredits).not.toHaveBeenCalled()
+    expect(onSubmit).not.toHaveBeenCalled()
     wrapper.find('form').prop('onSubmit')(event)
-    expect(dispatchSubmitCredits).toHaveBeenCalledWith(credits)
+    expect(onSubmit).toHaveBeenCalled()
   })
 })
