@@ -1,8 +1,9 @@
 import React from 'react'
-import { func, arrayOf, shape } from 'prop-types'
+import { func, arrayOf } from 'prop-types'
 import { connect } from 'react-redux'
 import { Mutation } from 'react-apollo'
 import { createCredits } from '../../util/queries/uploadCredits'
+import { creditProp } from '../../util/propTypes'
 
 export const UploadCreditsMutationComponent = ({ UploadForm, credits }) => (
   <Mutation mutation={createCredits} variables={{ credits }}>
@@ -14,7 +15,7 @@ export const UploadCreditsMutationComponent = ({ UploadForm, credits }) => (
 
 UploadCreditsMutationComponent.propTypes = {
   UploadForm: func.isRequired,
-  credits: arrayOf(shape({})).isRequired
+  credits: arrayOf(creditProp).isRequired
 }
 
 const mapStateToProps = state => ({

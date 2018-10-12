@@ -5,6 +5,7 @@ import Papa from 'papaparse'
 import { Button, Typography } from '@material-ui/core'
 import { changeCredits } from '../../util/actions/uploadCredits'
 import { file } from '../../util/propTypes'
+import parseCredits from './helpers/parseCredits'
 
 export class CreditsInputComponent extends PureComponent {
   handlePreview = () => {
@@ -14,10 +15,7 @@ export class CreditsInputComponent extends PureComponent {
       delimiter,
       header: true,
       skipEmptyLines: true,
-      complete: result => changeValue({
-        credits: result.data,
-        headers: result.meta.fields
-      })
+      complete: result => changeValue(parseCredits(result.data))
     })
   }
 
