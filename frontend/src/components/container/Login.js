@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 
 import parseQueryParams from '../../util/parseQueryParams'
 import { parseUser } from '../../util/actions/user'
+import { primary } from '../../common/colors'
 
 class Login extends PureComponent {
   componentDidMount() {
@@ -26,7 +27,7 @@ class Login extends PureComponent {
     const url = `${process.env.API_URL}/login?redirect_url=${process.env.REDIRECT_URL}`
     if (!user) {
       return (
-        <Button href={url} color="inherit">Login</Button>
+        <Button href={url} style={{ background: primary.light }}>Login</Button>
       )
     }
     return (

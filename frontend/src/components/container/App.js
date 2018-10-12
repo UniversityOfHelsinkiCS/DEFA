@@ -9,11 +9,18 @@ import { getHello } from '../../util/redux/reducer'
 import Main from './Main'
 
 const palette = {
-  primary: { main: '#4DD0E1' },
-  secondary: { main: '#B2DFDB' }
+  primary: {
+    main: '#4DD0E1',
+    light: '#88ffff',
+    dark: '#009faf'
+  },
+  secondary: {
+    main: '#FFB74D',
+    light: '##ffe97d',
+    dark: '#c88719'
+  }
 }
-
-const themeName = 'Turquoise Blue Aqua Island Gayal'
+const themeName = 'Turquoise Blue Texas Rose Bandicoot'
 
 const theme = createMuiTheme({ palette, themeName, typography: { useNextVariants: true } })
 
