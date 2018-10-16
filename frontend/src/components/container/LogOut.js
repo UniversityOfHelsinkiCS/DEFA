@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import { logout } from '../../util/actions/user'
+import { primary } from '../../common/colors'
 
 class LogOut extends PureComponent {
   handleLogout = () => {
@@ -16,7 +17,10 @@ class LogOut extends PureComponent {
       <nav>
         {loggedIn ? (
           <Button
-            color="inherit"
+            style={{
+              background: primary.light,
+              marginLeft: '12px'
+            }}
             onClick={() => this.handleLogout()}
           >
             Log out

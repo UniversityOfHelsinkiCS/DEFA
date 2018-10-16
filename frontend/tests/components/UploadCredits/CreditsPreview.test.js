@@ -3,19 +3,9 @@ import { Table, TableHead } from '@material-ui/core'
 import { CreditsPreviewComponent } from '../../../src/components/UploadCredits/CreditsPreview'
 import CreditsPreviewRow from '../../../src/components/UploadCredits/CreditsPreviewRow'
 import { findText } from '../../testUtils'
+import headers from '../../../src/components/UploadCredits/helpers/creditHeaders'
 
 CreditsPreviewComponent.propTypes = {}
-
-const headers = [
-  'opiskelijanumero',
-  'kurssikoodi',
-  'pvm (vvvv-kk-pp)',
-  'laajuus (op)',
-  'arvosana',
-  'suorituskieli',
-  'opettajan henkilötunnus',
-  'yliopiston nimi'
-]
 
 const credits = [{}, {}]
 
@@ -24,7 +14,6 @@ describe('CreditsPreview component', () => {
 
   beforeAll(() => {
     wrapper = shallow(<CreditsPreviewComponent
-      headers={headers}
       credits={credits}
     />)
   })
@@ -36,7 +25,7 @@ describe('CreditsPreview component', () => {
     const head = wrapper.find(TableHead)
     expect(head.exists()).toEqual(true)
     headers.forEach(
-      header => expect(findText(header, head)).toBeGreaterThan(0)
+      header => expect(findText(header.display, head)).toBeGreaterThan(0)
     )
   })
 

@@ -30,7 +30,7 @@ const getMany: IQuery = {
     name: { type: GraphQLString }
   },
   resolve(parent: null, args: { [key: string]: string, id: string, name: string }) {
-    return DummyModel.find({})
+    return DummyModel.find({ name: args.name })
   }
 }
 

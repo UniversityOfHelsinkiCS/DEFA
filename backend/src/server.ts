@@ -1,4 +1,7 @@
 import app from './app'
+import { connect } from './mongo/connection'
+
+connect()
 
 const port: number = 3000
 

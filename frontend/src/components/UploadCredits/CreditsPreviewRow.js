@@ -1,20 +1,20 @@
 import React from 'react'
-import { shape, arrayOf, string } from 'prop-types'
 import { TableCell, TableRow, Typography } from '@material-ui/core'
+import headers from './helpers/creditHeaders'
+import { creditProp } from '../../util/propTypes'
 
-const CreditsPreview = ({ credit, headers }) => (
+const CreditsPreview = ({ credit }) => (
   <TableRow>
     {headers.map(field => (
-      <TableCell key={field}>
-        <Typography>{credit[field]}</Typography>
+      <TableCell key={field.key}>
+        <Typography>{String(credit[field.key])}</Typography>
       </TableCell>
     ))}
   </TableRow>
 )
 
 CreditsPreview.propTypes = {
-  credit: shape({}).isRequired,
-  headers: arrayOf(string).isRequired
+  credit: creditProp.isRequired
 }
 
 export default CreditsPreview

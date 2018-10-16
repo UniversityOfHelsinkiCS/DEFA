@@ -8,8 +8,6 @@
     "build": "rimraf dist && webpack ---mode production",
     "dev": "webpack-dev-server --mode development --hot",
     "lint": "eslint ./src --ext .js",
-    "precommit": "npm run lint",
-    "prepush": "npm run lint && npm test",
     "start": "serve -s -l 5000 dist",
     "test": "jest"
   },
@@ -18,10 +16,13 @@
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@material-ui/core": "^3.2.0",
+    "apollo-boost": "^0.1.16",
     "axios": "^0.18.0",
     "css-loader": "^1.0.0",
     "dotenv": "^6.0.0",
     "file-loader": "^2.0.0",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.10.0",
     "html-webpack-plugin": "^3.2.0",
     "html-webpack-template": "^6.2.0",
     "jsonwebtoken": "^8.3.0",
@@ -30,6 +31,7 @@
     "papaparse": "^4.6.1",
     "prop-types": "^15.6.2",
     "react": "^16.5.0",
+    "react-apollo": "^2.2.4",
     "react-dom": "^16.5.0",
     "react-redux": "^5.0.7",
     "react-router": "^4.3.1",
@@ -62,7 +64,7 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-prefer-object-spread": "^1.2.1",
     "eslint-plugin-react": "^7.11.1",
-    "husky": "^0.14.3",
+    "husky": "^1.1.1",
     "jest": "^23.6.0"
   },
   "babel": {
@@ -83,5 +85,11 @@
       "\\.(css|less)$": "<rootDir>/tests/__mocks__/styleMock.js"
     },
     "setupTestFrameworkScriptFile": "<rootDir>/tests/setupTests.js"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint && npm test"
+    }
   }
 }

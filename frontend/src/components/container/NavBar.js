@@ -22,7 +22,7 @@ const NavBar = props => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="primary">
+      <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" color="inherit" className={classes.grow}>
             DEFA
