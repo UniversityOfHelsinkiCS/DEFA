@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
   client: new ApolloClient({
     uri: `${process.env.API_URL}/query`,
     headers: {
-      Authentication: state.user.token
+      authorization: state.user.token
     }
   })
 })
