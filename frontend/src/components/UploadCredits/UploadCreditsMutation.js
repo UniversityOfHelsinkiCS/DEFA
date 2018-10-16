@@ -4,9 +4,15 @@ import { connect } from 'react-redux'
 import { Mutation } from 'react-apollo'
 import { createCredits } from '../../util/queries/uploadCredits'
 import { creditProp } from '../../util/propTypes'
+import { mutationOnError, mutationOnCompleted } from '../../util/actions/uploadCredits'
 
-export const UploadCreditsMutationComponent = ({ UploadForm, credits }) => (
-  <Mutation mutation={createCredits} variables={{ credits }}>
+export const UploadCreditsMutationComponent = ({ UploadForm, credits, onError, onCompleted }) => (
+  <Mutation
+    mutation={createCredits}
+    variables={{ credits }}
+    onError={onError}
+    onCompleted={onCompleted}
+  >
     {mutate => (
       <UploadForm onSubmit={mutate} ready={credits.length !== 0} />
     )}
@@ -15,11 +21,18 @@ export const UploadCreditsMutationComponent = ({ UploadForm, credits }) => (
 
 UploadCreditsMutationComponent.propTypes = {
   UploadForm: func.isRequired,
-  credits: arrayOf(creditProp).isRequired
+  credits: arrayOf(creditProp).isRequired,
+  onError: func.isRequired,
+  onCompleted: func.isRequired
 }
 
 const mapStateToProps = state => ({
   credits: state.uploadCredits.credits
 })
 
-export default connect(mapStateToProps, null)(UploadCreditsMutationComponent)
+const mapDispatchToProps = {
+  onError: mutationOnError,
+  onCompleted: mutationOnCompleted
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UploadCreditsMutationComponent)
