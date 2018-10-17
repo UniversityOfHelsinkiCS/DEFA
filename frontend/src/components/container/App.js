@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { BrowserRouter } from 'react-router-dom'
+
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo'
 
@@ -32,7 +34,9 @@ const App = ({ getHelloFn }) => {
   return (
     <MuiThemeProvider theme={theme}>
       <ApolloProvider client={client}>
-        <Main />
+        <BrowserRouter>
+          <Main />
+        </BrowserRouter>
       </ApolloProvider>
     </MuiThemeProvider>
   )

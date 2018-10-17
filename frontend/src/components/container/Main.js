@@ -16,7 +16,8 @@ const Main = () => (
     <NavBar />
     <Switch>
       <Route exact path="/upload-credits" component={UploadCredits} />
-      <Route component={Welcome} />
+      <Route exact path="/student" />
+      <Route exact path="/" component={Welcome} />
     </Switch>
   </main>
 )
