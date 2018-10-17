@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify'
 import * as actions from '../../../src/util/actions/uploadCredits'
 import * as types from '../../../src/util/actionTypes'
 import { testAction } from '../../testUtils'
@@ -28,5 +29,29 @@ testAction(actions.changeCredits, {
   expectation: {
     type: types.UPLOAD_CREDITS_CHANGE_CREDITS,
     value: input
+  }
+})
+
+testAction(actions.mutationOnError, {
+  expectation: {
+    type: types.TOAST,
+    toast: {
+      message: expect.any(String),
+      options: {
+        type: toast.TYPE.ERROR
+      }
+    }
+  }
+})
+
+testAction(actions.mutationOnCompleted, {
+  expectation: {
+    type: types.TOAST,
+    toast: {
+      message: expect.any(String),
+      options: {
+        type: toast.TYPE.SUCCESS
+      }
+    }
   }
 })

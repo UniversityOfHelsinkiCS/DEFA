@@ -2,6 +2,8 @@ import React from 'react'
 import { UploadCreditsMutationComponent } from '../../../src/components/UploadCredits/UploadCreditsMutation'
 import { createCredits } from '../../../src/util/queries/uploadCredits'
 
+UploadCreditsMutationComponent.propTypes = {}
+
 const credits = [{ totally_a_credit: true }, { totally_a_credit: 'maybe' }]
 const TestForm = () => <form />
 
