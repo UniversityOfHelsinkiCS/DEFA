@@ -1,3 +1,3 @@
 export * from './Dummy'
-export * from './Student'
+export * from './User'
 export * from './Credit'

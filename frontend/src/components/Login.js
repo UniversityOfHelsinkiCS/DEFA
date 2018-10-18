@@ -5,9 +5,9 @@ import { withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import parseQueryParams from '../../util/parseQueryParams'
-import { parseUser } from '../../util/actions/user'
-import { primary } from '../../common/colors'
+import parseQueryParams from '../util/parseQueryParams'
+import { parseUser } from '../util/actions/user'
+import { primary } from '../common/colors'
 
 class Login extends PureComponent {
   componentDidMount() {
