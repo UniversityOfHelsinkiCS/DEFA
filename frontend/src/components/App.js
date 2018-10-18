@@ -1,7 +1,9 @@
 import React from 'react'
 
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import { BrowserRouter } from 'react-router-dom'
 import ApolloContainer from './ApolloContainer'
+import Main from './Main'
 
 const palette = {
   primary: {
@@ -21,9 +23,12 @@ const theme = createMuiTheme({ palette, themeName, typography: { useNextVariants
 
 const App = () => (
   <MuiThemeProvider theme={theme}>
-    <ApolloContainer />
+    <ApolloContainer>
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    </ApolloContainer>
   </MuiThemeProvider>
 )
-
 
 export default App

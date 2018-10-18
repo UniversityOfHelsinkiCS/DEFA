@@ -1,21 +1,18 @@
 import React from 'react'
-import { instanceOf } from 'prop-types'
+import { instanceOf, node } from 'prop-types'
 import { connect } from 'react-redux'
 import ApolloClient from 'apollo-boost'
 import { ApolloProvider } from 'react-apollo'
-import { BrowserRouter } from 'react-router-dom'
-import Main from './Main'
 
-const ApolloContainer = ({ client }) => (
+const ApolloContainer = ({ client, children }) => (
   <ApolloProvider client={client}>
-    <BrowserRouter>
-      <Main />
-    </BrowserRouter>
+    {children}
   </ApolloProvider>
 )
 
 ApolloContainer.propTypes = {
-  client: instanceOf(ApolloClient).isRequired
+  client: instanceOf(ApolloClient).isRequired,
+  children: node.isRequired
 }
 
 const mapStateToProps = state => ({
