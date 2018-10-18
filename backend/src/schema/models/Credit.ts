@@ -5,7 +5,7 @@ const schema: Schema = new Schema({
   course_code: String,
   date: String,
   study_credits: Number,
-  grade: Number,
+  grade: String,
   language: String,
   teacher: String,
   university: String

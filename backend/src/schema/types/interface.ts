@@ -21,9 +21,3 @@ export interface IQueries {
 export interface IEditableDummyDocument extends Document {
   name?: string
 }
-
-export interface IEditableStudentDocument extends Document {
-  name?: string
-  university?: string
-  studentNumber?: string
-}

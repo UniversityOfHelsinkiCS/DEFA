@@ -31,7 +31,7 @@ const input = new GraphQLInputObjectType({
     course_code: { type: GraphQLString },
     date: { type: GraphQLString },
     study_credits: { type: new GraphQLNonNull(GraphQLInt) },
-    grade: { type: GraphQLInt },
+    grade: { type: GraphQLString },
     language: { type: GraphQLString },
     teacher: { type: GraphQLString },
     university: { type: new GraphQLNonNull(GraphQLString) }
@@ -51,7 +51,7 @@ interface ICredit {
   course_code: string,
   date: string,
   study_credits: number,
-  grade: number,
+  grade: string,
   language: string,
   teacher: string,
   university: string
