@@ -1,10 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
-import { getHello } from '../../util/redux/reducer'
+import { BrowserRouter } from 'react-router-dom'
+import { getHello } from '../util/redux/reducer'
 import ApolloContainer from './ApolloContainer'
+import Main from './Main'
 
 const palette = {
   primary: {
@@ -27,7 +28,11 @@ const App = ({ getHelloFn }) => {
 
   return (
     <MuiThemeProvider theme={theme}>
-      <ApolloContainer />
+      <ApolloContainer>
+        <BrowserRouter>
+          <Main />
+        </BrowserRouter>
+      </ApolloContainer>
     </MuiThemeProvider>
   )
 }

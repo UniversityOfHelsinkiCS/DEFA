@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 
 import Login from './Login'
 import LogOut from './LogOut'
-import { parseClasses } from '../../util/propTypes'
+import { parseClasses } from '../util/propTypes'
 
 const { object } = PropTypes
 

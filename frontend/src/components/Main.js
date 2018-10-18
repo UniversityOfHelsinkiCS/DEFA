@@ -3,8 +3,8 @@ import { withRouter, Switch, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import NavBar from './NavBar'
-import Welcome from '../Welcome'
-import UploadCredits from './UploadCredits'
+import Welcome from './Welcome'
+import UploadCreditsContainer from './UploadCredits/UploadCreditsContainer'
 
 const Main = () => (
   <main>
@@ -15,7 +15,7 @@ const Main = () => (
     />
     <NavBar />
     <Switch>
-      <Route exact path="/upload-credits" component={UploadCredits} />
+      <Route exact path="/upload-credits" component={UploadCreditsContainer} />
       <Route exact path="/student" />
       <Route exact path="/" component={Welcome} />
     </Switch>
