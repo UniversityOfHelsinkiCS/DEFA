@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
-import { Input, FormControlLabel, Typography } from '@material-ui/core'
+import { Select, FormControlLabel, Typography, MenuItem } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { changeDelimiter } from '../../util/actions/uploadCredits'
 import { parseClasses } from '../../util/propTypes'
 
 const styles = {
   input: {
-    width: '35px',
-    marginLeft: '5px'
+    marginLeft: '10px'
   }
 }
 
@@ -27,14 +26,27 @@ export class DelimiterInputComponent extends Component {
           label={<Typography>Delimiter: </Typography>}
           labelPlacement="start"
           control={(
-            <Input
-              type="text"
+            <Select
               name="delimiter"
               value={value}
               onChange={this.handleChange}
               error={value.length > 1}
               className={classes.input}
-            />
+              displayEmpty
+            >
+              <MenuItem value="">
+                <Typography>automatic</Typography>
+              </MenuItem>
+              <MenuItem value=",">
+                <Typography>comma ( , )</Typography>
+              </MenuItem>
+              <MenuItem value=";">
+                <Typography>semicolon ( ; )</Typography>
+              </MenuItem>
+              <MenuItem value="#">
+                <Typography>pound ( # )</Typography>
+              </MenuItem>
+            </Select>
           )}
         />
       </div>

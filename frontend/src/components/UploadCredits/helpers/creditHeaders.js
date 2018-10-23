@@ -4,6 +4,10 @@ export default [
     display: 'student number'
   },
   {
+    key: 'course_name',
+    display: 'course name'
+  },
+  {
     key: 'course_code',
     display: 'course code'
   },
@@ -22,13 +26,5 @@ export default [
   {
     key: 'language',
     display: 'language'
-  },
-  {
-    key: 'teacher',
-    display: 'teacher identification'
-  },
-  {
-    key: 'university',
-    display: 'university'
   }
 ]

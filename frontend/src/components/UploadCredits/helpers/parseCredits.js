@@ -4,7 +4,11 @@ const identifiers = [
     key: 'student_number'
   },
   {
-    regex: /(kurssi|course)/,
+    regex: /(kurssi.+nimi|course.+name)/,
+    key: 'course_name'
+  },
+  {
+    regex: /(kurssi(|.+)koodi|course.+code)/,
     key: 'course_code'
   },
   {
@@ -24,14 +28,6 @@ const identifiers = [
   {
     regex: /(kieli|language)/,
     key: 'language'
-  },
-  {
-    regex: /(opettaja|teacher)/,
-    key: 'teacher'
-  },
-  {
-    regex: /(yliopisto|university)/,
-    key: 'university'
   }
 ]
 
