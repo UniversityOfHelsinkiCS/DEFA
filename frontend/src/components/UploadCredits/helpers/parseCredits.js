@@ -1,36 +1,36 @@
 const identifiers = [
   {
-    regex: /opiskelijanumero/,
+    regex: /(opiskelijanumero|student)/,
     key: 'student_number'
   },
   {
-    regex: /kurssi/,
+    regex: /(kurssi|course)/,
     key: 'course_code'
   },
   {
-    regex: /(pvm|päivämäärä)/,
+    regex: /(pvm|päivämäärä|date)/,
     key: 'date'
   },
   {
-    regex: /(laajuus|opintopiste)/,
+    regex: /(laajuus|opintopiste|credit)/,
     key: 'study_credits',
     type: Number
   },
   {
-    regex: /arvosana/,
+    regex: /(arvosana|grade)/,
     key: 'grade',
     type: Number
   },
   {
-    regex: /kieli/,
+    regex: /(kieli|language)/,
     key: 'language'
   },
   {
-    regex: /opettaja/,
+    regex: /(opettaja|teacher)/,
     key: 'teacher'
   },
   {
-    regex: /yliopisto/,
+    regex: /(yliopisto|university)/,
     key: 'university'
   }
 ]
