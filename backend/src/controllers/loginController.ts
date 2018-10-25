@@ -15,7 +15,10 @@ import fs from 'fs'
 const router: Router = Router()
 
 const sp = samlify.ServiceProvider({
-  metadata: fs.readFileSync('./src/utils/metadata.xml')
+  metadata: fs.readFileSync('./src/utils/metadata.xml'),
+  encPrivateKey: fs.readFileSync('./src/utils/key.pem'),
+  privateKey: fs.readFileSync('./src/utils/key.pem'),
+  loginNameIDFormat: "transient",
 })
 // tslint:disable-next-line:no-any
 let idp: any = null
@@ -29,8 +32,18 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
   // }
   const metadata = await getMetadata(req.query.entityID)
   idp = samlify.IdentityProvider({
-    metadata
-  })
+    metadata: fs.readFileSync('./src/utils/idp-metadata.xml'),
+    isAssertionEncrypted: true,
+    wantMessageSigned: true,
+    messageSigningOrder: 'encrypt-then-sign',
+    signatureConfig: {
+      prefix: 'ds',
+      location: {
+        reference: '/samlp:Response/saml:Issuer',
+        action: 'after'
+     }
+   }
+  })  
   sp.entitySetting.relayState = { redirect_url: process.env.RELAY_STATE }
   const { id, context } = sp.createLoginRequest(idp, 'redirect')
   return res.redirect(context)
@@ -62,7 +75,8 @@ router.post('/assert', async (req: Request, res: Response): Promise<void> => {
     res.redirect(responseUrl(attributes, relayState))
 
   } catch (error) {
-    res.redirect(errorUrl(error, sp.relayState))
+    console.log(error)    
+//res.redirect(errorUrl(error, sp.relayState))
   }
   // const relay: Irelay = JSON.parse(req.body.RelayState)
   // const options: GetAssertOptions = { request_body: req.body }
