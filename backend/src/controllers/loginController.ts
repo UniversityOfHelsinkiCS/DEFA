@@ -1,8 +1,13 @@
 import { Request, Response, Router } from 'express'
-import { GetAssertOptions, CreateLoginRequestUrlOptions } from 'saml2-js'
 // import { sp, idp } from '../utils/saml'
-import { responseUrl, errorUrl, Irelay, ISamlResponse, getMetadata } from '../utils/controller_helpers/login'
-
+import {
+  responseUrl,
+  errorUrl,
+  Irelay,
+  ISamlResponse,
+  getMetadata,
+  samlResponseAttributes
+} from '../utils/controller_helpers/login'
 // tslint:disable-next-line:no-var-requires
 const samlify = require('samlify')
 import fs from 'fs'
@@ -12,7 +17,7 @@ const router: Router = Router()
 const sp = samlify.ServiceProvider({
   metadata: fs.readFileSync('./src/utils/metadata.xml')
 })
-let idp = null
+let idp: any = null
 
 router.get('/', async (req: Request, res: Response): Promise<void> => {
   // const relay: Irelay = {
@@ -25,7 +30,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
   idp = samlify.IdentityProvider({
     metadata
   })
-  sp.entitySetting.relayState = process.env.RELAY_STATE
+  sp.entitySetting.relayState = { redirect_url: process.env.RELAY_STATE }
   const { id, context } = sp.createLoginRequest(idp, 'redirect')
   return res.redirect(context)
 
@@ -43,12 +48,21 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
   //   )
 })
 
-router.get('/metadata', (req: Request, res: Response): void => {
-  // res.type('application/xml')
-  // res.send(sp.create_metadata())
-})
+// router.get('/metadata', (req: Request, res: Response): void => {
+// res.type('application/xml')
+// res.send(sp.create_metadata())
+// })
 
-router.post('/assert', (req: Request, res: Response): void => {
+router.post('/assert', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const response = await sp.parseLoginResponse(idp, 'post', req)
+    const { relayState } = sp.entitySetting
+    const { attributes } = response.extract
+    res.redirect(responseUrl(attributes, relayState))
+
+  } catch (error) {
+    res.redirect(errorUrl(error, sp.relayState))
+  }
   // const relay: Irelay = JSON.parse(req.body.RelayState)
   // const options: GetAssertOptions = { request_body: req.body }
   // sp.post_assert(idp, options, (err: { message: string }, samlResponse: ISamlResponse): void => {

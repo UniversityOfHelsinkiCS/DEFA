@@ -22,8 +22,8 @@ const validateRedirect = (url: string | void): boolean => url ? allowedRedirects
 ) : false
 
 const applyToken = (url: string, token: string | void): string => token ? (
-    `${url}?token=${token}`
-  ) : (
+  `${url}?token=${token}`
+) : (
     `${url}?error=Kirjautuminen epäonnistui. Kirjautumispalvelu antoi epämuodostuneita tietoja.`
   )
 const signToken = (samlResponse: ISamlResponse): string | void => {
@@ -59,7 +59,7 @@ export const errorUrl = (error: { message: string }, relay: Irelay): string => {
   const redirectUrl: string = validateRedirect(relay.redirect_url) ? (
     relay.redirect_url
   ) : (
-    defaultRedirect
-  )
+      defaultRedirect
+    )
   return applyError(redirectUrl, errorMessage)
 }
