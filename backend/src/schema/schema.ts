@@ -1,5 +1,5 @@
-import { GraphQLSchema, GraphQLObjectType, GraphQLList } from 'graphql'
-import * as types from './types' // All types are imported.
+import { GraphQLSchema, GraphQLObjectType } from 'graphql'
+import * as types from './types'
 import { IQueries } from './types/interface'
 
 type IqueryReducer = (field: string) => (

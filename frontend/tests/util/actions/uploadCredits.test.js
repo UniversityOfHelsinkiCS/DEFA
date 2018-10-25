@@ -1,11 +1,9 @@
+import { toast } from 'react-toastify'
 import * as actions from '../../../src/util/actions/uploadCredits'
 import * as types from '../../../src/util/actionTypes'
-import { testAction, testApiConnectionAction } from '../../testUtils'
+import { testAction } from '../../testUtils'
 
 let input
-
-input = [{ totally_a_credit_object: true }]
-testApiConnectionAction(actions.submitCredits, input)
 
 input = ';'
 testAction(actions.changeDelimiter, {
@@ -31,5 +29,29 @@ testAction(actions.changeCredits, {
   expectation: {
     type: types.UPLOAD_CREDITS_CHANGE_CREDITS,
     value: input
+  }
+})
+
+testAction(actions.mutationOnError, {
+  expectation: {
+    type: types.TOAST,
+    toast: {
+      message: expect.any(String),
+      options: {
+        type: toast.TYPE.ERROR
+      }
+    }
+  }
+})
+
+testAction(actions.mutationOnCompleted, {
+  expectation: {
+    type: types.TOAST,
+    toast: {
+      message: expect.any(String),
+      options: {
+        type: toast.TYPE.SUCCESS
+      }
+    }
   }
 })

@@ -5,8 +5,9 @@ import { withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
-import parseQueryParams from '../../util/parseQueryParams'
-import { parseUser } from '../../util/actions/user'
+import parseQueryParams from '../util/parseQueryParams'
+import { parseUser } from '../util/actions/user'
+import { primary } from '../common/colors'
 
 class Login extends PureComponent {
   componentDidMount() {
@@ -27,12 +28,12 @@ class Login extends PureComponent {
     const url = `${process.env.DS_URL}?entityID=${process.env.ENTITY_ID}&return=${process.env.LOGIN_URL}`
     if (!user) {
       return (
-        <Button href={url} color="inherit">Login</Button>
+        <Button href={url} style={{ background: primary.light }}>Login</Button>
       )
     }
     return (
       <div>
-        <Typography variant="subheading">{user.name_id}</Typography>
+        <Typography variant="subtitle1">{user.name_id}</Typography>
       </div>
     )
   }

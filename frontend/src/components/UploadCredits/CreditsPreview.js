@@ -1,17 +1,19 @@
 import React from 'react'
-import { arrayOf, shape, string } from 'prop-types'
+import { arrayOf } from 'prop-types'
 import { connect } from 'react-redux'
 import { Table, TableHead, TableBody, TableCell, TableRow, Typography } from '@material-ui/core'
 import CreditsPreviewRow from './CreditsPreviewRow'
+import headers from './helpers/creditHeaders'
+import { creditProp } from '../../util/propTypes'
 
-export const CreditsPreviewComponent = ({ credits, headers }) => (
+export const CreditsPreviewComponent = ({ credits }) => (
   <div>
     <Table>
       <TableHead>
         <TableRow>
           {headers.map(field => (
-            <TableCell key={field}>
-              <Typography>{field}</Typography>
+            <TableCell key={field.key}>
+              <Typography>{field.display}</Typography>
             </TableCell>
           ))}
         </TableRow>
@@ -21,7 +23,6 @@ export const CreditsPreviewComponent = ({ credits, headers }) => (
           <CreditsPreviewRow
             key={Object.values(credit).reduce((acc, curr) => acc + curr, '')}
             credit={credit}
-            headers={headers}
           />
         ))}
       </TableBody>
@@ -30,13 +31,11 @@ export const CreditsPreviewComponent = ({ credits, headers }) => (
 )
 
 CreditsPreviewComponent.propTypes = {
-  credits: arrayOf(shape({})).isRequired,
-  headers: arrayOf(string).isRequired
+  credits: arrayOf(creditProp).isRequired
 }
 
 const mapStateToProps = state => ({
-  credits: state.uploadCredits.credits,
-  headers: state.uploadCredits.headers
+  credits: state.uploadCredits.credits
 })
 
 export default connect(mapStateToProps, null)(CreditsPreviewComponent)

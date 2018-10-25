@@ -17,3 +17,14 @@ export const parseClasses = styles => shape(
     {}
   )
 )
+
+export const creditProp = shape({
+  student_number: string,
+  course_code: string,
+  date: string,
+  study_credits: number,
+  grade: number,
+  language: string,
+  teacher: string,
+  university: string
+})

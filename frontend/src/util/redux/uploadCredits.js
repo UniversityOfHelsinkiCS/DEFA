@@ -3,7 +3,6 @@ import * as types from '../actionTypes'
 const INITIAL_STATE = {
   delimiter: '',
   file: null,
-  headers: [],
   credits: []
 }
 
@@ -27,8 +26,7 @@ const uploadCreditsReducer = (state = INITIAL_STATE, action) => {
     case types.UPLOAD_CREDITS_CHANGE_CREDITS:
       return {
         ...state,
-        headers: action.value.headers,
-        credits: action.value.credits
+        credits: action.value
       }
     default:
       return state

@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import { func, arrayOf, shape } from 'prop-types'
-import { connect } from 'react-redux'
+import { bool, func } from 'prop-types'
 import { Button, Typography, FormGroup } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-import { submitCredits } from '../../util/actions/uploadCredits'
 import DelimiterInput from './DelimiterInput'
 import FileInput from './FileInput'
 import CreditsInput from './CreditsInput'
@@ -28,13 +26,13 @@ const styles = {
 
 export class SubmitCreditsFormComponent extends Component {
   handleSubmit = event => {
-    const { dispatchSubmitCredits, credits } = this.props
+    const { onSubmit } = this.props
     event.preventDefault()
-    dispatchSubmitCredits(credits)
+    onSubmit(event)
   }
 
   render() {
-    const { credits, classes } = this.props
+    const { ready, classes } = this.props
     return (
       <form className={classes.form} onSubmit={this.handleSubmit}>
         <div className={classes.segment}>
@@ -46,7 +44,7 @@ export class SubmitCreditsFormComponent extends Component {
             <CreditsInput className={classes.button} />
             <Button
               type="submit"
-              disabled={credits.length === 0}
+              disabled={!ready}
               color="primary"
               variant="contained"
               className={classes.button}
@@ -64,21 +62,9 @@ export class SubmitCreditsFormComponent extends Component {
 }
 
 SubmitCreditsFormComponent.propTypes = {
-  dispatchSubmitCredits: func.isRequired,
-  credits: arrayOf(shape({})).isRequired,
-  classes: parseClasses(styles).isRequired
+  classes: parseClasses(styles).isRequired,
+  onSubmit: func.isRequired,
+  ready: bool.isRequired
 }
 
-const mapStateToProps = state => ({
-  credits: state.uploadCredits.credits
-})
-
-const mapDispatchToProps = {
-  dispatchSubmitCredits: submitCredits
-}
-
-export default withStyles(styles)(
-  connect(mapStateToProps, mapDispatchToProps)(
-    SubmitCreditsFormComponent
-  )
-)
+export default withStyles(styles)(SubmitCreditsFormComponent)
