@@ -60,8 +60,10 @@ interface ICreditWithUni extends ICredit {
   university: string
 }
 
-// TODO: parse university from user info
-const unversityMapper = (user: IUser) => (credit: ICredit): ICreditWithUni => ({ ...credit, university: 'placeholder' })
+const unversityMapper = (user: IUser) => (credit: ICredit): ICreditWithUni => ({
+  ...credit,
+  university: user.attributes.schacHomeOrganization
+})
 
 const createMany: IQuery = {
   type: new GraphQLList(type),

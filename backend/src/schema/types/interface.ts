@@ -2,7 +2,9 @@ import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull } from
 import { Document, DocumentQuery } from 'mongoose'
 
 export interface IUser {
-  id: string
+  attributes: {
+    schacHomeOrganization: string
+  }
 }
 
 interface IContext {
