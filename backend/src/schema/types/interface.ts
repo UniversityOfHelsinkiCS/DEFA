@@ -1,10 +1,19 @@
 import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull } from 'graphql'
 import { Document, DocumentQuery } from 'mongoose'
 
+export interface IUser {
+  id: string
+}
+
+interface IContext {
+  user: IUser
+}
+
 type Iresolve = (
   parent: null,
   // tslint:disable-next-line:no-any
-  args: { [key: string]: any | any[] }
+  args: { [key: string]: any | any[] },
+  context?: IContext
 ) => DocumentQuery<Document[] | Document, Document> | Promise<Document | Document[]>
 
 export interface IQuery {
