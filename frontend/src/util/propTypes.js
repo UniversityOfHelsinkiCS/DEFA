@@ -28,3 +28,15 @@ export const creditProp = shape({
   teacher: string,
   university: string
 })
+
+export const userProp = shape({
+  attributes: shape({
+    // Uncomment when mock idp has been fixed.
+    /* cn: string.isRequired,
+    displayName: string.isRequired,
+    eduPersonPrincipalName: string.isRequired,
+    mail: string.isRequired,
+    shacHomeOrganization: string.isRequired,
+    shacPersonalUniqueCode: string.isRequired */
+  }).isRequired
+})

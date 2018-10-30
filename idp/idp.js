@@ -1,5 +1,5 @@
 const { runServer, userDefaults } = require('saml-idp')
-const { dotenv } = require('dotenv').config()
+require('dotenv').config()
 
 console.log(process.env.ASCURL, process.env.AUDIENCE)
 runServer({

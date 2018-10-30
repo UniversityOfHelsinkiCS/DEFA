@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import { shape, string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography'
 import parseQueryParams from '../util/parseQueryParams'
 import { parseUser } from '../util/actions/user'
 import { primary } from '../common/colors'
+import { userProp } from '../util/propTypes'
+
 
 class Login extends PureComponent {
   componentDidMount() {
@@ -32,21 +34,19 @@ class Login extends PureComponent {
     }
     return (
       <div>
-        <Typography variant="subtitle1">{user.name_id}</Typography>
+        <Typography variant="subtitle1">{user.attributes.cn}</Typography>
       </div>
     )
   }
 }
 
 Login.propTypes = {
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired
+  location: shape({
+    search: string.isRequired
   }).isRequired,
-  user: PropTypes.shape({
-    name_id: PropTypes.string.isRequired
-  }),
-  dispatchParseUser: PropTypes.func.isRequired,
-  token: PropTypes.string
+  user: userProp,
+  dispatchParseUser: func.isRequired,
+  token: string
 }
 
 Login.defaultProps = {
