@@ -4,8 +4,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const EXPIRED_TOKEN_MESSAGE: string = 'Your session has expired. Please log in again to start a new session.'
-const INVALID_TOKEN_MESSAGE: string = 'Your session is invalid. Please log in again to start a valid session.'
+export const EXPIRED_TOKEN_MESSAGE: string = 'Your session has expired. Please log in again to start a new session.'
+export const INVALID_TOKEN_MESSAGE: string = 'Your session is invalid. Please log in again to start a valid session.'
 
 // This interface is yet to be decided.
 // It should mirror whatever user object is encoded into tokens.

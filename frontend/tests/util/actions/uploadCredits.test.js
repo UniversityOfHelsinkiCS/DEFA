@@ -32,18 +32,6 @@ testAction(actions.changeCredits, {
   }
 })
 
-testAction(actions.mutationOnError, {
-  expectation: {
-    type: types.TOAST,
-    toast: {
-      message: expect.any(String),
-      options: {
-        type: toast.TYPE.ERROR
-      }
-    }
-  }
-})
-
 testAction(actions.mutationOnCompleted, {
   expectation: {
     type: types.TOAST,
