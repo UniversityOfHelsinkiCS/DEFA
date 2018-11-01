@@ -1,7 +1,11 @@
-import jwt from 'jsonwebtoken'
+import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 
 dotenv.config()
+
+const JWT_OPTIONS: SignOptions = {
+  expiresIn: '24h'
+}
 
 export interface ISamlResponse {
   type: string,
@@ -34,7 +38,7 @@ const signToken = (samlResponse: ISamlResponse): string | void => {
     console.warn('Could not find required field \'user\' in saml response.')
     return null
   }
-  return jwt.sign(samlResponse.user, process.env.SECRET)
+  return jwt.sign(samlResponse.user, process.env.SECRET, JWT_OPTIONS)
 }
 export const responseUrl = (samlResponse: ISamlResponse, relay: Irelay): string => {
   const token: string | void = signToken(samlResponse)
