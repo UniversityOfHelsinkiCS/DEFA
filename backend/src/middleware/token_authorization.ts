@@ -21,20 +21,25 @@ const parseToken = (token: string): [IUser?, Error?] => {
   }
 }
 
-const handleError = (res: Response, error: Error): void => {
-  if (error.name === 'TokenExpiredError') {
-    res.status(403).json({
-      message: EXPIRED_TOKEN_MESSAGE,
-      actions: ['logout']
-    })
-  } else {
-    res.status(403).json({
-      message: INVALID_TOKEN_MESSAGE,
-      actions: ['logout']
-    })
-  }
+interface IErrorResponse {
+  message: string,
+  code: string
 }
 
+const handleError = (res: Response, error: Error): void => {
+  const response: IErrorResponse = error.name === 'TokenExpiredError' ? {
+    message: EXPIRED_TOKEN_MESSAGE,
+    code: 'TokenError'
+  } : {
+    message: INVALID_TOKEN_MESSAGE,
+    code: 'TokenError'
+  }
+  res.status(403).json(response)
+}
+
+// Sets req.user as null if no token is provided.
+// Sets req.user as the user object if valid token is provided.
+// Responds 403 and stops otherwise.
 const applyToken = (req: IRequestWithUser, res: Response, next: NextFunction): void => {
   const token: string = req.headers.authorization
   const [user, error]: [IUser?, Error?] = parseToken(token)

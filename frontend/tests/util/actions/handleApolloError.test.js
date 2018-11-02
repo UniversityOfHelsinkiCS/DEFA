@@ -104,41 +104,47 @@ describe('Apollo error handling', () => {
       })
     })
 
-    describe('and errors have actions defined.', () => {
+    describe('and errors have codes defined.', () => {
       beforeEach(() => {
         errorObject = {
           graphQLErrors: [
             basicError,
             {
-              basicError,
+              ...basicError,
               extensions: {
-                actions: [
-                  'test',
-                  'other_action'
-                ]
+                code: 'test'
               }
             },
             {
-              basicError,
+              ...basicError,
               extensions: {
-                actions: [
-                  'test',
-                  'anotherTest'
-                ]
+                code: 'other_code'
+              }
+            },
+            {
+              ...basicError,
+              extensions: {
+                code: 'test'
+              }
+            },
+            {
+              ...basicError,
+              extensions: {
+                code: 'anotherTest'
               }
             }
           ]
         }
       })
 
-      it('executes all unique actions.', () => {
+      it('executes actions for all unique codes.', () => {
         expect(testActions[0]).not.toHaveBeenCalled()
         expect(testActions[1]).not.toHaveBeenCalled()
         handleError(dispatch)(errorObject)
         expect(testActions[0]).toHaveBeenCalledWith(testParams[0])
         expect(testActions[1]).toHaveBeenCalledWith(testParams[1])
       })
-      it('does not execute an action more than once', () => {
+      it('does not execute an action more than once.', () => {
         handleError(dispatch)(errorObject)
         expect(testActions[0]).toHaveBeenCalledTimes(1)
       })
@@ -190,21 +196,16 @@ describe('Apollo error handling', () => {
         })
       })
 
-      describe('and actions are specified in the json body.', () => {
+      describe('and a code is specified in the json body.', () => {
         beforeEach(() => {
-          errorObject.networkError.result.actions = [
-            'test',
-            'other_action',
-            'anotherTest'
-          ]
+          errorObject.networkError.result.code = 'test'
         })
 
         it('executes the specified errorActions.', () => {
           expect(testActions[0]).not.toHaveBeenCalled()
-          expect(testActions[1]).not.toHaveBeenCalled()
           handleError(dispatch)(errorObject)
           expect(testActions[0]).toHaveBeenCalledWith(testParams[0])
-          expect(testActions[1]).toHaveBeenCalledWith(testParams[1])
+          expect(testActions[1]).not.toHaveBeenCalled()
         })
       })
     })

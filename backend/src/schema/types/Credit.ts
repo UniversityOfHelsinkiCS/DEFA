@@ -9,7 +9,7 @@ import {
 } from 'graphql'
 import { IQuery, IUser } from './interface'
 import { Document } from 'mongoose'
-import { checkLoggedIn } from '../../utils/errors/LoginRequiredError'
+import applyAccess from '../validators/applyAccess'
 
 const type: GraphQLObjectType = new GraphQLObjectType({
   name: 'Credit',
@@ -44,7 +44,8 @@ const getMany: IQuery = {
   args: {},
   resolve(parent: null, args: {}) {
     return CreditModel.find()
-  }
+  },
+  access: 'public'
 }
 
 interface ICredit {
@@ -72,19 +73,19 @@ const createMany: IQuery = {
     credits: { type: new GraphQLNonNull(new GraphQLList(input)) }
   },
   async resolve(parent: null, args: { credits: ICredit[] }, context) {
-    checkLoggedIn(context.user)
     const newCredits: Document[] = args.credits
       .map(unversityMapper(context.user))
       .map(credit => new CreditModel(credit))
     return CreditModel.create(newCredits)
-  }
+  },
+  access: 'privileged'
 }
 
-export const Credit = {
+export const Credit = applyAccess({
   queries: {
     credits: getMany
   },
   mutations: {
     createCredits: createMany
   }
-}
+})

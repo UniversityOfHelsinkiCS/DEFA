@@ -23,10 +23,10 @@ type Iresolve = (
 ) => DocumentQuery<Document[] | Document, Document> | Promise<Document | Document[]>
 
 export interface IQuery {
-  [key: string]: object
   type: GraphQLObjectType | GraphQLList<GraphQLObjectType>
   args: { [key: string]: { type: GraphQLInputType | GraphQLNonNull<GraphQLInputType> } }
   resolve: Iresolve
+  access?: string
 }
 
 export interface IQueries {
