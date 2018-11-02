@@ -1,14 +1,18 @@
 import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull } from 'graphql'
 import { Document, DocumentQuery } from 'mongoose'
+import { Request, Response } from 'express'
 
 export interface IUser {
   attributes: {
+    cn: string,
     schacHomeOrganization: string
   }
 }
 
 interface IContext {
-  user: IUser
+  user: IUser,
+  req: Request,
+  res: Response
 }
 
 type Iresolve = (

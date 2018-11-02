@@ -9,6 +9,7 @@ import {
 } from 'graphql'
 import { IQuery, IUser } from './interface'
 import { Document } from 'mongoose'
+import { checkLoggedIn } from '../../utils/errors/LoginRequiredError'
 
 const type: GraphQLObjectType = new GraphQLObjectType({
   name: 'Credit',
@@ -71,6 +72,7 @@ const createMany: IQuery = {
     credits: { type: new GraphQLNonNull(new GraphQLList(input)) }
   },
   async resolve(parent: null, args: { credits: ICredit[] }, context) {
+    checkLoggedIn(context.user)
     const newCredits: Document[] = args.credits
       .map(unversityMapper(context.user))
       .map(credit => new CreditModel(credit))

@@ -1,8 +1,8 @@
 import express from 'express'
-import bodyParser from 'body-parser'
-import { noParseRoutes, bodyParseRoutes } from './routes'
+import routes from './routes'
 import cors from 'cors'
 import tokenAuth from './middleware/token_authorization'
+import applyBodyParser from './middleware/body_parser'
 
 const app: express.Express = express()
 
@@ -10,12 +10,8 @@ app.use(cors())
 
 app.use(tokenAuth)
 
-noParseRoutes(app)
+applyBodyParser(app)
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}))
-
-bodyParseRoutes(app)
+routes(app)
 
 export default app
