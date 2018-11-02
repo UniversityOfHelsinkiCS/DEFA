@@ -9,7 +9,7 @@ import {
 } from 'graphql'
 import { IQuery, IUser } from './interface'
 import { Document } from 'mongoose'
-import applyAccess from '../validators/applyAccess'
+import applyAccess, { publicAccess, privilegedAccess } from '../validators'
 
 const type: GraphQLObjectType = new GraphQLObjectType({
   name: 'Credit',
@@ -45,7 +45,7 @@ const getMany: IQuery = {
   resolve(parent: null, args: {}) {
     return CreditModel.find()
   },
-  access: 'public'
+  access: publicAccess
 }
 
 interface ICredit {
@@ -78,7 +78,7 @@ const createMany: IQuery = {
       .map(credit => new CreditModel(credit))
     return CreditModel.create(newCredits)
   },
-  access: 'privileged'
+  access: privilegedAccess
 }
 
 export const Credit = applyAccess({

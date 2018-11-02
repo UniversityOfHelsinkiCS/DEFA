@@ -1,33 +1,17 @@
-import { IQuery, IUser } from '../types/interface'
-import checkLoggedIn from './checkLoggedIn'
-import checkPrivileged from './checkPrivileged'
-
-const validators: {
-  [key: string]: (user?: IUser) => void
-} = {
-  public: () => undefined,
-  user: checkLoggedIn,
-  privileged: checkPrivileged
-}
-
-const validateAccess = (accessLevel: string): ((user?: IUser) => void) => validators[accessLevel]
+import { IQuery, IQueries, IvalidatorFunction } from '../types/interface'
 
 const applyToQuery = (query: IQuery): IQuery => {
-  if (!validators[query.access]) {
+  if (typeof query.access !== 'function') {
     throw new Error(`Invalid access level: ${query.access}`)
   }
   return {
     ...query,
     resolve: (parent, args, context, ...rest) => {
-      validateAccess(query.access)(context.user)
+      query.access(parent, args, context, ...rest)
       return query.resolve(parent, args, context, ...rest)
     },
     access: undefined
   }
-}
-
-interface IQueries {
-  [key: string]: IQuery
 }
 
 const applyToQueryObject = (queries: IQueries): IQueries => Object.keys(queries).reduce(
