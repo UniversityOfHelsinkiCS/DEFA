@@ -21,7 +21,22 @@ const applyToQueryObject = (queries: IQueries): IQueries => Object.keys(queries)
 
 // This function applies a validator function to be run before the resolver.
 // If access cannot be granted the validator throws an error and the resolver will not be run.
-// All queries must include an access field. Set access to 'public' for no validation.
+// All queries must include an access field. Use validator publicAccess for no validation.
+/* Usage example:
+const pubQuery = {
+  type: ...,
+  args: ...,
+  resolve: ...,
+  access: publicAccess
+}
+
+export const Type = applyAccess({
+  queries: {
+    queryName: pubQuery
+  },
+  mutations: {}
+})
+*/
 const applyAccess = (type: {
   queries: IQueries,
   mutations: IQueries
