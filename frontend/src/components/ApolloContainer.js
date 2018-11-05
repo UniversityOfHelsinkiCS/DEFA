@@ -11,11 +11,14 @@ const httpLink = new HttpLink({
 })
 
 const auth = new ApolloLink((operation, forward) => {
-  operation.setContext({
-    headers: {
-      authorization: localStorage.getItem('DEFA-token')
-    }
-  })
+  const authorization = localStorage.getItem('DEFA-token')
+  if (authorization) {
+    operation.setContext({
+      headers: {
+        authorization
+      }
+    })
+  }
   return forward(operation)
 })
 

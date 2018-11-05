@@ -13,7 +13,7 @@ export interface IRequestWithUser extends Request {
 }
 
 const parseToken = (token: string): [IUser?, Error?] => {
-  if (!token || token === 'null') { return [null, null] }
+  if (!token) { return [null, null] }
   try {
     return [jwt.verify(token, process.env.SECRET) as IUser, null]
   } catch (e) {
