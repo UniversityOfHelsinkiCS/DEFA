@@ -26,7 +26,8 @@ UploadCreditsMutationComponent.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  credits: state.uploadCredits.credits
+  credits: state.uploadCredits.credits,
+  authorization: state.user.authorization
 })
 
 const mapDispatchToProps = {
