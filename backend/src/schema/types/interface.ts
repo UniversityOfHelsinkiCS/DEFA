@@ -1,28 +1,39 @@
 import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull } from 'graphql'
 import { Document, DocumentQuery } from 'mongoose'
+import { Request, Response } from 'express'
 
 export interface IUser {
   attributes: {
+    cn: string,
     schacHomeOrganization: string
   }
 }
 
-interface IContext {
-  user: IUser
+export interface IContext {
+  user: IUser,
+  req: Request,
+  res: Response
 }
 
-type Iresolve = (
+export type Iresolve = (
   parent: null,
   // tslint:disable-next-line:no-any
   args: { [key: string]: any | any[] },
   context?: IContext
 ) => DocumentQuery<Document[] | Document, Document> | Promise<Document | Document[]>
 
+export type IvalidatorFunction = (
+  parent: null,
+  // tslint:disable-next-line:no-any
+  args: { [key: string]: any | any[] },
+  context?: IContext
+) => void
+
 export interface IQuery {
-  [key: string]: object
   type: GraphQLObjectType | GraphQLList<GraphQLObjectType>
   args: { [key: string]: { type: GraphQLInputType | GraphQLNonNull<GraphQLInputType> } }
   resolve: Iresolve
+  access?: IvalidatorFunction
 }
 
 export interface IQueries {

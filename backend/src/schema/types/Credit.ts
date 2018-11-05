@@ -9,6 +9,7 @@ import {
 } from 'graphql'
 import { IQuery, IUser } from './interface'
 import { Document } from 'mongoose'
+import applyAccess, { publicAccess, privilegedAccess } from '../validators'
 
 const type: GraphQLObjectType = new GraphQLObjectType({
   name: 'Credit',
@@ -43,7 +44,8 @@ const getMany: IQuery = {
   args: {},
   resolve(parent: null, args: {}) {
     return CreditModel.find()
-  }
+  },
+  access: publicAccess
 }
 
 interface ICredit {
@@ -75,14 +77,15 @@ const createMany: IQuery = {
       .map(unversityMapper(context.user))
       .map(credit => new CreditModel(credit))
     return CreditModel.create(newCredits)
-  }
+  },
+  access: privilegedAccess
 }
 
-export const Credit = {
+export const Credit = applyAccess({
   queries: {
     credits: getMany
   },
   mutations: {
     createCredits: createMany
   }
-}
+})

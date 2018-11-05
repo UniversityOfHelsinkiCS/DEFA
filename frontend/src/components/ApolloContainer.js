@@ -1,18 +1,32 @@
 import React from 'react'
-import { string, func, node } from 'prop-types'
+import { func, node } from 'prop-types'
 import { connect } from 'react-redux'
-import ApolloClient from 'apollo-boost'
+import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from 'apollo-boost'
+import { onError } from 'apollo-link-error'
 import { ApolloProvider } from 'react-apollo'
 import handleError from '../util/actions/handleApolloError'
 
-const ApolloContainer = ({ authorization, onError, children }) => (
-  <ApolloProvider
-    client={new ApolloClient({
-      uri: `${process.env.API_URL}/query`,
+const httpLink = new HttpLink({
+  uri: `${process.env.API_URL}/query`
+})
+
+const auth = new ApolloLink((operation, forward) => {
+  const authorization = localStorage.getItem('DEFA-token')
+  if (authorization) {
+    operation.setContext({
       headers: {
         authorization
-      },
-      onError
+      }
+    })
+  }
+  return forward(operation)
+})
+
+const ApolloContainer = ({ errorHandler, children }) => (
+  <ApolloProvider
+    client={new ApolloClient({
+      link: onError(errorHandler).concat(auth.concat(httpLink)),
+      cache: new InMemoryCache()
     })}
   >
     {children}
@@ -20,13 +34,8 @@ const ApolloContainer = ({ authorization, onError, children }) => (
 )
 
 ApolloContainer.propTypes = {
-  authorization: string,
-  onError: func.isRequired,
+  errorHandler: func.isRequired,
   children: node.isRequired
-}
-
-ApolloContainer.defaultProps = {
-  authorization: null
 }
 
 const mapStateToProps = state => ({
@@ -34,7 +43,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onError: handleError(dispatch)
+  errorHandler: handleError(dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ApolloContainer)
