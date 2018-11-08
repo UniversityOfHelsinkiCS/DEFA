@@ -1,34 +1,30 @@
 export default [
   {
     key: 'student_number',
-    display: 'opiskelijanumero'
+    display: 'student number'
+  },
+  {
+    key: 'course_name',
+    display: 'course name'
   },
   {
     key: 'course_code',
-    display: 'kurssikoodi'
+    display: 'course code'
   },
   {
     key: 'date',
-    display: 'päivämäärä'
+    display: 'date (yyyy-mm-dd)'
   },
   {
     key: 'study_credits',
-    display: 'laajuus (op)'
+    display: 'credits'
   },
   {
     key: 'grade',
-    display: 'arvosana'
+    display: 'grade'
   },
   {
     key: 'language',
-    display: 'suorituskieli'
-  },
-  {
-    key: 'teacher',
-    display: 'opettajan henkilötunnus'
-  },
-  {
-    key: 'university',
-    display: 'yliopiston nimi'
+    display: 'language'
   }
 ]

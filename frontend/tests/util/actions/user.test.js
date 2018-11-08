@@ -27,8 +27,15 @@ describe('logout action', () => {
     window.localStorage.setItem('DEFA-token', tokenBefore)
   })
 
-  it('dispatches correct action when called.', () => {
-    actions.logout()(dispatch)
+  it('dispatches correct action type when called.', () => {
+    actions.logout({})(dispatch)
+    expect(dispatch).toHaveBeenCalledWith({
+      type: types.USER_LOG_OUT,
+      toast: undefined
+    })
+  })
+  it('adds a toast field to action when displayToast is set as true.', () => {
+    actions.logout({ displayToast: true })(dispatch)
     expect(dispatch).toHaveBeenCalledWith({
       type: types.USER_LOG_OUT,
       toast: expect.objectContaining({
@@ -38,7 +45,7 @@ describe('logout action', () => {
   })
   it('removes DEFA-token item from localStorage.', () => {
     expect(localStorage.getItem('DEFA-token')).toEqual(testToken)
-    actions.logout()(dispatch)
+    actions.logout({})(dispatch)
     expect(localStorage.getItem('DEFA-token')).toEqual(null)
   })
 })

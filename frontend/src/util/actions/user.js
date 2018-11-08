@@ -6,15 +6,15 @@ export const parseUser = token => dispatch => dispatch({
   token
 })
 
-export const logout = () => dispatch => {
+export const logout = options => dispatch => {
   window.localStorage.removeItem('DEFA-token')
   dispatch({
     type: types.USER_LOG_OUT,
-    toast: {
+    toast: options.displayToast ? {
       message: 'Logged out',
       options: {
         type: toast.TYPE.SUCCESS
       }
-    }
+    } : undefined
   })
 }

@@ -76,7 +76,7 @@ router.post('/assert', async (req: Request, res: Response): Promise<void> => {
 
   } catch (error) {
     console.log(error)
-    //res.redirect(errorUrl(error, sp.relayState))
+    // res.redirect(errorUrl(error, sp.relayState))
   }
   // const relay: Irelay = JSON.parse(req.body.RelayState)
   // const options: GetAssertOptions = { request_body: req.body }
