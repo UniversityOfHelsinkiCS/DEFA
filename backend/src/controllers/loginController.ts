@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express'
+import { DOMParser, XMLSerializer } from 'xmldom'
 // import { sp, idp } from '../utils/saml'
 import {
   responseUrl,
@@ -31,8 +32,11 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
   //   relay_state: JSON.stringify(relay)
   // }
   const metadata = await getMetadata(req.query.entityID)
+  const d = new DOMParser().parseFromString(metadata, 'text/xml')
+  d.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
+
   idp = samlify.IdentityProvider({
-    metadata: fs.readFileSync(metadata),
+    metadata: new XMLSerializer().serializeToString(d),
     isAssertionEncrypted: true,
     wantMessageSigned: true,
     messageSigningOrder: 'encrypt-then-sign',
