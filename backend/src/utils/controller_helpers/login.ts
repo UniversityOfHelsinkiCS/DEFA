@@ -87,10 +87,11 @@ export const errorUrl = (error: { message: string }, relay: Irelay): string => {
   return applyError(redirectUrl, errorMessage)
 }
 
-const parseUser = (attributes: { [index: string]: string }): object => {
-  const user: { [index: string]: string } = {}
+const parseUser = (a: { [index: string]: string }): object => {
+  const attributes: { [index: string]: string } = {}
+  const user: { [index: string]: { [index: string]: string } } = { attributes }
   Object.keys(samlResponseAttributes).forEach(attribute => (
-    user[attribute] = attributes[samlResponseAttributes[attribute]]
+    user.attributes[attribute] = attributes[samlResponseAttributes[attribute]]
   ))
   return user
 }
