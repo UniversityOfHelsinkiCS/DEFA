@@ -3,6 +3,7 @@ import { Document, DocumentQuery } from 'mongoose'
 import { Request, Response } from 'express'
 
 export interface IUser {
+  id: string,
   name: string,
   role: string,
   attributes: {

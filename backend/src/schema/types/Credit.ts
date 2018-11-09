@@ -7,7 +7,7 @@ import {
   GraphQLNonNull,
   GraphQLInputObjectType
 } from 'graphql'
-import { IQuery, IUser } from './interface'
+import { IQuery, IUser, Iresolve } from './interface'
 import { Document } from 'mongoose'
 import applyAccess, { privilegedAccess } from '../validators'
 
@@ -80,6 +80,16 @@ const createMany: IQuery = {
   },
   access: privilegedAccess
 }
+
+export const getByIdentifier: Iresolve = (parent: { university: string, student_number: string }, args: {}) => {
+  if (!parent) { return null }
+  return CreditModel.find({
+    university: parent.university,
+    student_number: parent.student_number
+  })
+}
+
+export const CreditType = type
 
 export default applyAccess({
   queries: {

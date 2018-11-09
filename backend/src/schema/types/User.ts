@@ -1,13 +1,16 @@
 import { UserModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
 import { IQuery } from './interface'
+import { getByIdentifier, CreditType } from './Credit'
+import { userAccess } from '../validators'
 
 const identifierType = new GraphQLObjectType({
   name: 'Identifier',
   fields: () => ({
     id: { type: GraphQLString },
     university: { type: GraphQLString },
-    student_number: { type: GraphQLString }
+    student_number: { type: GraphQLString },
+    credits: { type: new GraphQLList(CreditType), resolve: getByIdentifier }
    })
 })
 
@@ -42,18 +45,16 @@ const getMany: IQuery = {
   }
 }
 
-// const getCredits: IQuery = {
-//   type: new GraphQLList(type),
-//   args: {
-//     id: { type: GraphQLString }
-//   },
-//   async resolve(parent: null, args: { [key: string]: string, id: string}) {
-//     const user: type = await UserModel.findById(args.id)
-//     console.log(user.identifiers[0].student_number)
-//     console.log(Credit.queries.credits)
-//     return CreditModel.find({ student_number: user.identifiers[0].student_number})
-//   }
-// }
+const getMe: IQuery = {
+  type,
+  args: {},
+  resolve(parent, args: {}, context) {
+    return UserModel.findOne({
+      id: context.user.id
+    })
+  },
+  access: userAccess
+}
 
 const create: IQuery = {
   type,
@@ -91,8 +92,8 @@ const deleteUser: IQuery = {
 export default {
   queries: {
     user: getOne,
-    users: getMany
-    // userCredits: getCredits
+    users: getMany,
+    me: getMe
   },
   mutations: {
     createUser: create,

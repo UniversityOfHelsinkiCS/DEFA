@@ -1,4 +1,5 @@
-import { UserModel, IUserModel } from '../../schema/models'
+import { UserModel } from '../../schema/models'
+import { IUserModel } from '../../schema/models/User'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { Document } from 'mongoose'
@@ -66,6 +67,7 @@ export const signToken = async (samlResponse: ISamlResponse): Promise<string | v
   }
   const user = samlResponse.user
   const databaseUser: IUserModel = await findOrCreateUser(user) as IUserModel
+  user.id = databaseUser.id
   user.name = databaseUser.name
   user.role = databaseUser.role
   return jwt.sign(user, process.env.SECRET, JWT_OPTIONS)
