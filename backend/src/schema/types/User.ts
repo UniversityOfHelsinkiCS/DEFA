@@ -1,5 +1,4 @@
-import { UserModel, CreditModel } from '../models'
-import { Credit } from '../types'
+import { UserModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
 import { IQuery } from './interface'
 
@@ -89,7 +88,7 @@ const deleteUser: IQuery = {
 }
 
 // Export the type in the form that schema.ts expects.
-export const User = {
+export default {
   queries: {
     user: getOne,
     users: getMany

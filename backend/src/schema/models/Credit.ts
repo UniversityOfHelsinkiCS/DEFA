@@ -11,4 +11,6 @@ const schema: Schema = new Schema({
   university: String
 })
 
-export const CreditModel: Model<Document> = model('Credit', schema)
+const CreditModel: Model<Document> = model('Credit', schema)
+
+export default CreditModel

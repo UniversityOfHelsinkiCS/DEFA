@@ -43,4 +43,6 @@ router.post('/assert', (req: Request, res: Response): void => {
   })
 })
 
-export const LoginController: Router = router
+const LoginController: Router = router
+
+export default LoginController
