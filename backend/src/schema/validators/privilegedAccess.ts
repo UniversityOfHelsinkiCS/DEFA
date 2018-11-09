@@ -15,9 +15,9 @@ const checkUser = (user: IUser): void => {
   }
 }
 
-const adminAccess: IvalidatorFunction = (...inputs) => {
+const checkPrivileged: IvalidatorFunction = (...inputs) => {
   userAccess(...inputs)
   checkUser(inputs[2].user)
 }
 
-export default adminAccess
+export default checkPrivileged

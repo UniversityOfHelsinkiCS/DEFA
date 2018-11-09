@@ -2,7 +2,7 @@ import { UserModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
 import { IQuery } from './interface'
 import { getByIdentifier, CreditType } from './Credit'
-import { userAccess } from '../validators'
+import applyAccess, { userAccess, adminAccess } from '../validators'
 
 const identifierType = new GraphQLObjectType({
   name: 'Identifier',
@@ -32,7 +32,8 @@ const getOne: IQuery = {
   args: { id: { type: GraphQLString } },
   resolve(parent: null, args: { id: string }) {
     return UserModel.findById(args.id)
-  }
+  },
+  access: adminAccess
 }
 
 const getMany: IQuery = {
@@ -42,7 +43,8 @@ const getMany: IQuery = {
   },
   resolve(parent: null, args: { [key: string]: string, id: string }) {
     return UserModel.find({})
-  }
+  },
+  access: adminAccess
 }
 
 const getMe: IQuery = {
@@ -75,7 +77,8 @@ const create: IQuery = {
     const { name, university, role, identifierId, student_number } = args
     const newUser = new UserModel({ name, role, identifiers: [{ id: identifierId, university, student_number }]})
     return newUser.save()
-  }
+  },
+  access: adminAccess
 }
 
 const deleteUser: IQuery = {
@@ -85,11 +88,12 @@ const deleteUser: IQuery = {
   },
   resolve(parent: null, args: { id: string }) {
     return UserModel.findByIdAndDelete(args.id)
-  }
+  },
+  access: adminAccess
 }
 
 // Export the type in the form that schema.ts expects.
-export default {
+export default applyAccess({
   queries: {
     user: getOne,
     users: getMany,
@@ -99,4 +103,4 @@ export default {
     createUser: create,
     deleteUser
   }
-}
+})
