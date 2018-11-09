@@ -57,6 +57,7 @@ module.exports = (env, argv) => {
     plugins: [
       // Skip the part where we would make a html template
       new HtmlWebpackPlugin({
+        title: 'Digital Education for All',
         inject: false,
         template: htmlTemplate,
         appMountId: 'root'
