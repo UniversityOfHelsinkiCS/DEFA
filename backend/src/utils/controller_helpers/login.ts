@@ -1,5 +1,8 @@
+import { UserModel, IUserModel } from '../../schema/models'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import { Document } from 'mongoose'
+import { IUser } from '../../schema/types/interface'
 
 dotenv.config()
 
@@ -9,9 +12,10 @@ const JWT_OPTIONS: SignOptions = {
 
 export interface ISamlResponse {
   type: string,
-  user: object
+  user: IUser
 }
 export interface Irelay {
+  login_url?: string,
   redirect_url?: string
 }
 // Possible redirects must be limited so as not to allow reflected XSS attacks.
@@ -24,12 +28,34 @@ const validateRedirect = (url: string | void): boolean => url ? allowedRedirects
   false
 ) : false
 
-const applyToken = (url: string, token: string | void): string => token ? (
-    `${url}?token=${token}`
-  ) : (
-    `${url}?error=Kirjautuminen epäonnistui. Kirjautumispalvelu antoi epämuodostuneita tietoja.`
-  )
-const signToken = (samlResponse: ISamlResponse): string | void => {
+const applyParam = (url: string, key: string, value: string): string => {
+  const paramChar: string = url.includes('?') ? '&' : '?'
+  return `${url}${paramChar}${key}=${value}`
+}
+
+const parseStudentNumber = (user: IUser): string => user.attributes.schacPersonalUniqueCode[0].split(':').pop()
+const findOrCreateUser = async (user: IUser): Promise<Document> => {
+  const databaseUser: IUserModel = await UserModel.findOne({
+    identifiers: {
+      $elemMatch: {
+        university: user.attributes.schacHomeOrganization,
+        student_number: parseStudentNumber(user)
+      }
+    }
+  }) as IUserModel
+  if (databaseUser) { return databaseUser }
+  return await UserModel.create({
+    name: user.attributes.cn,
+    role: 'STUDENT',
+    identifiers: [
+      {
+        university: user.attributes.schacHomeOrganization,
+        student_number: parseStudentNumber(user)
+      }
+    ]
+  })
+}
+export const signToken = async (samlResponse: ISamlResponse): Promise<string | void> => {
   if (samlResponse.type !== 'authn_response') {
     console.warn(`Expected saml response to be of type 'authn_response', but was '${samlResponse.type}'`)
     return null
@@ -38,26 +64,27 @@ const signToken = (samlResponse: ISamlResponse): string | void => {
     console.warn('Could not find required field \'user\' in saml response.')
     return null
   }
-  return jwt.sign(samlResponse.user, process.env.SECRET, JWT_OPTIONS)
+  const user = samlResponse.user
+  const databaseUser: IUserModel = await findOrCreateUser(user) as IUserModel
+  user.name = databaseUser.name
+  user.role = databaseUser.role
+  return jwt.sign(user, process.env.SECRET, JWT_OPTIONS)
 }
-export const responseUrl = (samlResponse: ISamlResponse, relay: Irelay): string => {
-  const token: string | void = signToken(samlResponse)
-  const redirectUrl: string = validateRedirect(relay.redirect_url) ? (
-    relay.redirect_url
+export const responseUrl = (token: string, relay: Irelay): string => {
+  const redirectUrl: string = validateRedirect(relay.login_url) ? (
+    relay.login_url
   ) : (
     defaultRedirect
   )
-  return applyToken(redirectUrl, token)
+  return applyParam(
+    applyParam(redirectUrl, 'token', token),
+    'redirect',
+    relay.redirect_url
+  )
 }
 
-const defaultErrorMessage: string = 'Yllättävä virhe tapahtui.'
-const applyError = (redirectUrl: string, errorMessage: string): string => `${redirectUrl}?error=${errorMessage}`
-export const errorUrl = (error: { message: string }, relay: Irelay): string => {
-  const errorMessage = `Kirjautuminen epäonnistui. Kirjautumispalvelun virheilmoitus: ${error.message}`
-  const redirectUrl: string = validateRedirect(relay.redirect_url) ? (
-    relay.redirect_url
-  ) : (
-    defaultRedirect
-  )
-  return applyError(redirectUrl, errorMessage)
-}
+export const errorUrl = (relay: Irelay): string => validateRedirect(relay.login_url) ? (
+  relay.login_url
+) : (
+  defaultRedirect
+)

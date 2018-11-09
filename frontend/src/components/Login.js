@@ -17,16 +17,22 @@ class Login extends PureComponent {
     const queryParams = parseQueryParams(location).query_params
     if (queryParams.token) {
       window.localStorage.setItem('DEFA-token', queryParams.token)
+    } else {
+      // toast error
     }
     const storageToken = window.localStorage.getItem('DEFA-token')
     if (storageToken) {
       if (storageToken !== token) { dispatchParseUser(storageToken) }
     }
+    if (queryParams.redirect) {
+      const { history } = this.props
+      history.push(new URL(queryParams.redirect).pathname)
+    }
   }
 
   render() {
     const { user } = this.props
-    const url = `${process.env.API_URL}/login?redirect_url=${process.env.REDIRECT_URL}`
+    const url = `${process.env.API_URL}/login?login_url=${process.env.REDIRECT_URL}`
     if (!user) {
       return (
         <Button href={url} style={{ background: primary.light }}>Login</Button>
@@ -46,7 +52,10 @@ Login.propTypes = {
   }).isRequired,
   user: userProp,
   dispatchParseUser: func.isRequired,
-  token: string
+  token: string,
+  history: shape({
+    push: func.isRequired
+  }).isRequired
 }
 
 Login.defaultProps = {

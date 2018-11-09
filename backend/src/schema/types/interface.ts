@@ -3,9 +3,12 @@ import { Document, DocumentQuery } from 'mongoose'
 import { Request, Response } from 'express'
 
 export interface IUser {
+  name: string,
+  role: string,
   attributes: {
     cn: string,
-    schacHomeOrganization: string
+    schacHomeOrganization: string,
+    schacPersonalUniqueCode: string
   }
 }
 
