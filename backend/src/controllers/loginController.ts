@@ -17,7 +17,6 @@ router.get('/', (req: Request, res: Response): void => {
     idp,
     options,
     (err: object, loginUrl: string, requestId: string): void => {
-      console.log(err)
       if (err !== null) {
         res.status(500).send('The login service is currently unavailable.')
         return

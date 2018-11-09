@@ -2,22 +2,17 @@ import { IUser, IvalidatorFunction } from '../types/interface'
 import PrivilegeRequiredError from '../../utils/errors/PrivilegeRequiredError'
 import userAccess from './userAccess'
 
-const PRIVILEGED_ROLES: string[] = [
-  'PRIVILEGED',
-  'ADMIN'
-]
-
-// Validates that user is in a privileged role.
+// Validates that user is an administrator.
 
 const checkUser = (user: IUser): void => {
-  if (PRIVILEGED_ROLES.indexOf(user.role) === -1) {
+  if (user.role !== 'ADMIN') {
     throw new PrivilegeRequiredError()
   }
 }
 
-const adminAccess: IvalidatorFunction = (...inputs) => {
+const checkAdmin: IvalidatorFunction = (...inputs) => {
   userAccess(...inputs)
   checkUser(inputs[2].user)
 }
 
-export default adminAccess
+export default checkAdmin

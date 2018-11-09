@@ -1,6 +1,7 @@
 import { IUser, IContext } from '../../../src/schema/types/interface'
-import { userAccess } from '../../../src/schema/validators'
-import LoginRequiredError from '../../../src/utils/errors/LoginRequiredError'
+import { publicAccess } from '../../../src/schema/validators'
+
+// These tests are largely taking the piss, but they're here for documentation's sake.
 
 describe('userAccess validator', () => {
   let user: IUser
@@ -9,8 +10,8 @@ describe('userAccess validator', () => {
       user = null
     })
 
-    it('throws a LoginRequiredError.', () => {
-      expect(() => userAccess(null, null, { user } as IContext)).toThrowError(LoginRequiredError)
+    it('does not throw an error.', () => {
+      expect(() => publicAccess(null, null, { user } as IContext)).not.toThrowError()
     })
   })
 
@@ -20,7 +21,7 @@ describe('userAccess validator', () => {
     })
 
     it('does not throw an error.', () => {
-      expect(() => userAccess(null, null, { user } as IContext)).not.toThrowError()
+      expect(() => publicAccess(null, null, { user } as IContext)).not.toThrowError()
     })
   })
 })

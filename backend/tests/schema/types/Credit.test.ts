@@ -26,6 +26,12 @@ const exampleCredits = [
     language: 'suomi'
   }
 ]
+const user: IUser = {
+  role: 'PRIVILEGED',
+  attributes: {
+    schacHomeOrganization: 'yliopisto.fi'
+  }
+} as IUser
 
 describe('Credit GraphQL type', () => {
   beforeAll(done => {
@@ -37,14 +43,17 @@ describe('Credit GraphQL type', () => {
 
   describe('createCredits mutation resolver', () => {
     it('throws an error when user is unauthorized.', async done => {
-      const user = null as IUser
+      const unauthorizedUser = {
+        ...user,
+        role: 'STUDENT'
+      } as IUser
       try {
         await Credit.mutations.createCredits.resolve(
           null,
           {
             credits: exampleCredits
           },
-          { user } as IContext
+          { user: unauthorizedUser } as IContext
         )
         done('resolver did not throw an error.')
       } catch (e) {
@@ -53,11 +62,6 @@ describe('Credit GraphQL type', () => {
       }
     })
     it('returns an array of created credits.', async () => {
-      const user = {
-        attributes: {
-          schacHomeOrganization: 'yliopisto.fi'
-        }
-      } as IUser
       const credits = await Credit.mutations.createCredits.resolve(
         null,
         {
@@ -71,11 +75,6 @@ describe('Credit GraphQL type', () => {
       ])
     })
     it('applies user\'s university on the credits.', async () => {
-      const user = {
-        attributes: {
-          schacHomeOrganization: 'yliopisto.fi'
-        }
-      } as IUser
       const credits = await Credit.mutations.createCredits.resolve(
         null,
         {
@@ -89,11 +88,6 @@ describe('Credit GraphQL type', () => {
       })))
     })
     it('creates database rows.', async () => {
-      const user = {
-        attributes: {
-          schacHomeOrganization: 'yliopisto.fi'
-        }
-      } as IUser
       await Credit.mutations.createCredits.resolve(
         null,
         {
