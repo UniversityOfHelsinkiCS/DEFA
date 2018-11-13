@@ -15,9 +15,9 @@ import { generateLocalIdp } from '../utils/saml'
 const router: Router = Router()
 
 const sp = samlify.ServiceProvider({
-  metadata: fs.readFileSync('./src/utils/metadata.xml'),
-  encPrivateKey: fs.readFileSync('./src/utils/key.pem'),
-  privateKey: fs.readFileSync('./src/utils/key.pem'),
+  metadata: fs.readFileSync('./src/utils/samldata/metadata.xml'),
+  encPrivateKey: fs.readFileSync('./src/utils/samldata/key.pem'),
+  privateKey: fs.readFileSync('./src/utils/samldata/key.pem'),
   loginNameIDFormat: 'transient'
 })
 

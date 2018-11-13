@@ -10,6 +10,7 @@
     "lint": "tslint 'src/**/*.ts'",
     "start": "node dist/src/server.js",
     "test": "jest",
+    "test-ci": "jest --forceExit",
     "watch-node": "NODE_ENV=development nodemon",
     "watch-ts": "tsc --watch"
   },
