@@ -1,6 +1,7 @@
 import saml2 from 'saml2-js'
 import fs from 'fs'
 import dotenv from 'dotenv'
+import { getMetadata } from './controller_helpers/login'
 // tslint:disable-next-line:no-var-requires
 const samlify = require('samlify')
 dotenv.config()
@@ -45,16 +46,19 @@ const idp_options = {
   certificates: [fs.readFileSync('./src/utils/idp-public-cert.pem').toString()]
 }
 
-export const localIdp = samlify.IdentityProvider({
-  metadata: fs.readFileSync('./src/utils/idp-metadata-mock.xml'),
-  signatureConfig: {
-    prefix: 'ds',
-    location: {
-      reference: '/samlp:Response/saml:Issuer',
-      action: 'after'
+export const generateLocalIdp = async () => {
+  const m = await getMetadata('http://localhost:7000/metadata')
+  return samlify.IdentityProvider({
+    metadata: m,
+    signatureConfig: {
+      prefix: 'ds',
+      location: {
+        reference: '/samlp:Response/saml:Issuer',
+        action: 'after'
+      }
     }
-  }
-})
+  })
+}
 
 export const idp = new saml2.IdentityProvider(idp_options)
 

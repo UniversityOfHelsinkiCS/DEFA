@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express'
 import { DOMParser, XMLSerializer } from 'xmldom'
 import {
   responseUrl,
-  ISamlResponse,
+    ISamlResponse,
   getMetadata,
   samlResponseAttributes,
   signToken
@@ -10,7 +10,7 @@ import {
 // tslint:disable-next-line:no-var-requires
 const samlify = require('samlify')
 import fs from 'fs'
-import { localIdp } from '../utils/saml'
+import { generateLocalIdp } from '../utils/saml'
 
 const router: Router = Router()
 
@@ -45,7 +45,7 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 })
 
 router.post('/assert', async (req: Request, res: Response): Promise<void> => {
-  idp = process.env.NODE_ENV === 'development' ? localIdp : idp
+  idp = process.env.NODE_ENV === 'development' ? await generateLocalIdp() : idp
   try {
     const response = await sp.parseLoginResponse(idp, 'post', req)
     const token: string | void = await signToken(response)
