@@ -6,9 +6,11 @@ const schema: Schema = new Schema({
   course_code: String,
   date: String,
   study_credits: Number,
-  grade: String,
+  grade: Number,
   language: String,
   university: String
 })
 
-export const CreditModel: Model<Document> = model('Credit', schema)
+const CreditModel: Model<Document> = model('Credit', schema)
+
+export default CreditModel

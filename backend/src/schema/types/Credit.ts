@@ -7,9 +7,9 @@ import {
   GraphQLNonNull,
   GraphQLInputObjectType
 } from 'graphql'
-import { IQuery, IUser } from './interface'
+import { IQuery, IUser, Iresolve } from './interface'
 import { Document } from 'mongoose'
-import applyAccess, { publicAccess, privilegedAccess } from '../validators'
+import applyAccess, { privilegedAccess, adminAccess } from '../validators'
 
 const type: GraphQLObjectType = new GraphQLObjectType({
   name: 'Credit',
@@ -45,7 +45,7 @@ const getMany: IQuery = {
   resolve(parent: null, args: {}) {
     return CreditModel.find()
   },
-  access: publicAccess
+  access: adminAccess
 }
 
 interface ICredit {
@@ -81,7 +81,17 @@ const createMany: IQuery = {
   access: privilegedAccess
 }
 
-export const Credit = applyAccess({
+export const getByIdentifier: Iresolve = (parent: { university: string, student_number: string }, args: {}) => {
+  if (!parent) { return null }
+  return CreditModel.find({
+    university: parent.university,
+    student_number: parent.student_number
+  })
+}
+
+export const CreditType = type
+
+export default applyAccess({
   queries: {
     credits: getMany
   },

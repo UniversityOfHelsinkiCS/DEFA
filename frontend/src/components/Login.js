@@ -17,16 +17,21 @@ class Login extends PureComponent {
     const queryParams = parseQueryParams(location).query_params
     if (queryParams.token) {
       window.localStorage.setItem('DEFA-token', queryParams.token)
+    } else {
+      // toast error
     }
     const storageToken = window.localStorage.getItem('DEFA-token')
     if (storageToken) {
       if (storageToken !== token) { dispatchParseUser(storageToken) }
     }
+    if (queryParams.redirect) {
+      const { history } = this.props
+      history.push(new URL(queryParams.redirect).pathname)
+    }
   }
 
   render() {
     const { user } = this.props
-    console.log(process.env.MODE)
     const url = process.env.MODE === 'development' ? 'http://localhost:7000' : `${process.env.DS_URL}?entityID=${process.env.ENTITY_ID}&return=${process.env.LOGIN_URL}`
     if (!user) {
       return (
@@ -47,7 +52,10 @@ Login.propTypes = {
   }).isRequired,
   user: userProp,
   dispatchParseUser: func.isRequired,
-  token: string
+  token: string,
+  history: shape({
+    push: func.isRequired
+  }).isRequired
 }
 
 Login.defaultProps = {

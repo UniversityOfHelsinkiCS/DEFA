@@ -1,13 +1,12 @@
 import { Request, Response, Router } from 'express'
 import { DOMParser, XMLSerializer } from 'xmldom'
-// import { sp, idp } from '../utils/saml'
 import {
   responseUrl,
-  errorUrl,
   Irelay,
   ISamlResponse,
   getMetadata,
-  samlResponseAttributes
+  samlResponseAttributes,
+  signToken
 } from '../utils/controller_helpers/login'
 // tslint:disable-next-line:no-var-requires
 const samlify = require('samlify')
@@ -22,17 +21,11 @@ const sp = samlify.ServiceProvider({
   privateKey: fs.readFileSync('./src/utils/key.pem'),
   loginNameIDFormat: 'transient'
 })
-sp.entitySetting.relayState = { redirect_url: process.env.RELAY_STATE }
+
 // tslint:disable-next-line:no-any
 let idp: any = null
 
 router.get('/', async (req: Request, res: Response): Promise<void> => {
-  // const relay: Irelay = {
-  //   redirect_url: req.query.redirect_url
-  // }
-  // const options: CreateLoginRequestUrlOptions = {
-  //   relay_state: JSON.stringify(relay)
-  // }
   const metadata = await getMetadata(req.query.entityID)
   const d = new DOMParser().parseFromString(metadata, 'text/xml')
   d.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
@@ -50,51 +43,24 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
       }
     }
   })
-  const { id, context } = sp.createLoginRequest(idp, 'redirect')
-  return res.redirect(context)
-
-  //   sp.create_login_request_url(
-  //     idp,
-  //     options,
-  //     (err: object, loginUrl: string, requestId: string): void => {
-  //       if (err !== null) {
-  //         res.status(500).send('The login service is currently unavailable.')
-  //         return
-  //       }
-  //       console.log(loginUrl, 'loginurl')
-  //       res.redirect(loginUrl)
-  //     }
-  //   )
 })
 
-// router.get('/metadata', (req: Request, res: Response): void => {
-// res.type('application/xml')
-// res.send(sp.create_metadata())
-// })
-
 router.post('/assert', async (req: Request, res: Response): Promise<void> => {
-  console.log(process.env.NODE_ENV)
   idp = process.env.NODE_ENV === 'development' ? localIdp : idp
   try {
     const response = await sp.parseLoginResponse(idp, 'post', req)
-    const { relayState } = sp.entitySetting
-    const { attributes } = response.extract
-    console.log(attributes, relayState)
-    res.redirect(responseUrl(attributes, relayState))
+    const token: string | void = await signToken(response)
+    if (!token) {
+      res.redirect(process.env.FRONTEND_LOGIN)
+      return
+    }
+    res.redirect(responseUrl(token))
 
   } catch (error) {
     console.log(error)
-    // res.redirect(errorUrl(error, sp.relayState))
   }
-  // const relay: Irelay = JSON.parse(req.body.RelayState)
-  // const options: GetAssertOptions = { request_body: req.body }
-  // sp.post_assert(idp, options, (err: { message: string }, samlResponse: ISamlResponse): void => {
-  //   if (err !== null) {
-  //     res.redirect(errorUrl(err, relay))
-  //     return
-  //   }
-  //   res.redirect(responseUrl(samlResponse, relay))
-  // })
 })
 
-export const LoginController: Router = router
+const LoginController: Router = router
+
+export default LoginController

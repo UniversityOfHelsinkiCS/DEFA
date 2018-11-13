@@ -52,7 +52,7 @@ runServer({
       }
     ],
     user: {
-      userName: 'teppotest',
+      "urn:oid:1.3.6.1.4.1.25178.1.2.14": 'teppotest',
       cn: 'Teppo Testikäyttäjä',
       displayName: 'Teppo',
       eduPersonPrincipalName: 'teppo@yliopisto.fi',
