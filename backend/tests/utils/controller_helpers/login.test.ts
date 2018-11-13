@@ -4,8 +4,7 @@ import jwt from 'jsonwebtoken'
 import {
   responseUrl,
   signToken,
-  ISamlResponse,
-  Irelay
+  ISamlResponse
 } from '../../../src/utils/controller_helpers/login'
 import { IUser } from '../../../src/schema/types/interface'
 

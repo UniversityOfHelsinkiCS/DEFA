@@ -2,7 +2,6 @@ import { Request, Response, Router } from 'express'
 import { DOMParser, XMLSerializer } from 'xmldom'
 import {
   responseUrl,
-  Irelay,
   ISamlResponse,
   getMetadata,
   samlResponseAttributes,
