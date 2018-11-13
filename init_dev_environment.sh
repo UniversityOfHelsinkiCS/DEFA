@@ -1,13 +1,16 @@
 #!/bin/bash
+
+mkdir ./backend/src/utils/samldata/
+
 openssl req -x509 -new -newkey rsa:2048 -nodes -subj '/C=FI/ST=Helsinki/L=Helsinki/O=Hy/CN=Defa Dev' \
-  -keyout ./backend/src/utils/key.pem \
-  -out ./backend/src/utils/cert.pem -days 7300
+  -keyout ./backend/src/utils/samldata/key.pem \
+  -out ./backend/src/utils/samldata/cert.pem -days 7300
 
 openssl req -x509 -new -newkey rsa:2048 -nodes -subj '/C=FI/ST=Helsinki/L=Helsinki/O=Hy/CN=Defa IDP Dev' \
   -keyout ./idp/idp-private-key.pem \
   -out ./idp/idp-public-cert.pem -days 7300
 
-cp ./idp/idp-public-cert.pem ./backend/src/utils/
+cp ./idp/idp-public-cert.pem ./backend/src/utils/samldata/
 
 echo "
   DATABASE_URI=localhost:27017
