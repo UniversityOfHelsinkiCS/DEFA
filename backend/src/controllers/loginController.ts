@@ -60,6 +60,9 @@ router.post('/assert', async (req: Request, res: Response): Promise<void> => {
   }
 })
 
+router.get('/metadata', (req, res) => {
+  res.header('Content-Type', 'text/xml').send(sp.getMetadata())
+})
 const LoginController: Router = router
 
 export default LoginController
