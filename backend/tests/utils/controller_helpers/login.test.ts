@@ -10,54 +10,42 @@ import { IUser } from '../../../src/schema/types/interface'
 
 dotenv.config()
 
-// const samlResponse: ISamlResponse = {
-//   type: 'authn_response',
-//   user: {
-//     isUser: 'totally'
-//   } as unknown as IUser
-// } as unknown as ISamlResponse
-// const defaultToken: string = 'testtoken'
-// const relay: Irelay = {
-//   login_url: String(process.env.ALLOWED_REDIRECTS.split(',')[0]),
-//   redirect_url: '/login/redirect'
-// }
+const samlResponse: ISamlResponse = {
+  type: 'authn_response',
+  user: {
+    isUser: 'totally'
+  } as unknown as IUser
+} as unknown as ISamlResponse
+const defaultToken: string = 'testtoken'
 
 describe('responseUrl function', () => {
-  // tslint:disable-next-line:no-empty
-  it('is ok', () => {})
-  // it('returns a valid url with query parameters \'token\' and \'redirect\'.', done => {
-  //   let url
-  //   try {
-  //     url = new URL(responseUrl(defaultToken, relay))
-  //   } catch (e) { done(e) }
-  //   expect(url.search).toMatch(/(\?|\&)token=.+/)
-  //   expect(url.search).toMatch(/(\?|\&)redirect=.+/)
-  //   done()
-// })
+  it('returns a valid url with query parameter \'token\'.', done => {
+    let url
+    try {
+      url = new URL(responseUrl(defaultToken))
+    } catch (e) { done(e) }
+    expect(url.search).toMatch(/(\?|\&)token=.+/)
+    done()
+  })
 
-//   it('includes a token that can be verified.', done => {
-//     const inputToken: string = jwt.sign(samlResponse.user, process.env.SECRET)
-//     let token: string
-//     try {
-//       const url = new URL(responseUrl(inputToken, relay))
-//       token = url.search.split('token=')[1].split('&')[0]
-//     } catch (e) { done(e) }
-//     expect(jwt.verify(token, process.env.SECRET)).toMatchObject(samlResponse.user)
-//     expect(() => jwt.verify(token, 'WRONGSECRETTHISSHALLNEVERWORK')).toThrowError('invalid signature')
-//     done()
-//   })
-
-//   it('uses the default redirect when no login url is provided by relay.', () => {
-//     const urlString = responseUrl(defaultToken, { ...relay, login_url: undefined })
-//     expect(urlString).toMatch(RegExp(`^${defaultRedirect}`))
-//   })
-// })
+  it('includes a token that can be verified.', done => {
+    const inputToken: string = jwt.sign(samlResponse.user, process.env.SECRET)
+    let token: string
+    try {
+      const url = new URL(responseUrl(inputToken))
+      token = url.search.split('token=')[1].split('&')[0]
+    } catch (e) { done(e) }
+    expect(jwt.verify(token, process.env.SECRET)).toMatchObject(samlResponse.user)
+    expect(() => jwt.verify(token, 'WRONGSECRETTHISSHALLNEVERWORK')).toThrowError('invalid signature')
+    done()
+  })
+})
 
 // describe('signToken function', () => {
 //   const oldWarn = console.warn
 //   let warnings: string[] = []
 //   beforeAll(() => {
-//     console.warn = warning => warnings.push(warning)
+//     console.warn = (warning: string) => warnings.push(warning)
 //   })
 //   beforeEach(() => {
 //     warnings = []
@@ -85,4 +73,4 @@ describe('responseUrl function', () => {
 //     expect(warnings.length).toBeGreaterThan(0)
 //     done()
 //   })
-})
+// })
