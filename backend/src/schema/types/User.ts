@@ -1,6 +1,6 @@
 import { UserModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
-import { IQuery } from './interface'
+import { IQuery, Iresolve } from './interface'
 import { getByIdentifier, CreditType } from './Credit'
 import applyAccess, { userAccess, adminAccess } from '../validators'
 
@@ -14,7 +14,7 @@ const identifierType = new GraphQLObjectType({
    })
 })
 
-const type = new GraphQLObjectType({
+const userType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLString },
@@ -26,9 +26,17 @@ const type = new GraphQLObjectType({
   })
 })
 
+export const teacherType = new GraphQLObjectType({
+  name: 'Teacher',
+  fields: () => ({
+    name: { type: GraphQLString },
+    email: { type: GraphQLString }
+  })
+})
+
 // Defining a query.
 const getOne: IQuery = {
-  type,
+  type: userType,
   args: { id: { type: GraphQLString } },
   resolve(parent: null, args: { id: string }) {
     return UserModel.findById(args.id)
@@ -37,7 +45,7 @@ const getOne: IQuery = {
 }
 
 const getMany: IQuery = {
-  type: new GraphQLList(type),
+  type: new GraphQLList(userType),
   args: {
     id: { type: GraphQLString }
   },
@@ -48,7 +56,7 @@ const getMany: IQuery = {
 }
 
 const getMe: IQuery = {
-  type,
+  type: userType,
   args: {},
   resolve(parent, args: {}, context) {
     return UserModel.findOne({
@@ -58,8 +66,12 @@ const getMe: IQuery = {
   access: userAccess
 }
 
+export const getByIdResolver: Iresolve = (parent: { teacher: string }) => {
+  return UserModel.findById(parent.teacher)
+}
+
 const create: IQuery = {
-  type,
+  type: userType,
   args: {
     name: { type: new GraphQLNonNull(GraphQLString) },
     role: { type: GraphQLString },
@@ -82,7 +94,7 @@ const create: IQuery = {
 }
 
 const deleteUser: IQuery = {
-  type,
+  type: userType,
   args: {
     id: { type: new GraphQLNonNull(GraphQLString) }
   },
