@@ -1,6 +1,8 @@
 import saml2 from 'saml2-js'
 import fs from 'fs'
 import dotenv from 'dotenv'
+// tslint:disable-next-line:no-var-requires
+const samlify = require('samlify')
 dotenv.config()
 
 // tslint:disable-next-line:class-name
@@ -42,6 +44,17 @@ const idp_options = {
   sso_logout_url: process.env.SSO_LOGOUT_URL,
   certificates: [fs.readFileSync('./src/utils/idp-public-cert.pem').toString()]
 }
+
+export const localIdp = samlify.IdentityProvider({
+  metadata: fs.readFileSync('./src/utils/idp-metadata-mock.xml'),
+  signatureConfig: {
+    prefix: 'ds',
+    location: {
+      reference: '/samlp:Response/saml:Issuer',
+      action: 'after'
+    }
+  }
+})
 
 export const idp = new saml2.IdentityProvider(idp_options)
 

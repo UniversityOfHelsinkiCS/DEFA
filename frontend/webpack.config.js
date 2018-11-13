@@ -14,6 +14,8 @@ module.exports = (env, argv) => {
     prev[`process.env.${next}`] = JSON.stringify(env[next])
     return prev
   }, {})
+  envKeys['process.env.MODE'] = JSON.stringify(mode)
+  console.log(envKeys)
   const additionalOptimizations = mode === 'production' ? {
     splitChunks: {
       chunks: 'all'

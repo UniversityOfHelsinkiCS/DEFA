@@ -49,19 +49,19 @@ const signToken = (attributes: Iattributes): string | void => {
 }
 export const responseUrl = (attributes: Iattributes, relay: Irelay): string => {
   const token: string | void = signToken(attributes)
-// const signToken = (samlResponse: ISamlResponse): string | void => {
-//   if (samlResponse.type !== 'authn_response') {
-//     console.warn(`Expected saml response to be of type 'authn_response', but was '${samlResponse.type}'`)
-//     return null
-//   }
-//   if (!samlResponse.user) {
-//     console.warn('Could not find required field \'user\' in saml response.')
-//     return null
-//   }
-//   return jwt.sign(samlResponse.user, process.env.SECRET, JWT_OPTIONS)
-// }
-// export const responseUrl = (samlResponse: ISamlResponse, relay: Irelay): string => {
-//   const token: string | void = signToken(samlResponse)
+  // const signToken = (samlResponse: ISamlResponse): string | void => {
+  //   if (samlResponse.type !== 'authn_response') {
+  //     console.warn(`Expected saml response to be of type 'authn_response', but was '${samlResponse.type}'`)
+  //     return null
+  //   }
+  //   if (!samlResponse.user) {
+  //     console.warn('Could not find required field \'user\' in saml response.')
+  //     return null
+  //   }
+  //   return jwt.sign(samlResponse.user, process.env.SECRET, JWT_OPTIONS)
+  // }
+  // export const responseUrl = (samlResponse: ISamlResponse, relay: Irelay): string => {
+  //   const token: string | void = signToken(samlResponse)
   const redirectUrl: string = validateRedirect(relay.redirect_url) ? (
     relay.redirect_url
   ) : (

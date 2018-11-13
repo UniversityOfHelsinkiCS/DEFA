@@ -12,6 +12,7 @@ import {
 // tslint:disable-next-line:no-var-requires
 const samlify = require('samlify')
 import fs from 'fs'
+import { localIdp } from '../utils/saml'
 
 const router: Router = Router()
 
@@ -21,6 +22,7 @@ const sp = samlify.ServiceProvider({
   privateKey: fs.readFileSync('./src/utils/key.pem'),
   loginNameIDFormat: 'transient'
 })
+sp.entitySetting.relayState = { redirect_url: process.env.RELAY_STATE }
 // tslint:disable-next-line:no-any
 let idp: any = null
 
@@ -48,7 +50,6 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
       }
     }
   })
-  sp.entitySetting.relayState = { redirect_url: process.env.RELAY_STATE }
   const { id, context } = sp.createLoginRequest(idp, 'redirect')
   return res.redirect(context)
 
@@ -72,10 +73,13 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
 // })
 
 router.post('/assert', async (req: Request, res: Response): Promise<void> => {
+  console.log(process.env.NODE_ENV)
+  idp = process.env.NODE_ENV === 'development' ? localIdp : idp
   try {
     const response = await sp.parseLoginResponse(idp, 'post', req)
     const { relayState } = sp.entitySetting
     const { attributes } = response.extract
+    console.log(attributes, relayState)
     res.redirect(responseUrl(attributes, relayState))
 
   } catch (error) {
