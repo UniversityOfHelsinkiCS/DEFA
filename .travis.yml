@@ -31,7 +31,7 @@ jobs:
         - cd backend
         - npm install
       script:
-        - npm test
+        - npm run test-ci
         - npm run lint
       env:
         - DATABASE_URI=localhost:27017
