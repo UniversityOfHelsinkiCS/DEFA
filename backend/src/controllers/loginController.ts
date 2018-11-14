@@ -2,9 +2,7 @@ import { Request, Response, Router } from 'express'
 import { DOMParser, XMLSerializer } from 'xmldom'
 import {
   responseUrl,
-    ISamlResponse,
   getMetadata,
-  samlResponseAttributes,
   signToken
 } from '../utils/controller_helpers/login'
 // tslint:disable-next-line:no-var-requires

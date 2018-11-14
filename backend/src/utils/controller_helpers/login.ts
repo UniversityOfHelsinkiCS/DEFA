@@ -87,7 +87,7 @@ export const signToken = async (response: ISamlResponse): Promise<string | void>
 }
 export const responseUrl = (token: string): string => applyParam(process.env.FRONTEND_LOGIN, 'token', token)
 
-export const samlResponseAttributes: { [index: string]: string } = {
+const samlResponseAttributes: { [index: string]: string } = {
   cn: 'urn:oid:2.5.4.3',
   displayName: 'urn:oid:2.16.840.1.113730.3.1.241',
   eduPersonPrincipalName: 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
