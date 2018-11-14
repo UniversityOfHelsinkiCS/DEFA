@@ -2,8 +2,9 @@ import { UserModel } from '../../schema/models'
 import { IUserModel } from '../../schema/models/User'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import axios, { AxiosResponse } from 'axios'
 import { Document } from 'mongoose'
-import { IUser } from '../../schema/types/interface'
+import { IUser, IUserAttributes } from '../../schema/types/interface'
 
 dotenv.config()
 
@@ -12,30 +13,46 @@ const JWT_OPTIONS: SignOptions = {
 }
 
 export interface ISamlResponse {
-  type: string,
-  user: IUser
+  type?: string,
+  user?: IUser,
+  extract: {
+    attributes: Iattributes
+  }
 }
-export interface Irelay {
-  login_url?: string,
-  redirect_url?: string
+
+export interface Iattributes {
+  [key: string]: string
 }
-// Possible redirects must be limited so as not to allow reflected XSS attacks.
-const allowedRedirects: RegExp[] = process.env.ALLOWED_REDIRECTS.split(',').map(
-  (str: string): RegExp => str[0] === '^' ? RegExp(str) : RegExp(`^${str}`)
-)
-export const defaultRedirect: string = '/todo-404-page'
-const validateRedirect = (url: string | void): boolean => url ? allowedRedirects.reduce(
-  (acc: boolean, regex: RegExp) => acc || Boolean(url.match(regex)),
-  false
-) : false
+
+interface IProtoUser {
+  attributes: IUserAttributes
+}
+
+export const getMetadata = async (entityId: string): Promise<string> => {
+  const response: AxiosResponse = await axios.get(entityId)
+  return response.data
+}
+
+const parseUser = (a: { [index: string]: string }): IProtoUser => {
+  const attributes: IUserAttributes = Object.keys(samlResponseAttributes).reduce(
+    (acc: IUserAttributes, curr: string) => ({
+      ...acc,
+      [curr]: a[samlResponseAttributes[curr]]
+    }),
+    {} as IUserAttributes
+  )
+  return { attributes }
+}
 
 const applyParam = (url: string, key: string, value: string): string => {
   const paramChar: string = url.includes('?') ? '&' : '?'
   return `${url}${paramChar}${key}=${value}`
 }
 
-const parseStudentNumber = (user: IUser): string => user.attributes.schacPersonalUniqueCode[0].split(':').pop()
-const findOrCreateUser = async (user: IUser): Promise<Document> => {
+const parseStudentNumber = (user: IProtoUser | IUser): string => (
+  user.attributes.schacPersonalUniqueCode.split(':').pop()
+)
+const findOrCreateUser = async (user: IProtoUser | IUser): Promise<Document> => {
   const databaseUser: IUserModel = await UserModel.findOne({
     identifiers: {
       $elemMatch: {
@@ -56,37 +73,25 @@ const findOrCreateUser = async (user: IUser): Promise<Document> => {
     ]
   })
 }
-export const signToken = async (samlResponse: ISamlResponse): Promise<string | void> => {
-  if (samlResponse.type !== 'authn_response') {
-    console.warn(`Expected saml response to be of type 'authn_response', but was '${samlResponse.type}'`)
-    return null
+export const signToken = async (response: ISamlResponse): Promise<string | void> => {
+  const { attributes } = response.extract
+  const protoUser: IProtoUser = parseUser(attributes)
+  const databaseUser: IUserModel = await findOrCreateUser(protoUser) as IUserModel
+  const user: IUser = {
+    ...protoUser,
+    id: databaseUser.id,
+    name: databaseUser.name,
+    role: databaseUser.role
   }
-  if (!samlResponse.user) {
-    console.warn('Could not find required field \'user\' in saml response.')
-    return null
-  }
-  const user = samlResponse.user
-  const databaseUser: IUserModel = await findOrCreateUser(user) as IUserModel
-  user.id = databaseUser.id
-  user.name = databaseUser.name
-  user.role = databaseUser.role
   return jwt.sign(user, process.env.SECRET, JWT_OPTIONS)
 }
-export const responseUrl = (token: string, relay: Irelay): string => {
-  const redirectUrl: string = validateRedirect(relay.login_url) ? (
-    relay.login_url
-  ) : (
-    defaultRedirect
-  )
-  return applyParam(
-    applyParam(redirectUrl, 'token', token),
-    'redirect',
-    relay.redirect_url
-  )
-}
+export const responseUrl = (token: string): string => applyParam(process.env.FRONTEND_LOGIN, 'token', token)
 
-export const errorUrl = (relay: Irelay): string => validateRedirect(relay.login_url) ? (
-  relay.login_url
-) : (
-  defaultRedirect
-)
+const samlResponseAttributes: { [index: string]: string } = {
+  cn: 'urn:oid:2.5.4.3',
+  displayName: 'urn:oid:2.16.840.1.113730.3.1.241',
+  eduPersonPrincipalName: 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
+  mail: 'urn:oid:0.9.2342.19200300.100.1.3',
+  schacHomeOrganization: 'urn:oid:1.3.6.1.4.1.25178.1.2.9',
+  schacPersonalUniqueCode: 'urn:oid:1.3.6.1.4.1.25178.1.2.14'
+}

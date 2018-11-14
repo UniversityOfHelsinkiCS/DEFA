@@ -1,16 +1,21 @@
-import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull } from 'graphql'
+import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull, GraphQLType } from 'graphql'
 import { Document, DocumentQuery } from 'mongoose'
 import { Request, Response } from 'express'
+
+export interface IUserAttributes {
+  cn: string,
+  schacHomeOrganization: string,
+  schacPersonalUniqueCode: string,
+  displayName: string,
+  eduPersonPrincipalName: string,
+  mail: string
+}
 
 export interface IUser {
   id: string,
   name: string,
   role: string,
-  attributes: {
-    cn: string,
-    schacHomeOrganization: string,
-    schacPersonalUniqueCode: string
-  }
+  attributes: IUserAttributes
 }
 
 export interface IContext {
@@ -34,7 +39,7 @@ export type IvalidatorFunction = (
 ) => void
 
 export interface IQuery {
-  type: GraphQLObjectType | GraphQLList<GraphQLObjectType>
+  type: GraphQLObjectType | GraphQLList<GraphQLObjectType> | GraphQLList<GraphQLType>
   args: { [key: string]: { type: GraphQLInputType | GraphQLNonNull<GraphQLInputType> } }
   resolve: Iresolve
   access?: IvalidatorFunction

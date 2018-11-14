@@ -1,13 +1,15 @@
 FROM node:8
 
-RUN mkdir -p /usr/src/app
+RUN useradd --create-home --home-dir /app appuser
 
-WORKDIR /usr/src/app
+WORKDIR /app
+COPY . /app
 
-COPY . /usr/src/app
+RUN chown --recursive appuser /app
+
+USER appuser:appuser
 
 RUN npm install
-
 RUN npm run build
 
 EXPOSE 5000

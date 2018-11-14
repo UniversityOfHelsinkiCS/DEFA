@@ -1,46 +1,61 @@
 import { Request, Response, Router } from 'express'
-import { GetAssertOptions, CreateLoginRequestUrlOptions } from 'saml2-js'
-import { sp, idp } from '../utils/saml'
-import { responseUrl, signToken, errorUrl, Irelay, ISamlResponse } from '../utils/controller_helpers/login'
+import { DOMParser, XMLSerializer } from 'xmldom'
+import {
+  responseUrl,
+  getMetadata,
+  signToken
+} from '../utils/controller_helpers/login'
+// tslint:disable-next-line:no-var-requires
+const samlify = require('samlify')
+import fs from 'fs'
+import { generateLocalIdp } from '../utils/saml'
 
 const router: Router = Router()
 
-router.get('/', (req: Request, res: Response): void => {
-  const relay: Irelay = {
-    login_url: req.query.login_url,
-    redirect_url: req.headers.referer as string
-  }
-  const options: CreateLoginRequestUrlOptions = {
-    relay_state: JSON.stringify(relay)
-  }
-  sp.create_login_request_url(
-    idp,
-    options,
-    (err: object, loginUrl: string, requestId: string): void => {
-      if (err !== null) {
-        res.status(500).send('The login service is currently unavailable.')
-        return
-      }
-      res.redirect(loginUrl)
-    }
-  )
+const sp = samlify.ServiceProvider({
+  metadata: fs.readFileSync('./src/utils/samldata/metadata.xml'),
+  encPrivateKey: fs.readFileSync('./src/utils/samldata/key.pem'),
+  privateKey: fs.readFileSync('./src/utils/samldata/key.pem'),
+  loginNameIDFormat: 'transient'
 })
 
-router.post('/assert', (req: Request, res: Response): void => {
-  const relay: Irelay = JSON.parse(req.body.RelayState)
-  const options: GetAssertOptions = { request_body: req.body }
-  sp.post_assert(idp, options, async (err: { message: string }, samlResponse: ISamlResponse): Promise<void> => {
-    if (err !== null) {
-      res.redirect(errorUrl(relay))
-      return
+// tslint:disable-next-line:no-any
+let idp: any = null
+
+router.get('/', async (req: Request, res: Response): Promise<void> => {
+  const metadata = await getMetadata(req.query.entityID)
+  const d = new DOMParser().parseFromString(metadata, 'text/xml')
+  d.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
+
+  idp = samlify.IdentityProvider({
+    metadata: new XMLSerializer().serializeToString(d),
+    isAssertionEncrypted: true,
+    wantMessageSigned: true,
+    messageSigningOrder: 'encrypt-then-sign',
+    signatureConfig: {
+      prefix: 'ds',
+      location: {
+        reference: '/samlp:Response/saml:Issuer',
+        action: 'after'
+      }
     }
-    const token: string | void = await signToken(samlResponse)
-    if (!token) {
-      res.redirect(errorUrl(relay))
-      return
-    }
-    res.redirect(responseUrl(token, relay))
   })
+})
+
+router.post('/assert', async (req: Request, res: Response): Promise<void> => {
+  idp = process.env.NODE_ENV === 'development' ? await generateLocalIdp() : idp
+  try {
+    const response = await sp.parseLoginResponse(idp, 'post', req)
+    const token: string | void = await signToken(response)
+    if (!token) {
+      res.redirect(process.env.FRONTEND_LOGIN)
+      return
+    }
+    res.redirect(responseUrl(token))
+
+  } catch (error) {
+    console.log(error)
+  }
 })
 
 const LoginController: Router = router
