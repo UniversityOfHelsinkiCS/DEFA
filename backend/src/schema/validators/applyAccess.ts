@@ -1,4 +1,11 @@
-import { IQuery, IQueries, IvalidatorFunction } from '../types/interface'
+import { IQuery, IQueries, IvalidatorFunction, Iresolve } from '../types/interface'
+
+export const validateResolver = (resolver: Iresolve, validator: IvalidatorFunction): Iresolve => (
+  (parent, args, context, ...rest) => {
+    validator(parent, args, context, ...rest)
+    return resolver(parent, args, context, ...rest)
+  }
+)
 
 const applyToQuery = (query: IQuery): IQuery => {
   if (typeof query.access !== 'function') {
@@ -6,10 +13,7 @@ const applyToQuery = (query: IQuery): IQuery => {
   }
   return {
     ...query,
-    resolve: (parent, args, context, ...rest) => {
-      query.access(parent, args, context, ...rest)
-      return query.resolve(parent, args, context, ...rest)
-    },
+    resolve: validateResolver(query.resolve, query.access),
     access: undefined
   }
 }

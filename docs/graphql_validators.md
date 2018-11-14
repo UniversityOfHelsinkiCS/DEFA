@@ -36,4 +36,13 @@ export default applyAccess({
 })
 ```
 
-There is not yet any support for non-entrypoint resolvers.
+## Non-entrypoint nodes
+
+Validators can be applied to a resolver with the `validateResolver` function.
+
+Example:
+```
+import { validateResolver, userAccess } from 'src/schema/validators'
+
+const safeResolver = validateResolver(resolver, userAccess)
+```
