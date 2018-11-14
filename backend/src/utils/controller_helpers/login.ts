@@ -4,7 +4,7 @@ import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import axios, { AxiosResponse } from 'axios'
 import { Document } from 'mongoose'
-import { IUser } from '../../schema/types/interface'
+import { IUser, IUserAttributes } from '../../schema/types/interface'
 
 dotenv.config()
 
@@ -24,18 +24,24 @@ export interface Iattributes {
   [key: string]: string
 }
 
+interface IProtoUser {
+  attributes: IUserAttributes
+}
+
 export const getMetadata = async (entityId: string): Promise<string> => {
-  const response = await axios.get(entityId)
+  const response: AxiosResponse = await axios.get(entityId)
   return response.data
 }
 
-const parseUser = (a: { [index: string]: string }): IUser => {
-  const attributes: { [index: string]: string } = {}
-  const user: IUser = { attributes } as IUser
-  Object.keys(samlResponseAttributes).forEach(attribute => (
-    user.attributes[attribute] = a[samlResponseAttributes[attribute]]
-  ))
-  return user
+const parseUser = (a: { [index: string]: string }): IProtoUser => {
+  const attributes: IUserAttributes = Object.keys(samlResponseAttributes).reduce(
+    (acc: IUserAttributes, curr: string) => ({
+      ...acc,
+      [curr]: a[samlResponseAttributes[curr]]
+    }),
+    {} as IUserAttributes
+  )
+  return { attributes }
 }
 
 const applyParam = (url: string, key: string, value: string): string => {
@@ -43,8 +49,10 @@ const applyParam = (url: string, key: string, value: string): string => {
   return `${url}${paramChar}${key}=${value}`
 }
 
-const parseStudentNumber = (user: IUser): string => user.attributes.schacPersonalUniqueCode[0].split(':').pop()
-const findOrCreateUser = async (user: IUser): Promise<Document> => {
+const parseStudentNumber = (user: IProtoUser | IUser): string => (
+  user.attributes.schacPersonalUniqueCode.split(':').pop()
+)
+const findOrCreateUser = async (user: IProtoUser | IUser): Promise<Document> => {
   const databaseUser: IUserModel = await UserModel.findOne({
     identifiers: {
       $elemMatch: {
@@ -66,18 +74,15 @@ const findOrCreateUser = async (user: IUser): Promise<Document> => {
   })
 }
 export const signToken = async (response: ISamlResponse): Promise<string | void> => {
-  if (response.type !== 'authn_response') {
-    console.warn(`Expected saml response to be of type 'authn_response', but was '${response.type}'`)
-  }
-  if (!response.user) {
-    console.warn('Could not find required field \'user\' in saml response.')
-  }
   const { attributes } = response.extract
-  const user = parseUser(attributes)
-  const databaseUser: IUserModel = await findOrCreateUser(user) as IUserModel
-  user.id = databaseUser.id
-  user.name = databaseUser.name
-  user.role = databaseUser.role
+  const protoUser: IProtoUser = parseUser(attributes)
+  const databaseUser: IUserModel = await findOrCreateUser(protoUser) as IUserModel
+  const user: IUser = {
+    ...protoUser,
+    id: databaseUser.id,
+    name: databaseUser.name,
+    role: databaseUser.role
+  }
   return jwt.sign(user, process.env.SECRET, JWT_OPTIONS)
 }
 export const responseUrl = (token: string): string => applyParam(process.env.FRONTEND_LOGIN, 'token', token)

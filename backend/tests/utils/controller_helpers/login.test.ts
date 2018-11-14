@@ -3,7 +3,6 @@ import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import {
   responseUrl,
-  signToken,
   ISamlResponse
 } from '../../../src/utils/controller_helpers/login'
 import { IUser } from '../../../src/schema/types/interface'
@@ -40,37 +39,3 @@ describe('responseUrl function', () => {
     done()
   })
 })
-
-// describe('signToken function', () => {
-//   const oldWarn = console.warn
-//   let warnings: string[] = []
-//   beforeAll(() => {
-//     console.warn = (warning: string) => warnings.push(warning)
-//   })
-//   beforeEach(() => {
-//     warnings = []
-//   })
-//   afterAll(() => {
-//     console.warn = oldWarn
-//   })
-
-//   it('prints a warning when samlResponse is of the wrong type.', async done => {
-//     let token: string | void
-//     try {
-//       token = await signToken({ ...samlResponse, type: 'wrong_type' })
-//     } catch (e) { done(e) }
-//     expect(token).toBeFalsy()
-//     expect(warnings.length).toBeGreaterThan(0)
-//     done()
-//   })
-
-//   it('prints a warning when samlResponse has no user.', async done => {
-//     let token: string | void
-//     try {
-//       token = await signToken({ ...samlResponse, user: undefined })
-//     } catch (e) { done(e) }
-//     expect(token).toBeFalsy()
-//     expect(warnings.length).toBeGreaterThan(0)
-//     done()
-//   })
-// })
