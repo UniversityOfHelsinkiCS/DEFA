@@ -1,6 +1,7 @@
 import { Credit } from '../../../src/schema/types'
-import { CreditModel } from '../../../src/schema/models'
+import { CreditModel, UserModel } from '../../../src/schema/models'
 import { IContext, IUser } from '../../../src/schema/types/interface'
+import { IUserModel } from '../../../src/schema/models/User'
 import { Document } from 'mongoose'
 import { connect } from '../../../src/mongo/connection'
 
@@ -26,15 +27,18 @@ const exampleCredits = [
     language: 'suomi'
   }
 ]
-const user: IUser = {
-  role: 'PRIVILEGED',
-  attributes: {
-    schacHomeOrganization: 'yliopisto.fi'
-  }
-} as IUser
 
 describe('Credit GraphQL type', () => {
-  beforeAll(done => {
+  let user: IUser
+  beforeAll(async done => {
+    const dbUser = (await UserModel.create({
+      name: 'Test Teacher',
+      role: 'PRIVILEGED'
+    })) as IUserModel
+    user = { id: dbUser.id, role: dbUser.role, attributes: {
+        schacHomeOrganization: 'yliopisto.fi'
+      }
+    } as unknown as IUser
     CreditModel.deleteMany({}).then(() => done())
   })
   afterEach(done => {
@@ -46,7 +50,7 @@ describe('Credit GraphQL type', () => {
       const unauthorizedUser = {
         ...user,
         role: 'STUDENT'
-      } as IUser
+      }
       try {
         await Credit.mutations.createCredits.resolve(
           null,
