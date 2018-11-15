@@ -8,7 +8,10 @@ const schema: Schema = new Schema({
   study_credits: Number,
   grade: Number,
   language: String,
-  university: String
+  university: String,
+  teacher: {
+    type: Schema.Types.ObjectId, ref: 'User'
+  }
 })
 
 const CreditModel: Model<Document> = model('Credit', schema)

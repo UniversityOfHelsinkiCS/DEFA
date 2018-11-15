@@ -2,16 +2,20 @@ import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull, Graph
 import { Document, DocumentQuery } from 'mongoose'
 import { Request, Response } from 'express'
 
+export interface IUserAttributes {
+  cn: string,
+  schacHomeOrganization: string,
+  schacPersonalUniqueCode: string,
+  displayName: string,
+  eduPersonPrincipalName: string,
+  mail: string
+}
+
 export interface IUser {
   id: string,
   name: string,
   role: string,
-  attributes: {
-    cn: string,
-    schacHomeOrganization: string,
-    schacPersonalUniqueCode: string,
-    [key: string]: string
-  }
+  attributes: IUserAttributes
 }
 
 export interface IContext {

@@ -1,4 +1,5 @@
 import { CreditModel } from '../models'
+import { teacherType, getByIdResolver } from './User'
 import {
   GraphQLObjectType,
   GraphQLString,
@@ -16,6 +17,10 @@ const type: GraphQLObjectType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLString },
     student_number: { type: GraphQLString },
+    teacher: {
+      type: teacherType,
+      resolve: getByIdResolver
+    },
     course_name: { type: GraphQLString },
     course_code: { type: GraphQLString },
     date: { type: GraphQLString },
@@ -59,11 +64,13 @@ interface ICredit {
 }
 
 interface ICreditWithUni extends ICredit {
-  university: string
+  university: string,
+  teacher: string
 }
 
 const unversityMapper = (user: IUser) => (credit: ICredit): ICreditWithUni => ({
   ...credit,
+  teacher: user.id,
   university: user.attributes.schacHomeOrganization
 })
 
@@ -76,7 +83,8 @@ const createMany: IQuery = {
     const newCredits: Document[] = args.credits
       .map(unversityMapper(context.user))
       .map(credit => new CreditModel(credit))
-    return CreditModel.create(newCredits)
+    const created = await CreditModel.create(newCredits)
+    return created
   },
   access: privilegedAccess
 }
