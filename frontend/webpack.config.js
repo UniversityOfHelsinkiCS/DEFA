@@ -14,6 +14,8 @@ module.exports = (env, argv) => {
     prev[`process.env.${next}`] = JSON.stringify(env[next])
     return prev
   }, {})
+  envKeys['process.env.MODE'] = JSON.stringify(mode)
+  console.log(envKeys)
   const additionalOptimizations = mode === 'production' ? {
     splitChunks: {
       chunks: 'all'
@@ -57,6 +59,7 @@ module.exports = (env, argv) => {
     plugins: [
       // Skip the part where we would make a html template
       new HtmlWebpackPlugin({
+        title: 'Digital Education for All',
         inject: false,
         template: htmlTemplate,
         appMountId: 'root'

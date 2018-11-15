@@ -1,3 +1,7 @@
-export * from './Dummy'
-export * from './User'
-export * from './Credit'
+import UserModel from './User'
+import CreditModel from './Credit'
+
+export {
+  UserModel,
+  CreditModel
+}

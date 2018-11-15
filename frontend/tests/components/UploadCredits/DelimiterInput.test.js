@@ -17,9 +17,6 @@ describe('DelimiterInput component', () => {
     input = shallow(wrapper.find(FormControlLabel).prop('control'))
   })
 
-  it('renders a text input.', () => {
-    expect(input.prop('type')).toEqual('text')
-  })
   it('calls changeValue prop on change with input value.', () => {
     const event = {
       target: {

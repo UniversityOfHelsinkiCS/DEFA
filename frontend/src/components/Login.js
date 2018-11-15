@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import { shape, string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography'
 import parseQueryParams from '../util/parseQueryParams'
 import { parseUser } from '../util/actions/user'
 import { primary } from '../common/colors'
+import { userProp } from '../util/propTypes'
+
 
 class Login extends PureComponent {
   componentDidMount() {
@@ -20,33 +22,58 @@ class Login extends PureComponent {
     if (storageToken) {
       if (storageToken !== token) { dispatchParseUser(storageToken) }
     }
+    this.redirect()
+  }
+
+  redirect = () => {
+    const { history, location } = this.props
+    const path = window.localStorage.getItem('DEFA-redirect')
+    if (path) {
+      window.localStorage.removeItem('DEFA-redirect')
+      if (location.pathname === '/login') {
+        history.push(path)
+      }
+    }
+  }
+
+  prepareRedirect = () => {
+    const { location } = this.props
+    window.localStorage.setItem('DEFA-redirect', location.pathname)
   }
 
   render() {
     const { user } = this.props
-    const url = `${process.env.API_URL}/login?redirect_url=${process.env.REDIRECT_URL}`
+    const url = process.env.MODE === 'development' ? 'http://localhost:7000' : `${process.env.DS_URL}?entityID=${process.env.ENTITY_ID}&return=${process.env.LOGIN_URL}`
     if (!user) {
       return (
-        <Button href={url} style={{ background: primary.light }}>Login</Button>
+        <Button
+          href={url}
+          style={{ background: primary.light }}
+          onClick={this.prepareRedirect}
+        >
+          Login
+        </Button>
       )
     }
     return (
       <div>
-        <Typography variant="subtitle1">{user.name_id}</Typography>
+        <Typography variant="subtitle1">{user.attributes.cn}</Typography>
       </div>
     )
   }
 }
 
 Login.propTypes = {
-  location: PropTypes.shape({
-    search: PropTypes.string.isRequired
+  location: shape({
+    search: string.isRequired,
+    pathname: string.isRequired
   }).isRequired,
-  user: PropTypes.shape({
-    name_id: PropTypes.string.isRequired
-  }),
-  dispatchParseUser: PropTypes.func.isRequired,
-  token: PropTypes.string
+  user: userProp,
+  dispatchParseUser: func.isRequired,
+  token: string,
+  history: shape({
+    push: func.isRequired
+  }).isRequired
 }
 
 Login.defaultProps = {

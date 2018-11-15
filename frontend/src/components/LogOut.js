@@ -8,7 +8,7 @@ import { primary } from '../common/colors'
 class LogOut extends PureComponent {
   handleLogout = () => {
     const { dispatchLogout } = this.props
-    dispatchLogout()
+    dispatchLogout({ displayToast: true })
   }
 
   render() {

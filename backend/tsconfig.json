@@ -16,7 +16,11 @@
     },
     "lib": [
       "es2018",
-      "esnext"
+      "esnext",
+      "es5",
+      "es6",
+      "es2016",
+      "dom"
     ]
   },
   "include": [
