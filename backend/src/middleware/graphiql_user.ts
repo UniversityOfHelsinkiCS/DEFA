@@ -16,7 +16,10 @@ const graphiqlUser = (req: IRequestWithUser, res: Response, next: NextFunction):
       attributes: {
         cn: 'name',
         schacHomeOrganization: 'yliopisto.fi',
-        schacPersonalUniqueCode: 'A:0'
+        schacPersonalUniqueCode: 'A:0',
+        displayName: 'ADMIN',
+        eduPersonPrincipalName: '',
+        mail: ''
       }
     }
   }
