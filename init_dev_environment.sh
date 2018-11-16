@@ -19,6 +19,7 @@ echo "
   DATABASE_NAME=db
   SECRET=long0string1of2random3alphanumerical4characters5
   FRONTEND_LOGIN=http://localhost:8080/login
+  TEST_DATABASE_NAME=test
   ALLOWED_REDIRECTS=https://localhost,http://localhost
   ENTITY_ID=http://localhost:3000
   ASSERT_ENDPOINT=http://localhost:3000/api/login/assert
