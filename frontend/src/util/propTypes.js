@@ -1,4 +1,4 @@
-import { shape, string, number } from 'prop-types'
+import { shape, string, number, arrayOf } from 'prop-types'
 
 export const file = shape({
   name: string.isRequired,
@@ -42,3 +42,10 @@ export const userProp = shape({
     schacPersonalUniqueCode: string.isRequired
   }).isRequired
 })
+
+export const headerProp = arrayOf(
+  shape({
+    key: string.isRequired,
+    display: string.isRequired
+  })
+)

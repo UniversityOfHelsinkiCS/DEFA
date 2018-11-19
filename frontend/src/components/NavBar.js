@@ -34,6 +34,7 @@ const NavBar = ({ classes, history }) => (
           DEFA
         </Typography>
         <Button color="inherit" onClick={() => history.push('/upload-credits')}>Upload Credits</Button>
+        <Button onClick={() => history.push('/admin')}>All credits (ADMIN)</Button>
         <Button className={classes.lastButton} onClick={() => history.push('/')}>My Credits</Button>
         <Login />
         <LogOut />
