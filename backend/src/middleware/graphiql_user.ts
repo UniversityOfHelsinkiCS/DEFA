@@ -10,7 +10,7 @@ const graphiqlUser = (req: IRequestWithUser, res: Response, next: NextFunction):
   }
   if (req.headers.origin.includes(req.headers.host)) {
     req.user = {
-      id: '',
+      id: '111111111111111111111111',
       name: 'name',
       role: 'ADMIN',
       attributes: {
@@ -18,8 +18,8 @@ const graphiqlUser = (req: IRequestWithUser, res: Response, next: NextFunction):
         schacHomeOrganization: 'yliopisto.fi',
         schacPersonalUniqueCode: 'A:0',
         displayName: 'ADMIN',
-        eduPersonPrincipalName: '',
-        mail: ''
+        mail: 'a@b',
+        eduPersonPrincipalName: 'edName'
       }
     }
   }
