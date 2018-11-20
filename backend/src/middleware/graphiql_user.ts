@@ -17,7 +17,7 @@ const graphiqlUser = (req: IRequestWithUser, res: Response, next: NextFunction):
         cn: 'name',
         schacHomeOrganization: 'yliopisto.fi',
         schacPersonalUniqueCode: 'A:0',
-        displayName: 'dName',
+        displayName: 'ADMIN',
         mail: 'a@b',
         eduPersonPrincipalName: 'edName'
       }

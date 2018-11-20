@@ -40,6 +40,9 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
       }
     }
   })
+
+  const { id, context } = sp.createLoginRequest(idp, 'redirect')
+  return res.redirect(context)
 })
 
 router.post('/assert', async (req: Request, res: Response): Promise<void> => {
