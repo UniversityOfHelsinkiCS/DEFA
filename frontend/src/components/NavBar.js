@@ -43,7 +43,7 @@ const NavBar = ({ classes, history, user }) => {
           <Typography variant="h6" color="inherit" className={classes.grow} onClick={() => history.push('/')}>
             DEFA
           </Typography>
-          {user.user ? getRoutes(user.user.role) : null}
+          {user ? getRoutes(user.role) : null}
           <Login />
           <LogOut />
         </Toolbar>
@@ -52,10 +52,14 @@ const NavBar = ({ classes, history, user }) => {
   )
 }
 
+NavBar.defaultProps = {
+  user: null
+}
+
 NavBar.propTypes = {
   classes: parseClasses(styles).isRequired,
   history: object.isRequired, // eslint-disable-line react/forbid-prop-types,
-  user: userProp.isRequired
+  user: userProp
 }
 
 export default withRouter(withStyles(styles)(NavBar))

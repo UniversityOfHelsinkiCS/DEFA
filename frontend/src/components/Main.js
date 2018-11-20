@@ -1,7 +1,9 @@
 import React from 'react'
+import propTypes from 'prop-types'
 import { withRouter, Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
+import { userProp } from '../util/propTypes'
 import 'react-toastify/dist/ReactToastify.css'
 import Credits from './Credits'
 import NavBar from './NavBar'
@@ -10,6 +12,7 @@ import UploadCreditsContainer from './UploadCredits/UploadCreditsContainer'
 
 class Main extends React.PureComponent {
   render() {
+    const { user } = this.props
     return (
       <main>
         <ToastContainer
@@ -17,7 +20,7 @@ class Main extends React.PureComponent {
           autoClose={5000}
           hideProgressBar
         />
-        <NavBar user={this.props.user} />
+        <NavBar user={user} />
         <Switch>
           <Route exact path="/upload-credits" component={UploadCreditsContainer} />
           <Route exact path="/student" />
@@ -30,7 +33,15 @@ class Main extends React.PureComponent {
   }
 }
 const mapStateToProps = state => ({
-  user: state.user
+  user: state.user.user
 })
+
+Main.defaultProps = {
+  user: null
+}
+
+Main.propTypes = {
+  user: userProp
+}
 
 export default withRouter(connect(mapStateToProps, null)(Main))
