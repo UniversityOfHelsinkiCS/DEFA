@@ -9,6 +9,7 @@ WORKDIR /app
 RUN chown --recursive appuser /app
 
 USER appuser
+RUN mkdir src/utils/samldata
 RUN npm install
 RUN npm run build
 EXPOSE 3000
