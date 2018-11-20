@@ -21,10 +21,7 @@ export const validateResolver = (resolver: Iresolve, validator: IvalidatorFuncti
   const validatorIsAsync = isAsync(validator)
   return validatorIsAsync ? (
     async (parent, args, context, ...rest) => {
-      const promise: Promise<void> = validator(parent, args, context, ...rest) as Promise<void>
-      // Throws the error instead of causing a promise rejection.
-      promise.catch((error: Error) => { throw error })
-      await promise
+      await validator(parent, args, context, ...rest)
       return resolver(parent, args, context, ...rest)
     }
   ) : (

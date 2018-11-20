@@ -131,7 +131,7 @@ const deleteMany: IQuery = {
   },
   async resolve(parent: null, args: { credits: IEditCredit[] }) {
     return await CreditModel.deleteMany({
-      id: {
+      _id: {
         $in: args.credits.map(credit => Types.ObjectId(credit.id))
       }
     })
