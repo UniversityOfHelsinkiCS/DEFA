@@ -36,7 +36,7 @@ export type IvalidatorFunction = (
   // tslint:disable-next-line:no-any
   args: { [key: string]: any | any[] },
   context?: IContext
-) => void
+) => void | Promise<void>
 
 export interface IQuery {
   type: GraphQLObjectType | GraphQLList<GraphQLObjectType> | GraphQLList<GraphQLType>

@@ -1,11 +1,39 @@
 import { IQuery, IQueries, IvalidatorFunction, Iresolve } from '../types/interface'
 
-export const validateResolver = (resolver: Iresolve, validator: IvalidatorFunction): Iresolve => (
-  (parent, args, context, ...rest) => {
-    validator(parent, args, context, ...rest)
-    return resolver(parent, args, context, ...rest)
+// This abomination is necessary to find out whether a validator function returns undefined or a Promise<undefined>.
+const isAsync = (func: IvalidatorFunction): boolean => {
+  let returnValue: Promise<void> | void
+  try {
+    returnValue = func(null, {})
+  } catch (e) {
+    return false
   }
-)
+  if (returnValue) {
+    const promise = returnValue as Promise<void>
+    promise.catch((error: Error) => undefined)
+    return true
+  } else {
+    return false
+  }
+}
+
+export const validateResolver = (resolver: Iresolve, validator: IvalidatorFunction): Iresolve => {
+  const validatorIsAsync = isAsync(validator)
+  return validatorIsAsync ? (
+    async (parent, args, context, ...rest) => {
+      const promise: Promise<void> = validator(parent, args, context, ...rest) as Promise<void>
+      // Throws the error instead of causing a promise rejection.
+      promise.catch((error: Error) => { throw error })
+      await promise
+      return resolver(parent, args, context, ...rest)
+    }
+  ) : (
+    (parent, args, context, ...rest) => {
+      validator(parent, args, context, ...rest)
+      return resolver(parent, args, context, ...rest)
+    }
+  )
+}
 
 const applyToQuery = (query: IQuery): IQuery => {
   if (typeof query.access !== 'function') {

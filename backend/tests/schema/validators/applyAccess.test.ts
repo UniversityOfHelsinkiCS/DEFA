@@ -16,6 +16,7 @@ describe('validateResolver function', () => {
       indicator('validator')
     }
     const validatedResolver = validateResolver(resolver, validator)
+    indicator.mockClear()
     validatedResolver(null, {})
     expect(indicator).toHaveBeenCalledTimes(2)
     expect(indicator).toHaveBeenNthCalledWith(1, 'validator')
@@ -28,10 +29,40 @@ describe('validateResolver function', () => {
       throw new Error('Test error')
     }
     const validatedResolver = validateResolver(resolver, validator)
+    indicator.mockClear()
     expect(() => validatedResolver(null, {})).toThrowError()
     expect(indicator).toHaveBeenCalledWith('validator')
     expect(indicator).not.toHaveBeenCalledWith('resolver')
     expect(indicator).toHaveBeenCalledTimes(1)
+  })
+
+  describe('when validator is an async function.', () => {
+    it('returns a function that runs the validator before the resolver', async done => {
+      const validator: IvalidatorFunction = async () => {
+        await indicator('validator')
+      }
+      const validatedResolver = validateResolver(resolver, validator)
+      indicator.mockClear()
+      await validatedResolver(null, {})
+      expect(indicator).toHaveBeenCalledTimes(2)
+      expect(indicator).toHaveBeenNthCalledWith(1, 'validator')
+      expect(indicator).toHaveBeenNthCalledWith(2, 'resolver')
+      done()
+    })
+
+    it('returns a function that does not execute the resolver if the validator throws an error.', async done => {
+      const validator: IvalidatorFunction = async () => {
+        await indicator('validator')
+        throw new Error('Test error')
+      }
+      const validatedResolver = validateResolver(resolver, validator)
+      indicator.mockClear()
+      expect(validatedResolver(null, {})).rejects.toEqual(expect.any(Error))
+      expect(indicator).toHaveBeenCalledWith('validator')
+      expect(indicator).not.toHaveBeenCalledWith('resolver')
+      expect(indicator).toHaveBeenCalledTimes(1)
+      done()
+    })
   })
 })
 

@@ -2,7 +2,6 @@ import { Credit } from '../../../src/schema/types'
 import { CreditModel, UserModel } from '../../../src/schema/models'
 import { IContext, IUser } from '../../../src/schema/types/interface'
 import { IUserModel } from '../../../src/schema/models/User'
-import { Document } from 'mongoose'
 import { connect } from '../../../src/mongo/connection'
 
 connect()
