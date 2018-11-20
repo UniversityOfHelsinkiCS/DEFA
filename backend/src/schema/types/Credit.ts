@@ -9,7 +9,7 @@ import {
   GraphQLInputObjectType
 } from 'graphql'
 import { IQuery, IUser, Iresolve } from './interface'
-import { Document } from 'mongoose'
+import { Document, Types } from 'mongoose'
 import applyAccess, { privilegedAccess, adminAccess, creditOwnershipAccess } from '../validators'
 
 const type: GraphQLObjectType = new GraphQLObjectType({
@@ -129,11 +129,10 @@ const deleteMany: IQuery = {
   args: {
     credits: { type: new GraphQLNonNull(new GraphQLList(editInput)) }
   },
-  async resolve(parent: null, args: { ids: string[] }) {
-    // Does not work
+  async resolve(parent: null, args: { credits: IEditCredit[] }) {
     return await CreditModel.deleteMany({
-      id: {
-        $in: args.ids
+      _id: {
+        $in: args.credits.map(credit => Types.ObjectId(credit.id))
       }
     })
   },

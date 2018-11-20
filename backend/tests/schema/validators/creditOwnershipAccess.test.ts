@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import { creditOwnershipAccess } from '../../../src/schema/validators'
 import InvalidInputError from '../../../src/utils/errors/InvalidInputError'
 import LoginRequiredError from '../../../src/utils/errors/LoginRequiredError'
@@ -80,7 +81,10 @@ describe('creditOwnershipAccess validator', () => {
     await Promise.all([
       CreditModel.deleteMany({
         id: {
-          $in: [...credits.map(credit => credit.id), ...forbiddenCredits.map(credit => credit.id)]
+          $in: [
+            ...credits.map(credit => Types.ObjectId(credit.id)),
+            ...forbiddenCredits.map(credit => Types.ObjectId(credit.id))
+          ]
         }
       }),
       UserModel.findByIdAndDelete(user.id),
