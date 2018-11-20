@@ -3,6 +3,7 @@ import { CreditModel, UserModel } from '../../../src/schema/models'
 import { IContext, IUser } from '../../../src/schema/types/interface'
 import { IUserModel } from '../../../src/schema/models/User'
 import { connect } from '../../../src/mongo/connection'
+import { ICreditModel } from '../../../src/schema/models/Credit'
 
 connect()
 
@@ -40,11 +41,15 @@ describe('Credit GraphQL type', () => {
     } as unknown as IUser
     CreditModel.deleteMany({}).then(() => done())
   })
-  afterEach(done => {
-    CreditModel.deleteMany({}).then(() => done())
+  afterAll(async () => {
+    await UserModel.findByIdAndDelete(user.id)
   })
 
   describe('createCredits mutation resolver', () => {
+    afterEach(done => {
+      CreditModel.deleteMany({}).then(() => done())
+    })
+
     it('throws an error when user is unauthorized.', async done => {
       const unauthorizedUser = {
         ...user,
@@ -101,6 +106,104 @@ describe('Credit GraphQL type', () => {
       const found = await CreditModel.find({})
       expect(found).toContainEqual(expect.objectContaining(exampleCredits[0]))
       expect(found).toContainEqual(expect.objectContaining(exampleCredits[1]))
+    })
+  })
+
+  describe('uploads query resolvers', () => {
+    const dbValues: {
+      otheruser?: string,
+      credits: Array<{
+        id: string,
+        mine: boolean,
+        organization: boolean
+      }>
+    } = {
+      otheruser: null,
+      credits: []
+    }
+    beforeAll(async () => {
+      dbValues.otheruser = (await UserModel.create({
+        name: 'Test Teacher',
+        role: 'PRIVILEGED'
+      })).id
+      dbValues.credits = ((await Promise.all([
+        CreditModel.create({
+          student_number: '012345678',
+          course_code: 'TKT0000',
+          study_credits: 5,
+          grade: 5,
+          university: 'uni.fi',
+          teacher: user.id
+        }),
+        CreditModel.create({
+          student_number: '012345678',
+          course_code: 'TKT0000',
+          study_credits: 5,
+          grade: 5,
+          university: 'uni.fi',
+          teacher: dbValues.otheruser
+        }),
+        CreditModel.create({
+          student_number: '012345678',
+          course_code: 'TKT0000',
+          study_credits: 5,
+          grade: 5,
+          university: 'otheruni.fi',
+          teacher: dbValues.otheruser
+        })
+      ])) as unknown as ICreditModel[] ).map(
+        (credit: ICreditModel) => ({
+          id: String(credit.id),
+          mine: String(credit.teacher) === user.id,
+          organization: credit.university === user.attributes.schacHomeOrganization
+        })
+      )
+    })
+    afterAll(async () => {
+      await Promise.all([
+        CreditModel.deleteMany({}),
+        UserModel.findByIdAndDelete(dbValues.otheruser)
+      ])
+    })
+
+    describe('myUploads query resolver', () => {
+      let result: ICreditModel[]
+      let myUploads: string[]
+      beforeAll(async () => {
+        result = (
+          await Credit.queries.myUploads.resolve(null, { credits: dbValues.credits }, { user } as IContext)
+        ) as ICreditModel[]
+        myUploads = dbValues.credits.filter(credit => credit.mine).map(credit => credit.id)
+      })
+      it('finds only credits uploaded by user.', async () => {
+        result.forEach(credit => {
+          expect(myUploads).toContain(credit.id)
+        })
+      })
+
+      it('finds all credits uploaded by user.', async () => {
+        expect(result.length).toEqual(myUploads.length)
+      })
+    })
+
+    describe('organizationUploads query resolver', () => {
+      let result: ICreditModel[]
+      let orgUploads: string[]
+      beforeAll(async () => {
+        result = (
+          await Credit.queries.organizationUploads.resolve(null, { credits: dbValues.credits }, { user } as IContext)
+        ) as ICreditModel[]
+        orgUploads = dbValues.credits.filter(credit => credit.organization).map(credit => credit.id)
+      })
+      it('finds only credits uploaded by user\'s organization members.', async () => {
+        result.forEach(credit => {
+          expect(orgUploads).toContain(credit.id)
+        })
+      })
+
+      it('finds all credits uploaded by user\'s organization members.', async () => {
+        expect(result.length).toEqual(orgUploads.length)
+      })
     })
   })
 })
