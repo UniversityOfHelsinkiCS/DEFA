@@ -1,4 +1,4 @@
-import { shape, string, number } from 'prop-types'
+import { shape, string, number, arrayOf } from 'prop-types'
 
 export const file = shape({
   name: string.isRequired,
@@ -30,13 +30,22 @@ export const creditProp = shape({
 })
 
 export const userProp = shape({
+  id: string,
+  name: string,
+  role: string,
   attributes: shape({
-    // Uncomment when mock idp has been fixed.
-    /* cn: string.isRequired,
+    cn: string.isRequired,
     displayName: string.isRequired,
     eduPersonPrincipalName: string.isRequired,
     mail: string.isRequired,
-    shacHomeOrganization: string.isRequired,
-    shacPersonalUniqueCode: string.isRequired */
+    schacHomeOrganization: string.isRequired,
+    schacPersonalUniqueCode: string.isRequired
   }).isRequired
 })
+
+export const headerProp = arrayOf(
+  shape({
+    key: string.isRequired,
+    display: string.isRequired
+  })
+)

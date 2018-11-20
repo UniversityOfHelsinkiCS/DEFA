@@ -2,9 +2,7 @@ import { Request, Response, Router } from 'express'
 import { DOMParser, XMLSerializer } from 'xmldom'
 import {
   responseUrl,
-    ISamlResponse,
   getMetadata,
-  samlResponseAttributes,
   signToken
 } from '../utils/controller_helpers/login'
 // tslint:disable-next-line:no-var-requires
@@ -42,6 +40,9 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
       }
     }
   })
+
+  const { id, context } = sp.createLoginRequest(idp, 'redirect')
+  return res.redirect(context)
 })
 
 router.post('/assert', async (req: Request, res: Response): Promise<void> => {

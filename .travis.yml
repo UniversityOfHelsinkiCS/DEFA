@@ -39,12 +39,12 @@ jobs:
         - DATABASE_PASS=travispass
         - TEST_DATABASE_NAME=test
         - SECRET=long0string1of2random3alphanumerical4characters5
-        - ALLOWED_REDIRECTS=https://www.example.com/login
+        - FRONTEND_LOGIN=http://localhost:8080/login
 services:
  - docker
 after_success:
   - cd ../frontend
-  - printf "API_URL=$API_URL\nREDIRECT_URL=$REDIRECT_URL" >> .env
+  - printf "API_URL=$API_URL\nREDIRECT_URL=$REDIRECT_URL\nLOGIN_URL=$LOGIN_URL\nDS_URL=$DS_URL\nENTITY_ID=$ENTITY_ID" >> .env
   - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-frontend:staging ."
   - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
   - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-frontend:staging"

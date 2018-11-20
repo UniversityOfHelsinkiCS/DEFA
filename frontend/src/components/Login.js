@@ -17,17 +17,28 @@ class Login extends PureComponent {
     const queryParams = parseQueryParams(location).query_params
     if (queryParams.token) {
       window.localStorage.setItem('DEFA-token', queryParams.token)
-    } else {
-      // toast error
     }
     const storageToken = window.localStorage.getItem('DEFA-token')
     if (storageToken) {
       if (storageToken !== token) { dispatchParseUser(storageToken) }
     }
-    if (queryParams.redirect) {
-      const { history } = this.props
-      history.push(new URL(queryParams.redirect).pathname)
+    this.redirect()
+  }
+
+  redirect = () => {
+    const { history, location } = this.props
+    const path = window.localStorage.getItem('DEFA-redirect')
+    if (path) {
+      window.localStorage.removeItem('DEFA-redirect')
+      if (location.pathname === '/login') {
+        history.push(path)
+      }
     }
+  }
+
+  prepareRedirect = () => {
+    const { location } = this.props
+    window.localStorage.setItem('DEFA-redirect', location.pathname)
   }
 
   render() {
@@ -35,7 +46,13 @@ class Login extends PureComponent {
     const url = process.env.MODE === 'development' ? 'http://localhost:7000' : `${process.env.DS_URL}?entityID=${process.env.ENTITY_ID}&return=${process.env.LOGIN_URL}`
     if (!user) {
       return (
-        <Button href={url} style={{ background: primary.light }}>Login</Button>
+        <Button
+          href={url}
+          style={{ background: primary.light }}
+          onClick={this.prepareRedirect}
+        >
+          Login
+        </Button>
       )
     }
     return (
@@ -48,7 +65,8 @@ class Login extends PureComponent {
 
 Login.propTypes = {
   location: shape({
-    search: string.isRequired
+    search: string.isRequired,
+    pathname: string.isRequired
   }).isRequired,
   user: userProp,
   dispatchParseUser: func.isRequired,
