@@ -6,12 +6,11 @@ import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { userProp } from '../util/propTypes'
+import { userProp, parseClasses } from '../util/propTypes'
 
 
 import Login from './Login'
 import LogOut from './LogOut'
-import { parseClasses } from '../util/propTypes'
 
 const { object } = PropTypes
 

@@ -1,5 +1,4 @@
 import React from 'react'
-import propTypes from 'prop-types'
 import { withRouter, Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
