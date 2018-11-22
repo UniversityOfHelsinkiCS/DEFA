@@ -46,8 +46,6 @@ describe('logout action', () => {
   it('removes DEFA-token item from localStorage.', () => {
     expect(localStorage.getItem('DEFA-token')).toEqual(testToken)
     actions.logout({})(dispatch)
-    // Somehow getItem returns undefined instead of null, after removing the item.
-    // See if someone can replicate the problem
-    // expect(localStorage.getItem('DEFA-token')).toEqual(null)
+    expect(localStorage.getItem('DEFA-token')).toEqual(null)
   })
 })

@@ -24,11 +24,11 @@ let idp: any = null
 
 router.get('/', async (req: Request, res: Response): Promise<void> => {
   const metadata = await getMetadata(req.query.entityID)
-  const d = new DOMParser().parseFromString(metadata, 'text/xml')
-  d.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
+  const parsedMetaData = new DOMParser().parseFromString(metadata, 'text/xml')
+  parsedMetaData.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
 
   idp = samlify.IdentityProvider({
-    metadata: new XMLSerializer().serializeToString(d),
+    metadata: new XMLSerializer().serializeToString(parsedMetaData),
     isAssertionEncrypted: true,
     wantMessageSigned: true,
     messageSigningOrder: 'encrypt-then-sign',
