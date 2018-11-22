@@ -25,7 +25,8 @@ export interface IContext {
 }
 
 export type Iresolve = (
-  parent: null,
+  // tslint:disable-next-line:no-any
+  parent: any,
   // tslint:disable-next-line:no-any
   args: { [key: string]: any | any[] },
   context?: IContext

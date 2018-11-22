@@ -1,8 +1,8 @@
 import { UserModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
 import { IQuery, Iresolve } from './interface'
-import { getByIdentifier, CreditType } from './Credit'
-import applyAccess, { userAccess, adminAccess } from '../validators'
+import { getByIdentifier, CreditType, getByUniversity } from './Credit'
+import applyAccess, { userAccess, adminAccess, privilegedAccess } from '../validators'
 
 const identifierType = new GraphQLObjectType({
   name: 'Identifier',
@@ -11,7 +11,7 @@ const identifierType = new GraphQLObjectType({
     university: { type: GraphQLString },
     student_number: { type: GraphQLString },
     credits: { type: new GraphQLList(CreditType), resolve: getByIdentifier }
-   })
+  })
 })
 
 const userType = new GraphQLObjectType({
@@ -22,7 +22,8 @@ const userType = new GraphQLObjectType({
     role: { type: GraphQLString },
     email: { type: GraphQLString },
     university: { type: GraphQLString },
-    identifiers: { type: new GraphQLList(identifierType) }
+    identifiers: { type: new GraphQLList(identifierType) },
+    universityCredits: { type: new GraphQLList(CreditType), resolve: getByUniversity, access: privilegedAccess }
   })
 })
 
@@ -59,9 +60,7 @@ const getMe: IQuery = {
   type: userType,
   args: {},
   resolve(parent, args: {}, context) {
-    return UserModel.findOne({
-      id: context.user.id
-    })
+    return UserModel.findById(context.user.id)
   },
   access: userAccess
 }

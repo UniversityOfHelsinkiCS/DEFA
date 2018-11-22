@@ -1,3 +1,4 @@
+import { Iidentifier } from '../models/User'
 import { CreditModel } from '../models'
 import { teacherType, getByIdResolver } from './User'
 import {
@@ -63,7 +64,7 @@ interface ICredit {
   language: string
 }
 
-interface ICreditWithUni extends ICredit {
+export interface ICreditWithUni extends ICredit {
   university: string,
   teacher: string
 }
@@ -89,11 +90,18 @@ const createMany: IQuery = {
   access: privilegedAccess
 }
 
-export const getByIdentifier: Iresolve = (parent: { university: string, student_number: string }, args: {}) => {
+export const getByIdentifier: Iresolve = (parent: Iidentifier, args: {}) => {
   if (!parent) { return null }
   return CreditModel.find({
     university: parent.university,
     student_number: parent.student_number
+  })
+}
+
+export const getByUniversity: Iresolve = (parent: { university: string, student_number: string }, args: {}) => {
+  if (!parent) { return null }
+  return CreditModel.find({
+    university: parent.university
   })
 }
 

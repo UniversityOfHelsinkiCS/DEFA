@@ -1,6 +1,6 @@
 import { Schema, model, Document, Model } from 'mongoose'
 
-interface Iidentifier {
+export interface Iidentifier {
   id: string,
   student_number: string,
   university: string
