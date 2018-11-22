@@ -1,16 +1,12 @@
 import { Request, Response, NextFunction } from 'express'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import { IUser } from '../schema/types/interface'
+import { IUser, IRequestWithUser, IErrorResponse } from '../utils/typescript'
 
 dotenv.config()
 
 export const EXPIRED_TOKEN_MESSAGE: string = 'Your session has expired. Please log in again to start a new session.'
 export const INVALID_TOKEN_MESSAGE: string = 'Your session is invalid. Please log in again to start a valid session.'
-
-export interface IRequestWithUser extends Request {
-  user?: IUser
-}
 
 const parseToken = (token: string): [IUser?, Error?] => {
   if (!token) { return [null, null] }
@@ -19,11 +15,6 @@ const parseToken = (token: string): [IUser?, Error?] => {
   } catch (e) {
     return [null, e]
   }
-}
-
-interface IErrorResponse {
-  message: string,
-  code: string
 }
 
 const handleError = (res: Response, error: Error): void => {

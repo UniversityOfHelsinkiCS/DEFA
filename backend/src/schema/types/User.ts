@@ -1,6 +1,6 @@
 import { UserModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
-import { IQuery, Iresolve } from './interface'
+import { IQuery, Iresolve } from '../../utils/typescript'
 import { getByIdentifier, CreditType } from './Credit'
 import applyAccess, { userAccess, adminAccess } from '../validators'
 

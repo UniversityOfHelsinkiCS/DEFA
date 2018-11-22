@@ -1,5 +1,5 @@
 import applyAccess, { validateResolver } from '../../../src/schema/validators/applyAccess'
-import { IQueries, IQuery, Iresolve, IContext, IUser, IvalidatorFunction } from '../../../src/schema/types/interface'
+import { IQueries, IQuery, Iresolve, IContext, IUser, IvalidatorFunction } from '../../../src/utils/typescript'
 
 describe('validateResolver function', () => {
   const indicator = jest.fn()

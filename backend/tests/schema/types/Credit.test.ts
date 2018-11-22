@@ -1,10 +1,8 @@
 import { Types } from 'mongoose'
 import { Credit } from '../../../src/schema/types'
 import { CreditModel, UserModel } from '../../../src/schema/models'
-import { IContext, IUser } from '../../../src/schema/types/interface'
-import { IUserModel } from '../../../src/schema/models/User'
+import { IContext, IUser, ICreditModel, IUserModel } from '../../../src/utils/typescript'
 import { connect } from '../../../src/mongo/connection'
-import { ICreditModel } from '../../../src/schema/models/Credit'
 
 connect()
 
