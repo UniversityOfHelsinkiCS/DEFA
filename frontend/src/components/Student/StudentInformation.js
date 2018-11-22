@@ -1,11 +1,17 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Card, List, ListItem, ListItemText } from '@material-ui/core'
+import { Card, CardHeader, List, ListItem, ListItemText } from '@material-ui/core'
 import { userProp } from '../../util/propTypes'
 
 const StudentInformationComponent = ({ user }) => (
   <div>
     <Card>
+      <CardHeader
+        title="Info"
+        titleTypographyProps={{
+          align: 'center'
+        }}
+      />
       <List>
         <ListItem>
           <ListItemText primary="name" secondary={user.attributes.cn} />

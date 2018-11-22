@@ -6,15 +6,17 @@ import StudentCredits from './StudentCredits'
 
 const StudentContainerComponent = () => (
   <div>
-    <Grid container spacing={16}>
+    <Grid container spacing={8}>
       <Grid item xs={3}>
         <StudentInformation />
       </Grid>
       <Grid item xs={9}>
         <StudentIdentifiers />
       </Grid>
+      <Grid item xs={12}>
+        <StudentCredits />
+      </Grid>
     </Grid>
-    <StudentCredits />
   </div>
 )
 
