@@ -30,7 +30,7 @@ export const creditProp = shape({
 })
 
 export const userProp = shape({
-  id: string,
+  id: string.isRequired,
   name: string,
   role: string,
   attributes: shape({

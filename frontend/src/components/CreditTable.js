@@ -4,7 +4,7 @@ import { Table, TableHead, TableBody, TableCell, TableRow, Typography } from '@m
 import CreditsPreviewRow from './CreditTableRow'
 import { creditProp } from '../util/propTypes'
 
-const headers = [
+export const headers = [
   {
     key: 'student_number',
     display: 'student number'
@@ -46,7 +46,6 @@ const headers = [
 
 export const CreditTable = ({ credits }) => (
   <div>
-    {console.log(credits)}
     <Table>
       <TableHead>
         <TableRow>

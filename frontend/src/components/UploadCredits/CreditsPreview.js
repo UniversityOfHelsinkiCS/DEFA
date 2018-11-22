@@ -1,40 +1,29 @@
 import React from 'react'
 import { arrayOf } from 'prop-types'
 import { connect } from 'react-redux'
-import { Table, TableHead, TableBody, TableCell, TableRow, Typography } from '@material-ui/core'
-import CreditsPreviewRow from './CreditsPreviewRow'
-import headers from './helpers/creditHeaders'
-import { creditProp } from '../../util/propTypes'
+import { creditProp, userProp } from '../../util/propTypes'
+import CreditT from '../CreditTable'
 
-export const CreditsPreviewComponent = ({ credits }) => (
-  <div>
-    <Table>
-      <TableHead>
-        <TableRow>
-          {headers.map(field => (
-            <TableCell key={field.key}>
-              <Typography>{field.display}</Typography>
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {credits.map(credit => (
-          <CreditsPreviewRow
-            key={Object.values(credit).reduce((acc, curr) => acc + curr, '')}
-            credit={credit}
-          />
-        ))}
-      </TableBody>
-    </Table>
-  </div>
-)
+export const CreditsPreviewComponent = ({ user, credits }) => {
+  const tableCredits = credits.map(credit => ({
+    ...credit,
+    university: user.attributes.schacHomeOrganization,
+    teacher: user.id
+  }))
+  return (
+    <div>
+      <CreditT credits={tableCredits} />
+    </div>
+  )
+}
 
 CreditsPreviewComponent.propTypes = {
+  user: userProp.isRequired,
   credits: arrayOf(creditProp).isRequired
 }
 
 const mapStateToProps = state => ({
+  user: state.user.user,
   credits: state.uploadCredits.credits
 })
 
