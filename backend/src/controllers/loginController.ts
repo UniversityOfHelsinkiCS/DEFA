@@ -24,11 +24,11 @@ let idp: any = null
 
 router.get('/', async (req: Request, res: Response): Promise<void> => {
   const metadata = await getMetadata(req.query.entityID)
-  const d = new DOMParser().parseFromString(metadata, 'text/xml')
-  d.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
+  const parsedMetaData = new DOMParser().parseFromString(metadata, 'text/xml')
+  parsedMetaData.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
 
   idp = samlify.IdentityProvider({
-    metadata: new XMLSerializer().serializeToString(d),
+    metadata: new XMLSerializer().serializeToString(parsedMetaData),
     isAssertionEncrypted: true,
     wantMessageSigned: true,
     messageSigningOrder: 'encrypt-then-sign',
@@ -40,6 +40,9 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
       }
     }
   })
+
+  const { id, context } = sp.createLoginRequest(idp, 'redirect')
+  return res.redirect(context)
 })
 
 router.post('/assert', async (req: Request, res: Response): Promise<void> => {
@@ -58,6 +61,9 @@ router.post('/assert', async (req: Request, res: Response): Promise<void> => {
   }
 })
 
+router.get('/metadata', (req, res) => {
+  res.header('Content-Type', 'text/xml').send(sp.getMetadata())
+})
 const LoginController: Router = router
 
 export default LoginController

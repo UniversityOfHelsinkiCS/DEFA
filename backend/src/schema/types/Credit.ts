@@ -10,8 +10,8 @@ import {
   GraphQLInputObjectType
 } from 'graphql'
 import { IQuery, IUser, Iresolve } from './interface'
-import { Document } from 'mongoose'
-import applyAccess, { privilegedAccess, adminAccess } from '../validators'
+import { Document, Types } from 'mongoose'
+import applyAccess, { privilegedAccess, adminAccess, creditOwnershipAccess } from '../validators'
 
 const type: GraphQLObjectType = new GraphQLObjectType({
   name: 'Credit',
@@ -45,6 +45,13 @@ const input = new GraphQLInputObjectType({
   }
 })
 
+const editInput = new GraphQLInputObjectType({
+  name: 'EditInputCredit',
+  fields: {
+    id: { type: new GraphQLNonNull(GraphQLString) }
+  }
+})
+
 const getMany: IQuery = {
   type: new GraphQLList(type),
   args: {},
@@ -60,13 +67,17 @@ interface ICredit {
   course_code: string,
   date: string,
   study_credits: number,
-  grade: string,
+  grade: number,
   language: string
 }
 
 export interface ICreditWithUni extends ICredit {
   university: string,
   teacher: string
+}
+
+export interface IEditCredit {
+  id: string
 }
 
 const unversityMapper = (user: IUser) => (credit: ICredit): ICreditWithUni => ({
@@ -90,6 +101,45 @@ const createMany: IQuery = {
   access: privilegedAccess
 }
 
+const myUploads: IQuery = {
+  type: new GraphQLList(type),
+  args: {},
+  async resolve(parent: null, args: {}, context) {
+    const { user } = context
+    return await CreditModel.find({
+      teacher: user.id
+    })
+  },
+  access: privilegedAccess
+}
+
+const organizationUploads: IQuery = {
+  type: new GraphQLList(type),
+  args: {},
+  async resolve(parent: null, args: {}, context) {
+    const { user } = context
+    return await CreditModel.find({
+      university: user.attributes.schacHomeOrganization
+    })
+  },
+  access: privilegedAccess
+}
+
+const deleteMany: IQuery = {
+  type: new GraphQLList(type),
+  args: {
+    credits: { type: new GraphQLNonNull(new GraphQLList(editInput)) }
+  },
+  async resolve(parent: null, args: { credits: IEditCredit[] }) {
+    return await CreditModel.deleteMany({
+      _id: {
+        $in: args.credits.map(credit => Types.ObjectId(credit.id))
+      }
+    })
+  },
+  access: creditOwnershipAccess
+}
+
 export const getByIdentifier: Iresolve = (parent: Iidentifier, args: {}) => {
   if (!parent) { return null }
   return CreditModel.find({
@@ -98,20 +148,16 @@ export const getByIdentifier: Iresolve = (parent: Iidentifier, args: {}) => {
   })
 }
 
-export const getByUniversity: Iresolve = (parent: { university: string, student_number: string }, args: {}) => {
-  if (!parent) { return null }
-  return CreditModel.find({
-    university: parent.university
-  })
-}
-
 export const CreditType = type
 
 export default applyAccess({
   queries: {
-    credits: getMany
+    credits: getMany,
+    myUploads,
+    organizationUploads
   },
   mutations: {
-    createCredits: createMany
+    createCredits: createMany,
+    deleteCredits: deleteMany
   }
 })
