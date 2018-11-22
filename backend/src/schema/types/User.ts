@@ -1,8 +1,8 @@
 import { UserModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
 import { IQuery, Iresolve } from './interface'
-import { getByIdentifier, CreditType, getByUniversity } from './Credit'
-import applyAccess, { userAccess, adminAccess, privilegedAccess } from '../validators'
+import { getByIdentifier, CreditType } from './Credit'
+import applyAccess, { userAccess, adminAccess } from '../validators'
 
 const identifierType = new GraphQLObjectType({
   name: 'Identifier',
@@ -22,8 +22,7 @@ const userType = new GraphQLObjectType({
     role: { type: GraphQLString },
     email: { type: GraphQLString },
     university: { type: GraphQLString },
-    identifiers: { type: new GraphQLList(identifierType) },
-    universityCredits: { type: new GraphQLList(CreditType), resolve: getByUniversity, access: privilegedAccess }
+    identifiers: { type: new GraphQLList(identifierType) }
   })
 })
 
