@@ -1,3 +1,4 @@
+import { Iidentifier } from '../models/User'
 import { CreditModel } from '../models'
 import { teacherType, getByIdResolver } from './User'
 import {
@@ -139,7 +140,7 @@ const deleteMany: IQuery = {
   access: creditOwnershipAccess
 }
 
-export const getByIdentifier: Iresolve = (parent: { university: string, student_number: string }, args: {}) => {
+export const getByIdentifier: Iresolve = (parent: Iidentifier, args: {}) => {
   if (!parent) { return null }
   return CreditModel.find({
     university: parent.university,
