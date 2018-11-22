@@ -1,4 +1,3 @@
-import { Iidentifier } from '../models/User'
 import { CreditModel } from '../models'
 import { teacherType, getByIdResolver } from './User'
 import {
@@ -9,7 +8,7 @@ import {
   GraphQLNonNull,
   GraphQLInputObjectType
 } from 'graphql'
-import { IQuery, IUser, Iresolve } from './interface'
+import { IQuery, IUser, Iresolve, ICredit, ICreditWithUni, IEditCredit, Iidentifier } from '../../utils/typescript'
 import { Document, Types } from 'mongoose'
 import applyAccess, { privilegedAccess, adminAccess, creditOwnershipAccess } from '../validators'
 
@@ -59,25 +58,6 @@ const getMany: IQuery = {
     return CreditModel.find()
   },
   access: adminAccess
-}
-
-interface ICredit {
-  student_number: string,
-  course_name: string,
-  course_code: string,
-  date: string,
-  study_credits: number,
-  grade: number,
-  language: string
-}
-
-export interface ICreditWithUni extends ICredit {
-  university: string,
-  teacher: string
-}
-
-export interface IEditCredit {
-  id: string
 }
 
 const unversityMapper = (user: IUser) => (credit: ICredit): ICreditWithUni => ({

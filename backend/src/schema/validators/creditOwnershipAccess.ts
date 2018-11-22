@@ -1,9 +1,7 @@
 import { Types } from 'mongoose'
-import { IUser, IvalidatorFunction } from '../types/interface'
+import { IUser, IvalidatorFunction, IEditCredit, ICreditModel } from '../../utils/typescript'
 import userAccess from './userAccess'
-import { IEditCredit } from '../types/Credit'
 import { CreditModel } from '../models'
-import { ICreditModel } from '../models/Credit'
 import InvalidInputError from '../../utils/errors/InvalidInputError'
 
 const checkCredits = async (credits: IEditCredit[], user: IUser): Promise<void> => {

@@ -1,11 +1,8 @@
 import { URL } from 'url'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
-import {
-  responseUrl,
-  ISamlResponse
-} from '../../../src/utils/controller_helpers/login'
-import { IUser } from '../../../src/schema/types/interface'
+import { responseUrl } from '../../../src/utils/controller_helpers/login'
+import { IUser, ISamlResponse } from '../../../src/utils/typescript'
 
 dotenv.config()
 

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import { Response } from 'express'
-import { IRequestWithUser } from '../../src/middleware/token_authorization'
+import { IRequestWithUser, IMockResponse } from '../../src/utils/typescript'
 import tokenAuth, { INVALID_TOKEN_MESSAGE, EXPIRED_TOKEN_MESSAGE } from '../../src/middleware/token_authorization'
 
 dotenv.config()
@@ -19,11 +19,6 @@ class MockResponse {
     return this
   }
   public send = (message: string): this => this
-}
-
-interface IMockResponse extends Response {
-  statuses: number[],
-  jsons: object[]
 }
 
 describe('token authorization middleware', () => {
