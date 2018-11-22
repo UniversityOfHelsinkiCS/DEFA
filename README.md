@@ -95,6 +95,7 @@ DATABASE_PASS=pass
 DATABASE_NAME=db
 SECRET=long0string1of2random3alphanumerical4characters5
 ALLOWED_REDIRECTS=https://localhost,http://localhost
+FRONTEND_LOGIN=http://localhost:8080
 ```
 
 run
@@ -103,6 +104,17 @@ run
 npm i
 npm run dev
 ```
+
+You also need to generate metadata for your service provider in order to run it.
+
+
+
+To use our existing metadata, write
+
+```
+curl https://defa-staging.cs.helsinki.fi/api/login/metadata > ./src/utils/samldata/metadata.xml
+```
+
 
 ### Backend tests
 
