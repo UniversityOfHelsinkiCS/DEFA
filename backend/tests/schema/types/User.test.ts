@@ -1,14 +1,15 @@
 import { Credit, User } from '../../../src/schema/types'
-import { Iidentifier } from '../../../src/schema/models/User'
 
 import { getByIdentifier, ICreditWithUni } from '../../../src/schema/types/Credit'
 import { CreditModel, UserModel } from '../../../src/schema/models'
 import { IContext, IUser } from '../../../src/schema/types/interface'
 import { IUserModel } from '../../../src/schema/models/User'
-import { Document } from 'mongoose'
 import { connect } from '../../../src/mongo/connection'
 
+process.env.TEST_DATABASE_NAME = 'usertest'
+
 connect()
+
 const exampleCredits = [
   {
     student_number: '11123457',
