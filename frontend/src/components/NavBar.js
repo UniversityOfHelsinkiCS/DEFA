@@ -29,7 +29,7 @@ const NavBar = ({ classes, history, user }) => {
     <div>
       {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/upload-credits')}>Upload Credits</Button> : null}
       {role === 'ADMIN' ? <Button onClick={() => history.push('/admin')}>All credits (ADMIN)</Button> : null}
-      <Button className={classes.lastButton} onClick={() => history.push('/')}>My Credits</Button>
+      <Button className={classes.lastButton} onClick={() => history.push('/me')}>My Credits</Button>
     </div>
   )
 

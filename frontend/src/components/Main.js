@@ -8,6 +8,7 @@ import Credits from './Credits'
 import NavBar from './NavBar'
 import Welcome from './Welcome'
 import UploadCreditsContainer from './UploadCredits/UploadCreditsContainer'
+import StudentContainer from './Student/StudentContainer'
 
 class Main extends React.PureComponent {
   render() {
@@ -23,6 +24,7 @@ class Main extends React.PureComponent {
         <Switch>
           <Route exact path="/upload-credits" component={UploadCreditsContainer} />
           <Route exact path="/student" />
+          <Route exact path="/me" component={StudentContainer} />
           <Route exact path="/" component={Welcome} />
           <Route exact path="/admin" component={Credits} />
         </Switch>
