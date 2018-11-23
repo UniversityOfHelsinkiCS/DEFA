@@ -18,3 +18,18 @@ export const logout = options => dispatch => {
     } : undefined
   })
 }
+
+export const loginError = message => dispatch => {
+  dispatch({
+    type: types.TOAST,
+    toast: {
+      message,
+      options: {
+        type: toast.TYPE.ERROR,
+        autoClose: 5000,
+        pauseOnHover: true,
+        closeOnClick: true
+      }
+    }
+  })
+}
