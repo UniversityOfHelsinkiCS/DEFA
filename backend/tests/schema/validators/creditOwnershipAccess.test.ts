@@ -2,11 +2,16 @@ import { Types } from 'mongoose'
 import { creditOwnershipAccess } from '../../../src/schema/validators'
 import InvalidInputError from '../../../src/utils/errors/InvalidInputError'
 import LoginRequiredError from '../../../src/utils/errors/LoginRequiredError'
-import { IUser, IContext, IUserAttributes } from '../../../src/schema/types/interface'
-import { IEditCredit, ICreditWithUni } from '../../../src/schema/types/Credit'
+import {
+  IUser,
+  IContext,
+  IUserAttributes,
+  IEditCredit,
+  ICreditWithUni,
+  IUserModel,
+  ICreditModel
+} from '../../../src/utils/typescript'
 import { UserModel, CreditModel } from '../../../src/schema/models'
-import { IUserModel } from '../../../src/schema/models/User'
-import { ICreditModel } from '../../../src/schema/models/Credit'
 import { connect } from '../../../src/mongo/connection'
 
 connect()

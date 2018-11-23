@@ -8,7 +8,7 @@ import {
   GraphQLNonNull,
   GraphQLInputObjectType
 } from 'graphql'
-import { IQuery, IUser, Iresolve } from './interface'
+import { IQuery, IUser, Iresolve, ICredit, ICreditWithUni, IEditCredit, Iidentifier } from '../../utils/typescript'
 import { Document, Types } from 'mongoose'
 import applyAccess, { privilegedAccess, adminAccess, creditOwnershipAccess } from '../validators'
 
@@ -58,25 +58,6 @@ const getMany: IQuery = {
     return CreditModel.find()
   },
   access: adminAccess
-}
-
-interface ICredit {
-  student_number: string,
-  course_name: string,
-  course_code: string,
-  date: string,
-  study_credits: number,
-  grade: number,
-  language: string
-}
-
-export interface ICreditWithUni extends ICredit {
-  university: string,
-  teacher: string
-}
-
-export interface IEditCredit {
-  id: string
 }
 
 const unversityMapper = (user: IUser) => (credit: ICredit): ICreditWithUni => ({
@@ -139,7 +120,7 @@ const deleteMany: IQuery = {
   access: creditOwnershipAccess
 }
 
-export const getByIdentifier: Iresolve = (parent: { university: string, student_number: string }, args: {}) => {
+export const getByIdentifier: Iresolve = (parent: Iidentifier, args: {}) => {
   if (!parent) { return null }
   return CreditModel.find({
     university: parent.university,

@@ -1,31 +1,14 @@
 import { UserModel } from '../../schema/models'
-import { IUserModel } from '../../schema/models/User'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import axios, { AxiosResponse } from 'axios'
 import { Document } from 'mongoose'
-import { IUser, IUserAttributes } from '../../schema/types/interface'
+import { IUser, IUserAttributes, IUserModel, ISamlResponse, IProtoUser } from '../typescript'
 
 dotenv.config()
 
 const JWT_OPTIONS: SignOptions = {
   expiresIn: '24h'
-}
-
-export interface ISamlResponse {
-  type?: string,
-  user?: IUser,
-  extract: {
-    attributes: Iattributes
-  }
-}
-
-export interface Iattributes {
-  [key: string]: string
-}
-
-interface IProtoUser {
-  attributes: IUserAttributes
 }
 
 export const getMetadata = async (entityId: string): Promise<string> => {

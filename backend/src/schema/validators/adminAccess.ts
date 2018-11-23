@@ -1,4 +1,4 @@
-import { IUser, IvalidatorFunction } from '../types/interface'
+import { IUser, IvalidatorFunction } from '../../utils/typescript'
 import PrivilegeRequiredError from '../../utils/errors/PrivilegeRequiredError'
 import userAccess from './userAccess'
 

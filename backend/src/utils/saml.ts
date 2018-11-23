@@ -2,32 +2,13 @@ import saml2 from 'saml2-js'
 import fs from 'fs'
 import dotenv from 'dotenv'
 import { getMetadata } from './controller_helpers/login'
+import { IspOptions } from './typescript'
 // tslint:disable-next-line:no-var-requires
 const samlify = require('samlify')
 dotenv.config()
 
-// tslint:disable-next-line:class-name
-interface Isp_options {
-  entity_id: string
-  private_key: string
-  certificate: string
-  assert_endpoint: string
-  force_authn: boolean
-  auth_context: {
-    comparison: string
-    class_refs: string[]
-  }
-  nameid_format: string
-  sign_get_request: boolean
-  allow_unencrypted_assertion: boolean
-  [key: string]: string | {
-    comparison: string
-    class_refs: string[]
-  } | boolean
-}
-
 // tslint:disable-next-line:variable-name
-const sp_options: Isp_options = {
+const sp_options: IspOptions = {
   entity_id: process.env.ENTITY_ID,
   private_key: fs.readFileSync('./src/utils/samldata/key.pem').toString(),
   certificate: fs.readFileSync('./src/utils/samldata/cert.pem').toString(),

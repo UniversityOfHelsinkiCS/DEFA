@@ -1,4 +1,4 @@
-import { IUser, IContext } from '../../../src/schema/types/interface'
+import { IUser, IContext } from '../../../src/utils/typescript'
 import { publicAccess } from '../../../src/schema/validators'
 
 // These tests are largely taking the piss, but they're here for documentation's sake.

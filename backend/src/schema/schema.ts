@@ -1,6 +1,6 @@
 import { GraphQLSchema, GraphQLObjectType } from 'graphql'
 import * as types from './types'
-import { IQueries } from './types/interface'
+import { IQueries } from '../utils/typescript'
 
 type IqueryReducer = (field: string) => (
   acc: IQueries,

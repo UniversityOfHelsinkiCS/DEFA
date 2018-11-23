@@ -1,4 +1,4 @@
-import { IvalidatorFunction } from '../types/interface'
+import { IvalidatorFunction } from '../../utils/typescript'
 
 // Let's all users through.
 
