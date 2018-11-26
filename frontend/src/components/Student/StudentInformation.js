@@ -1,12 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { withStyles } from '@material-ui/core/styles'
 import { Card, CardHeader, List, ListItem, ListItemText } from '@material-ui/core'
-import { userProp } from '../../util/propTypes'
+import { secondary } from '../../common/colors'
+import { userProp, parseClasses } from '../../util/propTypes'
 
-const StudentInformationComponent = ({ user }) => (
+const styles = {
+  cardHeader: {
+    backgroundColor: secondary.main
+  }
+}
+
+const StudentInformationComponent = ({ user, classes }) => (
   <div>
     <Card>
       <CardHeader
+        className={classes.cardHeader}
         title="Info"
         titleTypographyProps={{
           align: 'center'
@@ -25,6 +34,7 @@ const StudentInformationComponent = ({ user }) => (
 )
 
 StudentInformationComponent.propTypes = {
+  classes: parseClasses(styles).isRequired,
   user: userProp.isRequired
 }
 
@@ -32,4 +42,4 @@ const mapStateToProps = state => ({
   user: state.user.user
 })
 
-export default connect(mapStateToProps)(StudentInformationComponent)
+export default connect(mapStateToProps)(withStyles(styles)(StudentInformationComponent))

@@ -1,12 +1,26 @@
 import React from 'react'
-import { List, ListItem, ListItemText, Card, CardContent, CardHeader } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { Typography, Card, CardContent, CardHeader, CircularProgress } from '@material-ui/core'
 import { Query } from 'react-apollo'
+import { secondary } from '../../common/colors'
 import { getMyCredits } from '../../util/queries/getCredits'
+import { parseClasses } from '../../util/propTypes'
+import CreditT from '../CreditTable'
 
-const StudentCreditsComponent = () => (
+const styles = {
+  cardHeader: {
+    backgroundColor: secondary.main
+  },
+  anomaly: {
+    textAlign: 'center'
+  }
+}
+
+const StudentCreditsComponent = ({ classes }) => (
   <div>
     <Card>
       <CardHeader
+        className={classes.cardHeader}
         title="DEFA Credits"
         titleTypographyProps={{
           align: 'center'
@@ -15,54 +29,27 @@ const StudentCreditsComponent = () => (
       <CardContent>
         <Query query={getMyCredits}>
           {({ loading, error, data }) => {
-            if (loading) { return 'loading...' }
-            if (error || !data.me) { return 'Failed to fetch credits data.' }
-            if (!data.me.identifiers) { return 'You have no credits.' }
+            if (loading) {
+              return <div className={classes.anomaly}><CircularProgress /></div>
+            }
+            if (error || !data.me) {
+              // TODO: error message
+              return <div className={classes.anomaly}><Typography>Error</Typography></div>
+            }
+            if (!data.me.identifiers) {
+              return (
+                <div className={classes.anomaly}>
+                  <Typography>You have no credits.</Typography>
+                </div>
+              )
+            }
             const credits = data.me.identifiers.reduce(
               (acc, curr) => (curr.credits ? [...acc, ...curr.credits] : acc),
               []
+            ).map(
+              credit => ({ ...credit, teacher: `${credit.teacher.name} ${credit.teacher.email}` })
             )
-            return (
-              <List>
-                {credits.map(credit => (
-                  <ListItem>
-                    <ListItemText
-                      primary={credit.course_name}
-                      secondary={(
-                        <List>
-                          <ListItem>
-                            <ListItemText
-                              primary="course code"
-                              secondary={credit.course_code}
-                            />
-                            <ListItemText
-                              primary="date"
-                              secondary={credit.date}
-                            />
-                            <ListItemText
-                              primary="credits"
-                              secondary={credit.study_credits}
-                            />
-                            <ListItemText
-                              primary="grade"
-                              secondary={credit.grade}
-                            />
-                            <ListItemText
-                              primary="language"
-                              secondary={credit.language}
-                            />
-                            <ListItemText
-                              primary="teacher"
-                              secondary={`${credit.teacher.name} ${credit.teacher.email}`}
-                            />
-                          </ListItem>
-                        </List>
-                      )}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            )
+            return <CreditT credits={credits} />
           }}
         </Query>
       </CardContent>
@@ -70,4 +57,8 @@ const StudentCreditsComponent = () => (
   </div>
 )
 
-export default StudentCreditsComponent
+StudentCreditsComponent.propTypes = {
+  classes: parseClasses(styles).isRequired
+}
+
+export default withStyles(styles)(StudentCreditsComponent)
