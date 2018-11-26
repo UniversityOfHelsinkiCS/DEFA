@@ -1,57 +1,56 @@
 import React from 'react'
 import { Query } from 'react-apollo'
 import { withStyles } from '@material-ui/core/styles'
-import { Card, CardHeader, CardContent, List, ListItem, ListItemText, CircularProgress } from '@material-ui/core'
-import { secondary } from '../../common/colors'
+import { List, ListItem, ListItemText, CircularProgress, Button } from '@material-ui/core'
 import { getMyIdentifiers } from '../../util/queries/getIdentifiers'
 import { parseClasses } from '../../util/propTypes'
+import CardContainer from './CardContainer'
 
 const styles = {
-  cardHeader: {
-    backgroundColor: secondary.main
-  },
   anomaly: {
     textAlign: 'center'
   }
 }
 
+const cardTitle = 'Your Universities'
+
 const StudentIdentifiersComponent = ({ classes }) => (
   <div>
-    <Card>
-      <CardHeader
-        className={classes.cardHeader}
-        title="Universities"
-        titleTypographyProps={{
-          align: 'center'
+    <CardContainer title={cardTitle}>
+      <Query query={getMyIdentifiers}>
+        {({ loading, error, data }) => {
+          if (loading) {
+            return <div className={classes.anomaly}><CircularProgress /></div>
+          }
+          if (error || !data.me) {
+            // TODO: error message
+            return <div className={classes.anomaly}>Error</div>
+          }
+          const { identifiers } = data.me
+          return (
+            <List>
+              {identifiers.map(identifier => (
+                <ListItem key={identifier.university}>
+                  <ListItemText
+                    primary={identifier.university}
+                    secondary={identifier.student_number}
+                  />
+                </ListItem>
+              ))}
+              <ListItem>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  disabled
+                >
+                  Link another university account
+                </Button>
+              </ListItem>
+            </List>
+          )
         }}
-      />
-      <CardContent>
-        <Query query={getMyIdentifiers}>
-          {({ loading, error, data }) => {
-            if (loading) {
-              return <div className={classes.anomaly}><CircularProgress /></div>
-            }
-            if (error || !data.me) {
-              // TODO: error message
-              return <div className={classes.anomaly}>Error</div>
-            }
-            const { identifiers } = data.me
-            return (
-              <List>
-                {identifiers.map(identifier => (
-                  <ListItem key={identifier.university}>
-                    <ListItemText
-                      primary={identifier.university}
-                      secondary={identifier.student_number}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            )
-          }}
-        </Query>
-      </CardContent>
-    </Card>
+      </Query>
+    </CardContainer>
   </div>
 )
 
