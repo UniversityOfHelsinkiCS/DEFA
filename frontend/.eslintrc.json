@@ -60,6 +60,7 @@
     "babel"
   ],
   "globals": {
-    "shallow": false
+    "shallow": false,
+    "mount": false
   }
 }

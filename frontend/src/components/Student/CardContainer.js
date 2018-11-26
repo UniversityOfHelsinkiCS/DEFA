@@ -17,6 +17,7 @@ const CardContainerComponent = ({ title, classes, children }) => (
       className={classes.cardHeader}
       title={title}
       titleTypographyProps={{
+        variant: 'h5',
         align: 'center'
       }}
     />

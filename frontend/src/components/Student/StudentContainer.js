@@ -2,8 +2,8 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Grid } from '@material-ui/core'
 import StudentInformation from './StudentInformation'
-import StudentIdentifiers from './StudentIdentifiers'
-import StudentCredits from './StudentCredits'
+import StudentIdentifierContainer from './StudentIdentifierContainer'
+import StudentCreditContainer from './StudentCreditContainer'
 import { parseClasses } from '../../util/propTypes'
 
 const styles = {
@@ -19,10 +19,10 @@ const StudentContainerComponent = ({ classes }) => (
         <StudentInformation />
       </Grid>
       <Grid item xs={8}>
-        <StudentIdentifiers />
+        <StudentIdentifierContainer />
       </Grid>
       <Grid item xs={12}>
-        <StudentCredits />
+        <StudentCreditContainer />
       </Grid>
     </Grid>
   </div>

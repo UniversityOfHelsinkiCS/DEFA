@@ -6,15 +6,33 @@ import CardContainer from './CardContainer'
 
 const cardTitle = 'Your Info'
 
-const StudentInformationComponent = ({ user }) => (
+export const StudentInformationComponent = ({ user }) => (
   <div>
     <CardContainer title={cardTitle}>
       <List>
         <ListItem>
-          <ListItemText primary="name" secondary={user.attributes.cn} />
+          <ListItemText
+            primary="name"
+            primaryTypographyProps={{
+              variant: 'subtitle1'
+            }}
+            secondary={user.attributes.cn}
+            secondaryTypographyProps={{
+              variant: 'subtitle2'
+            }}
+          />
         </ListItem>
         <ListItem>
-          <ListItemText primary="email" secondary={user.attributes.mail} />
+          <ListItemText
+            primary="email"
+            primaryTypographyProps={{
+              variant: 'subtitle1'
+            }}
+            secondary={user.attributes.mail}
+            secondaryTypographyProps={{
+              variant: 'subtitle2'
+            }}
+          />
         </ListItem>
       </List>
     </CardContainer>
