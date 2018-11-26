@@ -9,10 +9,13 @@ import NavBar from './NavBar'
 import Welcome from './Welcome'
 import UploadCreditsContainer from './UploadCredits/UploadCreditsContainer'
 import StudentContainer from './Student/StudentContainer'
+import ProtectedRoute from '../util/ProtectedRoute'
+
 
 class Main extends React.PureComponent {
   render() {
     const { user } = this.props
+    const userRole = user ? user.role : null
     return (
       <main>
         <ToastContainer
@@ -22,11 +25,10 @@ class Main extends React.PureComponent {
         />
         <NavBar user={user} />
         <Switch>
-          <Route exact path="/upload-credits" component={UploadCreditsContainer} />
-          <Route exact path="/student" />
-          <Route exact path="/me" component={StudentContainer} />
+          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} userRole={userRole} exact path="/upload-credits" component={UploadCreditsContainer} />
+          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED', 'STUDENT']} userRole={userRole} exact path="/student" component={StudentContainer} />
           <Route exact path="/" component={Welcome} />
-          <Route exact path="/admin" component={Credits} />
+          <ProtectedRoute requiredRole={['ADMIN']} userRole={userRole} exact path="/admin" component={Credits} />
         </Switch>
       </main>
 
