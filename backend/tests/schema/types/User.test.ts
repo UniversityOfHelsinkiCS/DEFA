@@ -3,11 +3,7 @@ import { Credit, User } from '../../../src/schema/types'
 import { getByIdentifier } from '../../../src/schema/types/Credit'
 import { CreditModel, UserModel } from '../../../src/schema/models'
 import { IUserModel, IContext, IUser } from '../../../src/utils/typescript'
-import { connect } from '../../../src/mongo/connection'
-
-process.env.TEST_DATABASE_NAME = 'usertest'
-
-connect()
+import testConnect from '../../env/mongodb'
 
 const exampleCredits = [
   {
@@ -34,6 +30,7 @@ describe('User GraphQL type', () => {
   let studentUser: IUser
   let teacherUser: IUser
   beforeAll(async () => {
+    await testConnect()
     const dbSUser = (await UserModel.create({
       name: 'Test Student',
       role: 'STUDENT',
@@ -61,7 +58,7 @@ describe('User GraphQL type', () => {
       }
     } as unknown as IUser
     await CreditModel.deleteMany({})
-    const credits = await Credit.mutations.createCredits.resolve(
+    await Credit.mutations.createCredits.resolve(
       null,
       {
         credits: exampleCredits

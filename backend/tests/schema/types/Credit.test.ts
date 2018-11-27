@@ -2,9 +2,7 @@ import { Types } from 'mongoose'
 import { Credit } from '../../../src/schema/types'
 import { CreditModel, UserModel } from '../../../src/schema/models'
 import { IContext, IUser, ICreditModel, IUserModel } from '../../../src/utils/typescript'
-import { connect } from '../../../src/mongo/connection'
-
-connect()
+import testConnect from '../../env/mongodb'
 
 const exampleCredits = [
   {
@@ -31,6 +29,7 @@ describe('Credit GraphQL type', () => {
   let user: IUser
   let otherUserId: string
   beforeAll(async done => {
+    await testConnect()
     const dbUser = (await UserModel.create({
       name: 'Test Teacher',
       role: 'PRIVILEGED'
