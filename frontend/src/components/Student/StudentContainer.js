@@ -13,7 +13,7 @@ const styles = {
 }
 
 const StudentContainerComponent = ({ classes }) => (
-  <div>
+  <div style={{ margin: '25px 50px 75px 25px' }}>
     <Grid className={classes.superContainer} container spacing={8}>
       <Grid item xs={4}>
         <StudentInformation />

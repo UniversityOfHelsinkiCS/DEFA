@@ -87,7 +87,7 @@ const myUploads: IQuery = {
   async resolve(parent: null, args: {}, context) {
     const { user } = context
     return await CreditModel.find({
-      teacher: user.id
+      teacher: Types.ObjectId(user.id)
     })
   },
   access: privilegedAccess

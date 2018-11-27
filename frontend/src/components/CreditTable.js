@@ -44,7 +44,7 @@ export const headers = [
 ]
 
 
-export const CreditTable = ({ credits }) => (
+export const CreditTableComponent = ({ credits }) => (
   <div>
     <Table>
       <TableHead>
@@ -69,9 +69,9 @@ export const CreditTable = ({ credits }) => (
   </div>
 )
 
-CreditTable.propTypes = {
+CreditTableComponent.propTypes = {
   credits: arrayOf(creditProp).isRequired
 }
 
 
-export default CreditTable
+export default CreditTableComponent
