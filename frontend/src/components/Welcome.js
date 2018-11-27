@@ -1,12 +1,29 @@
 import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
 import { Typography, Card, CardContent, Grid } from '@material-ui/core'
+import { parseClasses } from '../util/propTypes'
 
 import toskaLogo from '../assets/toska.png'
 
-const Welcome = () => (
+const styles = {
+  header: {
+    padding: '22px'
+  },
+  card: {
+    padding: '12px'
+  },
+  logo: {
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '30%'
+  }
+}
+
+const Welcome = ({ classes }) => (
   <div>
     <Typography
-      style={{ padding: '22px' }}
+      className={classes.header}
       align="center"
       variant="h2"
     >
@@ -20,7 +37,7 @@ const Welcome = () => (
       spacing={16}
     >
       <Grid item>
-        <Card style={{ padding: '12px' }}>
+        <Card className={classes.card}>
           <CardContent>
             <Typography
               align="center"
@@ -35,7 +52,7 @@ const Welcome = () => (
         </Card>
       </Grid>
       <Grid item>
-        <Card style={{ padding: '12px' }}>
+        <Card className={classes.card}>
           <CardContent>
             <Typography
               align="center"
@@ -52,16 +69,15 @@ const Welcome = () => (
     </Grid>
 
     <img
+      className={classes.logo}
       src={toskaLogo}
       alt="toska logo"
-      style={{
-        display: 'block',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        width: '30%'
-      }}
     />
   </div>
 )
 
-export default Welcome
+Welcome.propTypes = {
+  classes: parseClasses(styles).isRequired
+}
+
+export default withStyles(styles)(Welcome)

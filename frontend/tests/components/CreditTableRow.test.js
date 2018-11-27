@@ -1,10 +1,10 @@
 import React from 'react'
 import { TableRow, TableCell } from '@material-ui/core'
-import CreditsPreviewRow from '../../../src/components/UploadCredits/CreditsPreviewRow'
-import { findText } from '../../testUtils'
-import headers from '../../../src/components/UploadCredits/helpers/creditHeaders'
+import CreditTableRow from '../../src/components/CreditTableRow'
+import { findText } from '../testUtils'
+import { headers } from '../../src/components/CreditTable'
 
-CreditsPreviewRow.propTypes = {}
+CreditTableRow.propTypes = {}
 
 const credit = headers.reduce(
   (acc, curr) => ({ ...acc, [curr.key]: 'test' }),
@@ -13,12 +13,13 @@ const credit = headers.reduce(
 credit.grade = 5
 credit.study_credits = 10
 
-describe('CreditsPreviewRow component', () => {
+describe('CreditTableRow component', () => {
   let wrapper
 
   beforeAll(() => {
-    wrapper = shallow(<CreditsPreviewRow
+    wrapper = shallow(<CreditTableRow
       credit={credit}
+      headers={headers}
     />)
   })
 

@@ -8,15 +8,22 @@ export const file = shape({
   type: string.isRequired
 })
 
-export const parseClasses = styles => shape(
-  Object.keys(styles).reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: string.isRequired
-    }),
-    {}
+export const parseClasses = styles => {
+  if (typeof styles === 'function') {
+    console.warn(
+      'parseClasses function should only be used for style definition objects, not functions. Received function as input: no prop type validation is performed.'
+    )
+  }
+  return shape(
+    Object.keys(styles).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: string.isRequired
+      }),
+      {}
+    )
   )
-)
+}
 
 export const creditProp = shape({
   student_number: string,
@@ -30,7 +37,7 @@ export const creditProp = shape({
 })
 
 export const userProp = shape({
-  id: string,
+  id: string.isRequired,
   name: string,
   role: string,
   attributes: shape({

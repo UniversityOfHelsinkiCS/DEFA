@@ -6,6 +6,7 @@ configure({ adapter: new Adapter() })
 
 // make Enzyme functions available in all test files without importing
 global.shallow = Enzyme.shallow
+global.mount = Enzyme.mount
 
 // This sets up the adapter to be used by Enzyme
 Enzyme.configure({ adapter: new Adapter() })
