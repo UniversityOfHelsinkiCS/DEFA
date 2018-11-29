@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
 import { parseUser, loginError } from './actions/user'
 
-class ProtectedRoute extends React.PureComponent {
+export class ProtectedRouteComponent extends React.PureComponent {
   async componentDidMount() {
     const storageToken = window.localStorage.getItem('DEFA-token')
     const { dispatchErrorToast, dispatchParseUser, user } = this.props
@@ -45,4 +45,4 @@ const mapDispatchToProps = {
   dispatchParseUser: parseUser,
   dispatchErrorToast: loginError
 }
-export default connect(mapStateToProps, mapDispatchToProps)(ProtectedRoute)
+export default connect(mapStateToProps, mapDispatchToProps)(ProtectedRouteComponent)
