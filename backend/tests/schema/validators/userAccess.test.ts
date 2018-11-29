@@ -1,4 +1,4 @@
-import { IUser, IContext } from '../../../src/schema/types/interface'
+import { IUser, IContext } from '../../../src/utils/typescript'
 import { userAccess } from '../../../src/schema/validators'
 import LoginRequiredError from '../../../src/utils/errors/LoginRequiredError'
 

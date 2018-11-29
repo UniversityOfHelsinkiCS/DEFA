@@ -1,4 +1,4 @@
-import { IQuery, IQueries, IvalidatorFunction, Iresolve } from '../types/interface'
+import { IQuery, IQueries, IvalidatorFunction, Iresolve } from '../../utils/typescript'
 
 // This abomination is necessary to find out whether a validator function returns undefined or a Promise<undefined>.
 const isAsync = (func: IvalidatorFunction): boolean => {

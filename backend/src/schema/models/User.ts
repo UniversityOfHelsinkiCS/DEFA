@@ -1,17 +1,5 @@
 import { Schema, model, Document, Model } from 'mongoose'
 
-interface Iidentifier {
-  id: string,
-  student_number: string,
-  university: string
-}
-
-export interface IUserModel extends Document {
-  name: string,
-  role: string,
-  identifiers: Iidentifier[]
-}
-
 const schema: Schema = new Schema({
   name: String,
   role: String,

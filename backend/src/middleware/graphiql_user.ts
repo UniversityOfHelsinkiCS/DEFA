@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express'
-import { IRequestWithUser } from './token_authorization'
+import { IRequestWithUser } from '../utils/typescript'
 
 // Identifies requests made through graphiql as opposed to from the frontend.
 // Can be easily spoofed. Do not use this in production.

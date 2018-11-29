@@ -5,14 +5,12 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
-import PropTypes from 'prop-types'
+import { shape, func } from 'prop-types'
 import { userProp, parseClasses } from '../util/propTypes'
 
 
 import Login from './Login'
 import LogOut from './LogOut'
-
-const { object } = PropTypes
 
 const styles = {
   root: {
@@ -31,7 +29,8 @@ const NavBar = ({ classes, history, user }) => {
     <div>
       {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/upload-credits')}>Upload Credits</Button> : null}
       {role === 'ADMIN' ? <Button onClick={() => history.push('/admin')}>All credits (ADMIN)</Button> : null}
-      <Button className={classes.lastButton} onClick={() => history.push('/')}>My Credits</Button>
+      {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button onClick={() => history.push('/my-uploads')}>My uploads</Button> : null}
+      <Button className={classes.lastButton} onClick={() => history.push('/student')}>My Credits</Button>
     </div>
   )
 
@@ -57,7 +56,9 @@ NavBar.defaultProps = {
 
 NavBar.propTypes = {
   classes: parseClasses(styles).isRequired,
-  history: object.isRequired, // eslint-disable-line react/forbid-prop-types,
+  history: shape({
+    push: func.isRequired
+  }).isRequired,
   user: userProp
 }
 
