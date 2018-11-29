@@ -9,7 +9,7 @@ const dotenv = require('dotenv')
 module.exports = (env, argv) => {
   const { mode } = argv
   const additionalPlugins = mode === 'production' ? [new UglifyJsPlugin()] : [] // Make JS smaller
-  env = dotenv.config().parsed || {}
+  env = dotenv.config().parsed || {} // eslint-disable-line
   const envKeys = Object.keys(env).reduce((prev, next) => {
     prev[`process.env.${next}`] = JSON.stringify(env[next])
     return prev
@@ -48,7 +48,7 @@ module.exports = (env, argv) => {
           ]
         },
         { // Load other files
-          test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+          test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2|csv)$/,
           use: ['file-loader']
         }
       ]

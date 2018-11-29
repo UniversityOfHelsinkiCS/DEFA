@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import Papa from 'papaparse'
-import { Button, Typography } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import { changeCredits } from '../../util/actions/uploadCredits'
 import { file } from '../../util/propTypes'
 import parseCredits from './helpers/parseCredits'
@@ -30,7 +30,7 @@ export class CreditsInputComponent extends PureComponent {
           variant="contained"
           color="secondary"
         >
-          <Typography>Parse</Typography>
+          Parse
         </Button>
       </div>
     )
