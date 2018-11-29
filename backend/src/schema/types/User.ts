@@ -1,5 +1,6 @@
 import { UserModel } from '../models'
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLNonNull } from 'graphql'
+import { Types } from 'mongoose'
 import { IQuery, Iresolve } from '../../utils/typescript'
 import { getByIdentifier, CreditType } from './Credit'
 import applyAccess, { userAccess, adminAccess } from '../validators'
@@ -59,7 +60,7 @@ const getMe: IQuery = {
   type: userType,
   args: {},
   resolve(parent, args: {}, context) {
-    return UserModel.findById(context.user.id)
+    return UserModel.findById(Types.ObjectId(context.user.id))
   },
   access: userAccess
 }
