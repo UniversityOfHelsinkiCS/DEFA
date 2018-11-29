@@ -1,10 +1,10 @@
 import React from 'react'
 import { Table, TableHead } from '@material-ui/core'
-import { CreditTable, headers } from '../../src/components/CreditTable'
+import { CreditTableComponent, headers } from '../../src/components/CreditTable'
 import CreditTableRow from '../../src/components/CreditTableRow'
 import { findText } from '../testUtils'
 
-CreditTable.propTypes = {}
+CreditTableComponent.propTypes = {}
 
 const credits = [{}, {}]
 
@@ -12,7 +12,7 @@ describe('CreditTable component', () => {
   let wrapper
 
   beforeAll(() => {
-    wrapper = shallow(<CreditTable
+    wrapper = shallow(<CreditTableComponent
       credits={credits}
     />)
   })

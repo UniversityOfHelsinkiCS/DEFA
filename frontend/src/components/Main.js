@@ -9,6 +9,7 @@ import NavBar from './NavBar'
 import Welcome from './Welcome'
 import UploadCreditsContainer from './UploadCredits/UploadCreditsContainer'
 import StudentContainer from './Student/StudentContainer'
+import TeacherContainer from './Teacher/TeacherContainer'
 import ProtectedRoute from '../util/ProtectedRoute'
 
 
@@ -25,8 +26,9 @@ class Main extends React.PureComponent {
         />
         <NavBar user={user} />
         <Switch>
-          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} userRole={userRole} exact path="/upload-credits" component={UploadCreditsContainer} />
-          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED', 'STUDENT']} userRole={userRole} exact path="/student" component={StudentContainer} />
+          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/upload-credits" component={UploadCreditsContainer} />
+          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/my-uploads" component={TeacherContainer} />
+          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED', 'STUDENT']} exact path="/student" component={StudentContainer} />
           <Route exact path="/" component={Welcome} />
           <ProtectedRoute requiredRole={['ADMIN']} userRole={userRole} exact path="/admin" component={Credits} />
         </Switch>
