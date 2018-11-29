@@ -10,8 +10,30 @@ const styles = {
   },
   panelSummary: {
     backgroundColor: secondary.light
+  },
+  listNumber: {
+    fontWeight: 'bold',
+    marginRight: '5px'
   }
 }
+
+const instructionsBlock = `
+Credits must be uploaded through this form as a csv (comma separated values) file. Download a blank template by clicking on the download lin on this page.
+The template file can be opened with any spreadsheet editing program (e.g. Microsoft Excel). Each row after the header row is a course completion.
+Fill in the corresponding values for each column for as many course completions as you wish to upload into the service. The header row should be included in the uploaded file.
+Fields not included in the template file should not be provided. Instead, these fields will be autofilled with your information.
+If you already have a csv file with the relevant data you should copy the headers from the template file into the top of the corresponding columns.
+You may change the order of the columns without issue.
+`
+
+const instructionsSteps = [
+  'When you\'ve created a valid csv file, upload it with the form below.',
+  'Choose the delimiter you used in your csv file. Automatic handling is suggested. Only change the delimiter if the automatic handling fails.',
+  'Once you\'ve uploaded a file, the PARSE button lights up. Click or tap it to display a preview of the course completions to upload.',
+  'Inspect the preview for any possible errors.',
+  'Finally click or tap the SUBMIT button to upload the course completions to the service.',
+  'Optionally verify the uploads were successful on the My Uploads page.'
+]
 
 class UploadCreditsInfoComponent extends Component {
   constructor(props) {
@@ -27,14 +49,6 @@ class UploadCreditsInfoComponent extends Component {
     this.setState({
       expanded: !expanded
     })
-  }
-
-  fullyCollapsed = () => {
-    if (!this.panelRef.current || !this.panelRef.current.clientHeight) {
-      return true
-    }
-    console.log(this.panelRef.current.clientHeight)
-    return this.panelRef.current.clientHeight < 50
   }
 
   render() {
@@ -61,46 +75,24 @@ class UploadCreditsInfoComponent extends Component {
             <ExpansionPanelDetails>
               <Grid container spacing={8}>
                 <Grid item xs={12}>
+                  <Typography variant="h5">Instructions</Typography>
+                </Grid>
+                <Grid item xs={12}>
                   <Typography>
-                    {`
-                      Credits must be uploaded through this form as a csv (comma separated values) file. Download a blank template by clicking on the download lin on this page.
-                      The template file can be opened with any spreadsheet editing program (e.g. Microsoft Excel). Each row after the header row is a course completion.
-                      Fill in the corresponding values for each column for as many course completions as you wish to upload into the service. The header row should be included in the uploaded file.
-                      Fields not included in the template file should not be provided. Instead, these fields will be autofilled with your information.
-                      If you already have a csv file with the relevant data you should copy the headers from the template file. You may change the order of the columns without issue.
-                    `}
+                    {instructionsBlock}
                   </Typography>
                 </Grid>
                 <Grid item xs={12}>
-                  <List>
-                    <ListItem>
-                      <Typography>
-                        {'1. When you\'ve created a valid csv file upload it with the form below.'}
-                      </Typography>
-                    </ListItem>
-                    <ListItem>
-                      <Typography>
-                        {'2. Choose the delimiter you used in your csv file. Leave it blank for automatic handling. Only change the delimiter if the automatic handling fails.'}
-                      </Typography>
-                    </ListItem>
-                    <ListItem>
-                      <Typography>{'3. Once you\'ve uploaded a file the PARSE button lights up. Click or tap it to display a preview of the course completions to upload.'}</Typography>
-                    </ListItem>
-                    <ListItem>
-                      <Typography>
-                        {'4. Inspect the preview for any possible errors.'}
-                      </Typography>
-                    </ListItem>
-                    <ListItem>
-                      <Typography>
-                        {'5. Finally click or tap the SUBMIT button to upload the course completions to the service.'}
-                      </Typography>
-                    </ListItem>
-                    <ListItem>
-                      <Typography>
-                        {'6. Optionally verify the uploads were successful on the My Uploads page.'}
-                      </Typography>
-                    </ListItem>
+                  <Typography variant="h5">Steps of uploading</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <List dense>
+                    {instructionsSteps.map((step, index) => (
+                      <ListItem>
+                        <Typography className={classes.listNumber}>{`${index + 1}. `}</Typography>
+                        <Typography>{step}</Typography>
+                      </ListItem>
+                    ))}
                   </List>
                 </Grid>
               </Grid>
