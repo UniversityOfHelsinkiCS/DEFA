@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { bool, func } from 'prop-types'
-import { Button, Typography, FormGroup } from '@material-ui/core'
+import { Button, FormGroup, Grid } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import DelimiterInput from './DelimiterInput'
 import FileInput from './FileInput'
 import CreditsInput from './CreditsInput'
 import CreditsPreview from './CreditsPreview'
 import { parseClasses } from '../../util/propTypes'
+import csv from '../../assets/template.csv'
 
 const styles = {
   form: {
@@ -34,29 +35,37 @@ export class SubmitCreditsFormComponent extends Component {
   render() {
     const { ready, classes } = this.props
     return (
-      <form className={classes.form} onSubmit={this.handleSubmit}>
-        <div className={classes.segment}>
-          <div className={classes.group}>
-            <FileInput />
-            <DelimiterInput />
+      <div>
+        <form className={classes.form} onSubmit={this.handleSubmit}>
+          <div>
+            <Grid container className={classes.segment}>
+              <Grid className={classes.group}>
+                <FileInput />
+                <DelimiterInput />
+              </Grid>
+              <Grid>
+                <Button href={csv} variant="contained" color="primary" download="template.csv">Download CSV template</Button>
+              </Grid>
+            </Grid>
+
+            <FormGroup row className={classes.group}>
+              <CreditsInput className={classes.button} />
+              <Button
+                type="submit"
+                disabled={!ready}
+                color="primary"
+                variant="contained"
+                className={classes.button}
+              >
+                Submit
+              </Button>
+            </FormGroup>
           </div>
-          <FormGroup row className={classes.group}>
-            <CreditsInput className={classes.button} />
-            <Button
-              type="submit"
-              disabled={!ready}
-              color="primary"
-              variant="contained"
-              className={classes.button}
-            >
-              <Typography>Submit</Typography>
-            </Button>
-          </FormGroup>
-        </div>
-        <div className={classes.segment}>
-          <CreditsPreview />
-        </div>
-      </form>
+          <div className={classes.segment}>
+            <CreditsPreview />
+          </div>
+        </form>
+      </div>
     )
   }
 }

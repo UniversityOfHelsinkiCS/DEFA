@@ -1,6 +1,6 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { Grid } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import StudentInformation from './StudentInformation'
 import StudentIdentifierContainer from './StudentIdentifierContainer'
 import StudentCreditContainer from './StudentCreditContainer'
@@ -14,6 +14,7 @@ const styles = {
 
 const StudentContainerComponent = ({ classes }) => (
   <div style={{ margin: '25px 50px 75px 25px' }}>
+    <Typography align="center" variant="h2" style={{ marginTop: '20px' }}>Your page</Typography>
     <Grid className={classes.superContainer} container spacing={8}>
       <Grid item xs={4}>
         <StudentInformation />
