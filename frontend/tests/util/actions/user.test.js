@@ -46,6 +46,6 @@ describe('logout action', () => {
   it('removes DEFA-token item from localStorage.', () => {
     expect(localStorage.getItem('DEFA-token')).toEqual(testToken)
     actions.logout({})(dispatch)
-    expect(localStorage.getItem('DEFA-token')).toEqual(null)
+    expect(localStorage.getItem('DEFA-token')).toBeUndefined()
   })
 })
