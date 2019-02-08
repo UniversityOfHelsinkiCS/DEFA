@@ -4,6 +4,7 @@ import { Types } from 'mongoose'
 import { IQuery, Iresolve } from '../../utils/typescript'
 import { getByIdentifier, CreditType } from './Credit'
 import applyAccess, { userAccess, adminAccess } from '../validators'
+import { getByUserResolver, submissionType } from './Submission'
 
 const identifierType = new GraphQLObjectType({
   name: 'Identifier',
@@ -15,7 +16,7 @@ const identifierType = new GraphQLObjectType({
   })
 })
 
-const userType = new GraphQLObjectType({
+export const userType = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: GraphQLString },
@@ -23,7 +24,11 @@ const userType = new GraphQLObjectType({
     role: { type: GraphQLString },
     email: { type: GraphQLString },
     university: { type: GraphQLString },
-    identifiers: { type: new GraphQLList(identifierType) }
+    identifiers: { type: new GraphQLList(identifierType) },
+    submissions: {
+      type: new GraphQLList(submissionType),
+      resolver: getByUserResolver
+    }
   })
 })
 
@@ -47,10 +52,8 @@ const getOne: IQuery = {
 
 const getMany: IQuery = {
   type: new GraphQLList(userType),
-  args: {
-    id: { type: GraphQLString }
-  },
-  resolve(parent: null, args: { [key: string]: string, id: string }) {
+  args: {},
+  resolve() {
     return UserModel.find({})
   },
   access: adminAccess
