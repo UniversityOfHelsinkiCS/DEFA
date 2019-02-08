@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { Grid, Typography } from '@material-ui/core'
 import StudentInformation from './StudentInformation'
 import StudentIdentifierContainer from './StudentIdentifierContainer'
-import StudentCreditContainer from './StudentCreditContainer'
+import StudentSubmissionContainer from './StudentSubmissionContainer'
 import { parseClasses } from '../../util/propTypes'
 
 const styles = {
@@ -23,7 +23,7 @@ const StudentContainerComponent = ({ classes }) => (
         <StudentIdentifierContainer />
       </Grid>
       <Grid item xs={12}>
-        <StudentCreditContainer />
+        <StudentSubmissionContainer />
       </Grid>
     </Grid>
   </div>
