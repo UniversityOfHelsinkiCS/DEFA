@@ -1,5 +1,5 @@
 const { Types } = require('mongoose')
-const { UserModel, SubmissionModel } = require('../schema/models')
+const { UserModel, SubmissionModel } = require('../models')
 
 const createSubmission = (parent, args, context) => {
   if (!context.authorization) {

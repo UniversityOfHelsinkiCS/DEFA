@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../config')
-const { UserModel } = require('../schema/models')
+const { UserModel } = require('../models')
 const { connect } = require('../mongo/connection')
 
 connect()

@@ -1,5 +1,5 @@
 const { ApolloServer } = require('apollo-server')
-const schema = require('./schema/schema')
+const schema = require('./schema')
 const resolvers = require('./resolvers')
 
 const app = new ApolloServer({

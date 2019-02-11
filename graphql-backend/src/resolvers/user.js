@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { Types } = require('mongoose')
-const { SECRET } = require('../config')
-const { UserModel, SubmissionModel } = require('../schema/models')
+const { SECRET, JWT_OPTIONS } = require('../config')
+const { UserModel, SubmissionModel } = require('../models')
 
 const me = (parent, args, context) => {
   if (!context.authorization) {
@@ -11,7 +11,7 @@ const me = (parent, args, context) => {
 }
 
 const login = async (parent, args, context) => {
-  if (context.authorization.role !== 'ADMIN') {
+  if (!context.authorization || context.authorization.role !== 'ADMIN') {
     return null
   }
   let loggedIn = await UserModel.findOne({
@@ -24,7 +24,7 @@ const login = async (parent, args, context) => {
     id: loggedIn.id,
     role: loggedIn.role,
     name: loggedIn.name
-  }, SECRET)
+  }, SECRET, JWT_OPTIONS)
 }
 
 const submissions = (parent) => {
