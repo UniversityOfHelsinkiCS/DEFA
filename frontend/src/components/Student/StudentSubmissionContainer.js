@@ -20,7 +20,7 @@ const QueryLoading = () => <div><CircularProgress /></div>
 // TODO: proper error message
 const QueryError = () => <div><Typography>Error</Typography></div>
 
-const StudentCreditContainerComponent = ({ classes }) => (
+const StudentSubmissionContainer = ({ classes }) => (
   <div>
     <CardContainer title={cardTitle}>
       <Query query={getMySubmission}>
@@ -43,8 +43,8 @@ const StudentCreditContainerComponent = ({ classes }) => (
   </div>
 )
 
-StudentCreditContainerComponent.propTypes = {
+StudentSubmissionContainer.propTypes = {
   classes: parseClasses(styles).isRequired
 }
 
-export default withStyles(styles)(StudentCreditContainerComponent)
+export default withStyles(styles)(StudentSubmissionContainer)

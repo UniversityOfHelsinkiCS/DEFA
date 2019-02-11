@@ -1,23 +1,25 @@
 import React from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography, Button } from '@material-ui/core'
 import { string } from 'prop-types'
 
-export const noCreditsMessage = 'You have no credits.'
+export const AddSubmissionText = 'Add Submission'
 
-const StudentSubmission = ({ submission }) => {
+export const EditSubmissionText = 'Edit Submission'
+
+export const StudentSubmissionComponent = ({ submission }) => {
   if (!submission) {
-    return <Typography variant="h6"> Add submission here</Typography>
+    return <Button>{AddSubmissionText}</Button>
   }
   return (
     <Typography variant="h6">
-      {submission}
-      and edit
+      {submission.url}
+      {EditSubmissionText}
     </Typography>
   )
 }
 
-StudentSubmission.propTypes = {
+StudentSubmissionComponent.propTypes = {
   submission: string //eslint-disable-line
 }
 
-export default StudentSubmission
+export default StudentSubmissionComponent
