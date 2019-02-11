@@ -2,7 +2,6 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Grid, Typography } from '@material-ui/core'
 import StudentInformation from './StudentInformation'
-import StudentIdentifierContainer from './StudentIdentifierContainer'
 import StudentSubmissionContainer from './StudentSubmissionContainer'
 import { parseClasses } from '../../util/propTypes'
 
@@ -18,9 +17,6 @@ const StudentContainerComponent = ({ classes }) => (
     <Grid className={classes.superContainer} container spacing={8}>
       <Grid item xs={4}>
         <StudentInformation />
-      </Grid>
-      <Grid item xs={8}>
-        <StudentIdentifierContainer />
       </Grid>
       <Grid item xs={12}>
         <StudentSubmissionContainer />
