@@ -12,6 +12,16 @@ type User {
   submissions: [Submission]
 }
 
+input UserSearch {
+  id: ID
+  name: String
+  studentNumber: String
+  role: String
+  username: String
+  cn: String
+  email: String
+}
+
 type Submission {
   id: ID!
   url: String!
@@ -20,6 +30,7 @@ type Submission {
 
 type Query {
   me: User
+  submissions(user: UserSearch): [Submission]
   authenticate(token: String!): Query
 }
 
