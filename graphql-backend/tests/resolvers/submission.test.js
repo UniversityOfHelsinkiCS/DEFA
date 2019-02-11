@@ -1,7 +1,7 @@
-const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const resolvers = require('../../src/resolvers/submission')
 const { SubmissionModel, UserModel } = require('../../src/models')
+const asymmetricMatcher = require('../testUtils/asymmetricMatcher')
 
 describe('submission resolvers', () => {
   describe('mutations', () => {
@@ -31,7 +31,10 @@ describe('submission resolvers', () => {
         }
       })
       afterAll(async () => {
-        UserModel.findByIdAndDelete(ids.user)
+        await Promise.all([
+          UserModel.findByIdAndDelete(ids.user),
+          SubmissionModel.deleteMany(args)
+        ])
       })
       describe('when not authenticated', () => {
         const context = notAuthenticatedContext
@@ -103,12 +106,15 @@ describe('submission resolvers', () => {
         parent.user = submission.user
       })
       afterAll(async () => {
-        await UserModel.findByIdAndDelete(ids.user)
+        await Promise.all([
+          UserModel.findByIdAndDelete(ids.user),
+          SubmissionModel.findByIdAndDelete(ids.submission)
+        ])
       })
       it('returns parent\'s asociated user.', async () => {
         const user = await resolver(parent, args, context)
         expect(user).toMatchObject({
-          id: expect.any(String),
+          id: asymmetricMatcher(actual => actual === ids.user),
           ...userData
         })
       })
