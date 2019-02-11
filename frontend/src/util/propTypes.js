@@ -39,15 +39,7 @@ export const creditProp = shape({
 export const userProp = shape({
   id: string.isRequired,
   name: string,
-  role: string,
-  attributes: shape({
-    cn: string.isRequired,
-    displayName: string.isRequired,
-    eduPersonPrincipalName: string.isRequired,
-    mail: string.isRequired,
-    schacHomeOrganization: string.isRequired,
-    schacPersonalUniqueCode: string.isRequired
-  }).isRequired
+  role: string
 })
 
 export const headerProp = arrayOf(

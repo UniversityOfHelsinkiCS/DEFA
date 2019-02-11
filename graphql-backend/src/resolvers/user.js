@@ -22,7 +22,8 @@ const login = async (parent, args, context) => {
   }
   return jwt.sign({
     id: loggedIn.id,
-    role: loggedIn.role
+    role: loggedIn.role,
+    name: loggedIn.name
   }, SECRET)
 }
 

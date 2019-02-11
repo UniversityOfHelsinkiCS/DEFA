@@ -57,7 +57,7 @@ class Login extends PureComponent {
     }
     return (
       <div>
-        <Typography variant="subtitle1">{user.attributes.cn}</Typography>
+        <Typography variant="subtitle1">{user.name}</Typography>
       </div>
     )
   }

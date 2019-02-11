@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-import { connect } from '../../src/mongo/connection'
+const mongoose = require('mongoose')
+const { connect } = require('../../src/mongo/connection')
 
 describe('connect() function', () => {
   afterEach(done => {
