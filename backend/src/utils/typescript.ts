@@ -123,7 +123,12 @@ export interface Iattributes {
 }
 
 export interface IProtoUser {
-  attributes: IUserAttributes
+  name: string
+  cn: string
+  username: string
+  email: string
+  studentNumber: string
+  role?: string
 }
 
 export interface IspOptions {

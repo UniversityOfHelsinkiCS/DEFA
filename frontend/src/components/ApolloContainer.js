@@ -7,7 +7,7 @@ import { ApolloProvider } from 'react-apollo'
 import handleError from '../util/actions/handleApolloError'
 
 const httpLink = new HttpLink({
-  uri: `${process.env.API_URL}/query`
+  uri: process.env.API_URL
 })
 
 const auth = new ApolloLink((operation, forward) => {
