@@ -76,7 +76,7 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
           <Typography>{AddSubmissionText}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <form>
+          <div>
             <div>
               <TextField
                 label="Koski URL"
@@ -110,7 +110,7 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
               </Mutation>
               {loading ? <CircularProgress /> : null}
             </div>
-          </form>
+          </div>
         </ExpansionPanelDetails>
       </ExpansionPanel>
     )

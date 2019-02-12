@@ -14,7 +14,10 @@ const studentSubmissionReducer = (state = INITIAL_STATE, action) => {
     case types.SUBMISSION_CREATE:
       return {
         ...state,
-        submissions: state.submissions.concat(action.submission)
+        submissions: state.submissions.concat({
+          ...action.submission,
+          updated: true
+        })
       }
     default:
       return state
