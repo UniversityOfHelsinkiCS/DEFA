@@ -4,6 +4,139 @@ const { SubmissionModel, UserModel } = require('../../src/models')
 const asymmetricMatcher = require('../testUtils/asymmetricMatcher')
 
 describe('submission resolvers', () => {
+  describe('queries', () => {
+    describe('submissions', () => {
+      const resolver = resolvers.Query.submissions
+      const parent = null
+      const usersData = [
+        {
+          username: 'testuser4',
+          name: 'Test User',
+          role: 'STUDENT',
+          cn: 'Test Test User',
+          studentNumber: '000000010',
+          email: 'test@test.test'
+        },
+        {
+          username: 'testuser5',
+          name: 'Other User',
+          role: 'STUDENT',
+          cn: 'Other Other Other',
+          studentNumber: '000000220',
+          email: 'other@other.other'
+        }
+      ]
+      const submissionsData = [
+        { url: 'https://first.one' },
+        { url: 'https://second.two' },
+        { url: 'https://third.three' },
+        { url: 'https://fourth.four' }
+      ]
+      const ids = {}
+      const expectations = {
+        firstMatch: [],
+        secondMatch: [],
+        bothMatch: []
+      }
+      beforeAll(async () => {
+        const users = await Promise.all(usersData.map(userData => (
+          UserModel.create(userData)
+        )))
+        const submissions = await Promise.all(submissionsData.map((
+          (submissionData, index) => SubmissionModel.create({
+            ...submissionData,
+            user: users[(index % 2)]._id
+          })
+        )))
+        ids.users = users.map(user => user.id)
+        ids.submissions = submissions.map(submission => submission.id)
+        submissions.forEach((submission, index) => {
+          const matcher = expect.objectContaining({
+            id: submission.id,
+            url: submission.url
+          })
+          expectations.bothMatch.push(matcher)
+          if (index % 2 === 0) {
+            expectations.firstMatch.push(matcher)
+          } else {
+            expectations.secondMatch.push(matcher)
+          }
+        })
+      })
+      afterAll(async () => {
+        await Promise.all([
+          ...ids.users.map(id => UserModel.findByIdAndDelete(id)),
+          ...ids.submissions.map(id => SubmissionModel.findByIdAndDelete(id))
+        ])
+      })
+
+      describe('when not authenticated', () => {
+        const context = {}
+        const args = {}
+        it('returns null.', async () => {
+          const value = await resolver(parent, args, context)
+          expect(value).toBeNull()
+        })
+      })
+      describe('when authenticated as unauthorized', () => {
+        const context = {}
+        const args = {}
+        beforeAll(() => {
+          context.authorization = {
+            id: ids.users[0],
+            role: 'STUDENT'
+          }
+        })
+        it('returns null.', async () => {
+          const value = await resolver(parent, args, context)
+          expect(value).toBeNull()
+        })
+      })
+      describe('when authenticated as authorized', () => {
+        const context = {}
+        const privilegedUserData = {
+          username: 'testuser6',
+          name: 'Test User',
+          role: 'PRIVILEGED',
+          cn: 'Test Test User',
+          studentNumber: '000000010',
+          email: 'test@test.test'
+        }
+        beforeAll(async () => {
+          const privilegedUser = UserModel.create(privilegedUserData)
+          context.authorization = {
+            id: privilegedUser.id,
+            role: privilegedUser.role
+          }
+          ids.privilegedUser = privilegedUser.id
+        })
+        afterAll(async () => {
+          await UserModel.findByIdAndDelete(ids.privilegedUser)
+        })
+        describe('when no args are provided', () => {
+          const args = {}
+          it('returns all submissions.', async () => {
+            const value = await resolver(parent, args, context)
+            expect(value.length).toEqual(expectations.bothMatch.length)
+            expect(value).toEqual(expect.arrayContaining(expectations.bothMatch))
+          })
+        })
+        describe('when args includes a user object', () => {
+          const args = {
+            user: {
+              name: 'User',
+              studentNumber: '22'
+            }
+          }
+          it('returns submissions whose user has fields like input.', async () => {
+            const value = await resolver(parent, args, context)
+            expect(value.length).toEqual(expectations.secondMatch.length)
+            expect(value).toEqual(expect.arrayContaining(expectations.secondMatch))
+          })
+        })
+      })
+    })
+  })
   describe('mutations', () => {
     const resolver = resolvers.Mutation.createSubmission
     const parent = null

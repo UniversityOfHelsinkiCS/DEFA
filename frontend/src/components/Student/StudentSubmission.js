@@ -1,6 +1,6 @@
 import React from 'react'
 import { Typography, Button } from '@material-ui/core'
-import { string } from 'prop-types'
+import { shape, string } from 'prop-types'
 
 export const AddSubmissionText = 'Add Submission'
 
@@ -11,15 +11,19 @@ export const StudentSubmissionComponent = ({ submission }) => {
     return <Button>{AddSubmissionText}</Button>
   }
   return (
-    <Typography variant="h6">
-      {submission.url}
-      {EditSubmissionText}
-    </Typography>
+    <div>
+      <Typography variant="h6">
+        {submission.url}
+      </Typography>
+      <Button>{EditSubmissionText}</Button>
+    </div>
   )
 }
 
 StudentSubmissionComponent.propTypes = {
-  submission: string //eslint-disable-line
+  submission: shape({
+    url: string.isRequired
+  }).isRequired
 }
 
 export default StudentSubmissionComponent

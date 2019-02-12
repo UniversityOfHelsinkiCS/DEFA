@@ -1,10 +1,11 @@
 import { gql } from 'apollo-boost'
 
-export const getMySubmission = gql`
+export const getMySubmissions = gql`
   query getMySubmission($token: String!) { 
     authenticate(token: $token) {
       me {
         submissions {
+          id
           url
         }
       }
