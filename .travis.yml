@@ -44,7 +44,7 @@ jobs:
         - FRONTEND_LOGIN=http://localhost:8080/login
     - stage: build & deploy
       script:
-        - cd ../frontend
+        - cd frontend
         - printf "API_URL=$API_URL\nLOGIN_URL=$LOGIN_URL\nDS_URL=$DS_URL\nENTITY_ID=$ENTITY_ID" > .env
         - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker build -t toska/defa-frontend:staging . ; else :; fi"
         - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker login -u $DOCKER_USER -p $DOCKER_PASS ; else :; fi"
