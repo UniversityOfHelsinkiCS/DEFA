@@ -2,7 +2,7 @@ FROM node:8
 
 RUN useradd --create-home --home-dir /app appuser
 RUN apt-get update
-RUN apt-get install openjdk-7-jdk --assume-yes
+RUN apt-get install openjdk-8-jdk --assume-yes
 
 COPY . /app
 WORKDIR /app
