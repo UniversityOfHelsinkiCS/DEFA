@@ -5,6 +5,8 @@ notifications:
 language: node_js
 node_js:
   - '8'
+services:
+ - docker
 before_install:
   - npm install -g npm
 jobs:
@@ -40,34 +42,33 @@ jobs:
         - TEST_DATABASE_NAME=test
         - SECRET=long0string1of2random3alphanumerical4characters5
         - FRONTEND_LOGIN=http://localhost:8080/login
-services:
- - docker
-after_success:
-  - cd ../frontend
-  - printf "API_URL=$API_URL\nLOGIN_URL=$LOGIN_URL\nDS_URL=$DS_URL\nENTITY_ID=$ENTITY_ID" > .env
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-frontend:staging ."
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-frontend:staging"
-  - printf "API_URL=$PROD_API_URL\nLOGIN_URL=$PROD_LOGIN_URL\nDS_URL=$PROD_DS_URL\nENTITY_ID=$PROD_ENTITY_ID" > .env
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker build -t toska/defa-frontend:latest ."
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker push toska/defa-frontend:latest"
-  - rm .env
-  - cd ../backend
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-backend:staging ."
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-backend:staging"
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker build -t toska/defa-backend:latest ."
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker push toska/defa-backend:latest"
-  - cd ../graphql-backend
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-graphql-backend:staging ."
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-graphql-backend:staging"
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker build -t toska/defa-graphql-backend:latest ."
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_TAG =~ ([0-1].+) ]] && docker push toska/defa-graphql-backend:latest"
-  - cd ../idp
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker build -t toska/defa-backend:idp ."
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker login -u $DOCKER_USER -p $DOCKER_PASS"
-  - "[[ $TRAVIS_BRANCH =~ (^master) ]] && docker push toska/defa-backend:idp"
+    - stage: build & deploy
+      script:
+        - cd ../frontend
+        - printf "API_URL=$API_URL\nLOGIN_URL=$LOGIN_URL\nDS_URL=$DS_URL\nENTITY_ID=$ENTITY_ID" > .env
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker build -t toska/defa-frontend:staging . ; else :; fi"
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker login -u $DOCKER_USER -p $DOCKER_PASS ; else :; fi"
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker push toska/defa-frontend:staging ; else :; fi"
+        - printf "API_URL=$PROD_API_URL\nLOGIN_URL=$PROD_LOGIN_URL\nDS_URL=$PROD_DS_URL\nENTITY_ID=$PROD_ENTITY_ID" > .env
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker build -t toska/defa-frontend:latest . ; else :; fi"
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker login -u $DOCKER_USER -p $DOCKER_PASS ; else :; fi"
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker push toska/defa-frontend:latest ; else :; fi"
+        - rm .env
+        - cd ../backend
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker build -t toska/defa-backend:staging . ; else :; fi"
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker login -u $DOCKER_USER -p $DOCKER_PASS ; else :; fi"
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker push toska/defa-backend:staging ; else :; fi"
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker build -t toska/defa-backend:latest . ; else :; fi"
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker login -u $DOCKER_USER -p $DOCKER_PASS ; else :; fi"
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker push toska/defa-backend:latest ; else :; fi"
+        - cd ../graphql-backend
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker build -t toska/defa-graphql-backend:staging . ; else :; fi"
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker login -u $DOCKER_USER -p $DOCKER_PASS ; else :; fi"
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker push toska/defa-graphql-backend:staging ; else :; fi"
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker build -t toska/defa-graphql-backend:latest . ; else :; fi"
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker login -u $DOCKER_USER -p $DOCKER_PASS ; else :; fi"
+        - "if [[ $TRAVIS_TAG =~ ([0-1].+) ]]; && docker push toska/defa-graphql-backend:latest ; else :; fi"
+        - cd ../idp
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker build -t toska/defa-backend:idp . ; else :; fi"
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker login -u $DOCKER_USER -p $DOCKER_PASS ; else :; fi"
+        - "if [[ $TRAVIS_BRANCH =~ (^master) ]]; && docker push toska/defa-backend:idp ; else :; fi"
