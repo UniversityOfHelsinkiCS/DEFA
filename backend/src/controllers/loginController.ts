@@ -23,26 +23,34 @@ const sp = samlify.ServiceProvider({
 let idp: any = null
 
 router.get('/', async (req: Request, res: Response): Promise<void> => {
-  const metadata = await getMetadata(req.query.entityID)
-  const parsedMetaData = new DOMParser().parseFromString(metadata, 'text/xml')
-  parsedMetaData.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
+  try {
+    const metadata = await getMetadata(req.query.entityID)
+    const parsedMetaData = new DOMParser().parseFromString(metadata, 'text/xml')
+    console.log('parsedMD:', parsedMetaData)
+    parsedMetaData.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
+    console.log('parsedMD setattribute OK')
 
-  idp = samlify.IdentityProvider({
-    metadata: new XMLSerializer().serializeToString(parsedMetaData),
-    isAssertionEncrypted: true,
-    wantMessageSigned: true,
-    messageSigningOrder: 'encrypt-then-sign',
-    signatureConfig: {
-      prefix: 'ds',
-      location: {
-        reference: '/samlp:Response/saml:Issuer',
-        action: 'after'
+    idp = samlify.IdentityProvider({
+      metadata: new XMLSerializer().serializeToString(parsedMetaData),
+      isAssertionEncrypted: true,
+      wantMessageSigned: true,
+      messageSigningOrder: 'encrypt-then-sign',
+      signatureConfig: {
+        prefix: 'ds',
+        location: {
+          reference: '/samlp:Response/saml:Issuer',
+          action: 'after'
+        }
       }
-    }
-  })
+    })
+    console.log('idp:', idp)
 
-  const { id, context } = sp.createLoginRequest(idp, 'redirect')
-  return res.redirect(context)
+    const { id, context } = sp.createLoginRequest(idp, 'redirect')
+    console.log('sp createloginRQ: ', id, context)
+    return res.redirect(context)
+  } catch (e) {
+    console.log('login failed, error: ', e)
+  }
 })
 
 router.post('/assert', async (req: Request, res: Response): Promise<void> => {
