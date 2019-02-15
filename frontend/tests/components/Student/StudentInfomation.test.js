@@ -12,7 +12,6 @@ const user = {
     cn: 'Name Nameson',
     displayName: 'Name',
     eduPersonPrincipalName: '????',
-    mail: 'name@email.com',
     schacHomeOrganization: 'uni.fi',
     schacPersonalUniqueCode: '012345678'
   }
@@ -31,8 +30,5 @@ describe('StudentInformation component', () => {
 
   it('Displays user\'s name', () => {
     expect(findText(user.attributes.cn, wrapper)).toBeGreaterThan(0)
-  })
-  it('Displays user\'s email address', () => {
-    expect(findText(user.attributes.mail, wrapper)).toBeGreaterThan(0)
   })
 })

@@ -1,0 +1,33 @@
+{
+  "name": "defa-backend",
+  "version": "1.0.0",
+  "description": "DEFA",
+  "repository": "UniversityOfHelsinkiCS/DEFA",
+  "main": "dist/src/server.js",
+  "scripts": {
+    "lint": "tslint 'src/**/*.js'",
+    "start": "node src/server.js",
+    "test": "jest",
+    "login_service_token": "node src/scripts/login_service_token.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.4.2",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.1.0",
+    "graphql": "^14.0.2",
+    "jsonwebtoken": "^8.3.0",
+    "merge": "^1.2.1",
+    "mongoose": "^5.3.10"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "mongodb-memory-server": "^3.0.0",
+    "nodemon": "^1.18.6"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "<rootDir>/tests/setupTests.js"
+  }
+}

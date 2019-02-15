@@ -1,4 +1,4 @@
-import { Express, RequestHandler } from 'express'
+import { Express } from 'express'
 import { IRouteMap } from './utils/typescript'
 import * as controllers from './controllers'
 
@@ -11,8 +11,7 @@ const useRoutes = (app: Express, routeMap: IRouteMap): void => {
 }
 
 const routes = (app: Express): void => useRoutes(app, {
-  '/login': controllers.LoginController,
-  '/query': controllers.GraphQLController
+  '/login': controllers.LoginController
 })
 
 export default routes

@@ -16,19 +16,7 @@ export const StudentInformationComponent = ({ user }) => (
             primaryTypographyProps={{
               variant: 'subtitle1'
             }}
-            secondary={user.attributes.cn}
-            secondaryTypographyProps={{
-              variant: 'subtitle2'
-            }}
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemText
-            primary="email"
-            primaryTypographyProps={{
-              variant: 'subtitle1'
-            }}
-            secondary={user.attributes.mail}
+            secondary={user.name}
             secondaryTypographyProps={{
               variant: 'subtitle2'
             }}

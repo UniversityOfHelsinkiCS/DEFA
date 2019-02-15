@@ -1,0 +1,6 @@
+samldata/
+node_modules/
+dist/
+*.pem
+.env
+metadata.xml

@@ -1,5 +1,3 @@
-import { GraphQLObjectType, GraphQLList, GraphQLInputType, GraphQLNonNull, GraphQLType } from 'graphql'
-import { Document, DocumentQuery } from 'mongoose'
 import { Request, Response, RequestHandler } from 'express'
 
 export interface IUserAttributes {
@@ -22,79 +20,6 @@ export interface IContext {
   user: IUser,
   req: Request,
   res: Response
-}
-
-export type Iresolve = (
-  // tslint:disable-next-line:no-any
-  parent: any,
-  // tslint:disable-next-line:no-any
-  args: { [key: string]: any | any[] },
-  context?: IContext
-) => DocumentQuery<Document[] | Document, Document> | Promise<Document | Document[]>
-
-export type IvalidatorFunction = (
-  parent: null,
-  // tslint:disable-next-line:no-any
-  args: { [key: string]: any | any[] },
-  context?: IContext
-) => void | Promise<void>
-
-export interface IQuery {
-  type: GraphQLObjectType | GraphQLList<GraphQLObjectType> | GraphQLList<GraphQLType>
-  args: { [key: string]: { type: GraphQLInputType | GraphQLNonNull<GraphQLInputType> } }
-  resolve: Iresolve
-  access?: IvalidatorFunction
-}
-
-export interface IQueries {
-  [key: string]: IQuery
-}
-
-export interface IEditableDummyDocument extends Document {
-  name?: string
-}
-
-export interface ICredit {
-  student_number: string,
-  course_name: string,
-  course_code: string,
-  date: string,
-  study_credits: number,
-  grade: number,
-  language: string
-}
-
-export interface ICreditWithUni extends ICredit {
-  university: string,
-  teacher: string
-}
-
-export interface IEditCredit {
-  id: string
-}
-
-export interface ICreditModel extends Document {
-  student_number: string,
-  course_name?: string,
-  course_code: string,
-  date?: string,
-  study_credits: number,
-  grade: number,
-  language?: string,
-  university: string,
-  teacher: string
-}
-
-export interface Iidentifier {
-  id: string,
-  student_number: string,
-  university: string
-}
-
-export interface IUserModel extends Document {
-  name: string,
-  role: string,
-  identifiers: Iidentifier[]
 }
 
 export interface IRequestWithUser extends Request {
@@ -123,7 +48,12 @@ export interface Iattributes {
 }
 
 export interface IProtoUser {
-  attributes: IUserAttributes
+  name: string
+  cn: string
+  username: string
+  email: string
+  studentNumber: string
+  role?: string
 }
 
 export interface IspOptions {
