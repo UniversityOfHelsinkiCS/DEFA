@@ -5,6 +5,8 @@ import SubmissionSearchForm from './SubmissionSearchForm'
 import SubmissionSearchResult from './SubmissionSearchResult'
 import { parseClasses } from '../../util/propTypes'
 
+export const HEADER_TEXT = 'View DEFA submissions'
+
 const styles = {
   header: {
     padding: '22px'
@@ -18,7 +20,7 @@ export const SubmissionSearchPageComponent = ({ classes }) => (
       align="center"
       className={classes.header}
     >
-      View DEFA submissions
+      {HEADER_TEXT}
     </Typography>
     <SubmissionSearchForm />
     <SubmissionSearchResult />

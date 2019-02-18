@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { Typography, Grid } from '@material-ui/core'
 import CardContainer from '../Student/CardContainer'
 
-const SubmissionSearchResultComponent = ({ submissions }) => (
+export const SubmissionSearchResultComponent = ({ submissions }) => (
   <Grid container spacing={32}>
     {submissions.map(submission => {
       const title = `${submission.user.name} ${submission.user.studentNumber}`
@@ -35,6 +35,7 @@ const SubmissionSearchResultComponent = ({ submissions }) => (
 
 SubmissionSearchResultComponent.propTypes = {
   submissions: arrayOf(shape({
+    id: string.isRequired,
     url: string.isRequired,
     user: shape({
       name: string.isRequired,

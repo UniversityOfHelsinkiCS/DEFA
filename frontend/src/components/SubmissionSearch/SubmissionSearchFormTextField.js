@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { TextField } from '@material-ui/core'
 import { changeInput } from '../../util/actions/submissionSearch'
 
-class SubmissionSearchFormTextFieldComponent extends PureComponent {
+export class SubmissionSearchFormTextFieldComponent extends PureComponent {
   onFieldChange = event => {
     const { name, dispatchChangeInput } = this.props
     dispatchChangeInput({

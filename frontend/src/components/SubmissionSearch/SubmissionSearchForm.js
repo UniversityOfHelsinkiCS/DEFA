@@ -20,7 +20,7 @@ const styles = {
   }
 }
 
-const SubmissionSearchFormComponent = ({ classes }) => (
+export const SubmissionSearchFormComponent = ({ classes }) => (
   <div className={classes.filtersCardContainer}>
     <CardContainer title="Filters" className={classes.filtersCard}>
       <Grid container spacing={16}>

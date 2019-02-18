@@ -6,7 +6,7 @@ import { Button } from '@material-ui/core'
 import { getSubmissions } from '../../util/queries/getSubmissions'
 import { submitSearchAttempt, submitSearchSuccess } from '../../util/actions/submissionSearch'
 
-class SubmissionSearchQueryComponent extends PureComponent {
+export class SubmissionSearchQueryComponent extends PureComponent {
   onSubmit = client => () => {
     const { token, inputs, dispatchSubmitSearchAttempt } = this.props
     dispatchSubmitSearchAttempt()
