@@ -31,6 +31,7 @@ class SubmissionSearchQueryComponent extends PureComponent {
             onClick={this.onSubmit(client)}
             variant="contained"
             color="primary"
+            size="large"
             disabled={disabled}
           >
             Search

@@ -1,28 +1,36 @@
 import React from 'react'
 import { arrayOf, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
-import { Typography } from '@material-ui/core'
+import { Typography, Grid } from '@material-ui/core'
 import CardContainer from '../Student/CardContainer'
 
 const SubmissionSearchResultComponent = ({ submissions }) => (
-  <div>
+  <Grid container spacing={32}>
     {submissions.map(submission => {
       const title = `${submission.user.name} ${submission.user.studentNumber}`
       return (
-        <CardContainer
+        <Grid
           key={submission.id}
-          title={title}
+          item
+          xs={12}
+          lg={3}
+          md={6}
+          sm={12}
         >
-          <div>
-            <Typography>
-              <span>Koski url:</span>
-              <a href={submission.url}>{submission.url}</a>
-            </Typography>
-          </div>
-        </CardContainer>
+          <CardContainer
+            title={title}
+          >
+            <div>
+              <Typography>
+                <span>Koski url: </span>
+                <a href={submission.url}>{submission.url}</a>
+              </Typography>
+            </div>
+          </CardContainer>
+        </Grid>
       )
     })}
-  </div>
+  </Grid>
 )
 
 SubmissionSearchResultComponent.propTypes = {
