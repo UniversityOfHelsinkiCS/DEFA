@@ -45,6 +45,10 @@ type Mutation {
   ): String
   createSubmission(url: String!): Submission
   authenticate(token: String!): Mutation
+  setAdmin(username: String!): User
+  setPriviledge(username: String!): User
+  setStudent(username: String!): User
+  
 }
 
 schema {
