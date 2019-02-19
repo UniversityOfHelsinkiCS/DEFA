@@ -28,14 +28,14 @@ const login = async (parent, args, context) => {
   }, SECRET, JWT_OPTIONS)
 }
 
-const setRole = async (parent, args, context) => {
+const editUser = async (parent, args, context) => {
   if (!isAdmin(context)) {
     return null
   }
-  const modified = await UserModel.findOne({
+  const toModify = await UserModel.findOne({
     username: args.username
   })
-  modified.role = args.role
+  const modified = Object.assign(toModify, args.values)
   modified.save()
   return modified
 }
@@ -52,7 +52,7 @@ module.exports = {
   },
   Mutation: {
     login,
-    setRole
+    editUser
   },
   User: {
     submissions

@@ -167,10 +167,10 @@ describe('user resolvers', () => {
       })
     })
 
-    describe('setRole', () => {
-      const resolver = resolvers.Mutation.setRole
+    describe('editUser', () => {
+      const resolver = resolvers.Mutation.editUser
       const userData = {
-        username: 'testuserrolechange',
+        username: 'testuseredit',
         name: 'Test User',
         role: 'STUDENT',
         cn: 'Test Test User',
@@ -188,7 +188,13 @@ describe('user resolvers', () => {
       const parent = null
       const args = {
         username: userData.username,
-        role: 'PRIVILEGED'
+        values: {
+          name: 'Test User edited',
+          role: 'PRIVILEGED',
+          cn: 'Test Test User edited',
+          studentNumber: '000000001',
+          email: 'test@edited.test'
+        }
       }
       const ids = {}
 
@@ -217,7 +223,7 @@ describe('user resolvers', () => {
           const response = await resolver(parent, args, context)
           expect(response).toMatchObject({
             ...userData,
-            role: args.role
+            ...args.values
           })
         })
         it('changes user in database.', async () => {
@@ -225,7 +231,7 @@ describe('user resolvers', () => {
           const user = await UserModel.findById(ids.user)
           expect(user).toMatchObject({
             ...userData,
-            role: args.role
+            ...args.values
           })
         })
       })
