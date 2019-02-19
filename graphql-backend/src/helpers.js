@@ -15,6 +15,6 @@ const isAdmin = (context) =>
 
 module.exports = {
   roleValues,
-  isPriviledged,
+  isPrivileged,
   isAdmin
 }

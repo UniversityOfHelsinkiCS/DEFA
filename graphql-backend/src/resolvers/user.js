@@ -28,7 +28,7 @@ const login = async (parent, args, context) => {
   }, SECRET, JWT_OPTIONS)
 }
 
-const setPriviledge = async (parent, args, context) => {
+const setPrivilege = async (parent, args, context) => {
   if (!isAdmin(context) && !args.username) {
     return null
   }
@@ -73,7 +73,7 @@ module.exports = {
   Mutation: {
     login,
     setAdmin,
-    setPriviledge,
+    setPrivilege,
     setStudent
   },
   User: {

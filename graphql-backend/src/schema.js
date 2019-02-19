@@ -46,7 +46,7 @@ type Mutation {
   createSubmission(url: String!): Submission
   authenticate(token: String!): Mutation
   setAdmin(username: String!): User
-  setPriviledge(username: String!): User
+  setPrivilege(username: String!): User
   setStudent(username: String!): User
   
 }
