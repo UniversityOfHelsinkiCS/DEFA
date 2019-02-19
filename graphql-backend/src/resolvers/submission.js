@@ -1,9 +1,9 @@
 const { Types } = require('mongoose')
 const { UserModel, SubmissionModel } = require('../models')
-const { isPriviledged } = require('../helpers')
+const { isPrivileged } = require('../helpers')
 
 const submissions = async (parent, args, context) => {
-  if (!isPriviledged(context)) {
+  if (!isPrivileged(context)) {
     return null
   }
   const submissions = await SubmissionModel.find({}).populate('user')
