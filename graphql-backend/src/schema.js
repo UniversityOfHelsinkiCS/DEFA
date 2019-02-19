@@ -1,11 +1,17 @@
 const { gql } = require('apollo-server')
 
 const schema = gql`
+enum Role {
+  STUDENT
+  PRIVILEGED
+  ADMIN
+}
+
 type User {
   id: ID!
   name: String!
   studentNumber: String!
-  role: String!
+  role: Role!
   username: String!
   cn: String!
   email: String!
@@ -16,7 +22,7 @@ input UserSearch {
   id: ID
   name: String
   studentNumber: String
-  role: String
+  role: Role
   username: String
   cn: String
   email: String
@@ -45,10 +51,7 @@ type Mutation {
   ): String
   createSubmission(url: String!): Submission
   authenticate(token: String!): Mutation
-  setAdmin(username: String!): User
-  setPrivilege(username: String!): User
-  setStudent(username: String!): User
-  
+  setRole(username: String!, role: Role!): User
 }
 
 schema {

@@ -166,6 +166,86 @@ describe('user resolvers', () => {
         })
       })
     })
+
+    describe('setRole', () => {
+      const resolver = resolvers.Mutation.setRole
+      const userData = {
+        username: 'testuserrolechange',
+        name: 'Test User',
+        role: 'STUDENT',
+        cn: 'Test Test User',
+        studentNumber: '000000010',
+        email: 'test@test.test'
+      }
+      const adminData = {
+        username: 'testadmin',
+        name: 'Test User',
+        role: 'ADMIN',
+        cn: 'Test Test User',
+        studentNumber: '000000000',
+        email: 'test@test.test'
+      }
+      const parent = null
+      const args = {
+        username: userData.username,
+        role: 'PRIVILEGED'
+      }
+      const ids = {}
+
+      beforeAll(async () => {
+        const [user, admin] = await UserModel.create([userData, adminData])
+        ids.user = user.id
+        ids.admin = admin.id
+      })
+      afterEach(async () => {
+        await UserModel.findByIdAndUpdate(ids.user, userData)
+      })
+      afterAll(async () => {
+        await Promise.all([
+          UserModel.findByIdAndDelete(ids.user),
+          UserModel.findByIdAndDelete(ids.admin)
+        ])
+      })
+
+      describe('when authorized', () => {
+        const context = {
+          authorization: {
+            role: 'ADMIN'
+          }
+        }
+        it('returns updated user.', async () => {
+          const response = await resolver(parent, args, context)
+          expect(response).toMatchObject({
+            ...userData,
+            role: args.role
+          })
+        })
+        it('changes user in database.', async () => {
+          await resolver(parent, args, context)
+          const user = await UserModel.findById(ids.user)
+          expect(user).toMatchObject({
+            ...userData,
+            role: args.role
+          })
+        })
+      })
+      describe('when not authorized', () => {
+        const context = {
+          authorization: {
+            role: 'PRIVILEGED'
+          }
+        }
+        it('returns null.', async () => {
+          const response = await resolver(parent, args, context)
+          expect(response).toBeNull()
+        })
+        it('does not change user in database.', async () => {
+          await resolver(parent, args, context)
+          const user = await UserModel.findById(ids.user)
+          expect(user).toMatchObject(userData)
+        })
+      })
+    })
   })
   describe('children', () => {
     describe('submissions', () => {

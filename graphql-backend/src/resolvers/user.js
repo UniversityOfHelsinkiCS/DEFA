@@ -28,37 +28,17 @@ const login = async (parent, args, context) => {
   }, SECRET, JWT_OPTIONS)
 }
 
-const setPrivilege = async (parent, args, context) => {
-  if (!isAdmin(context) && !args.username) {
+const setRole = async (parent, args, context) => {
+  if (!isAdmin(context)) {
     return null
   }
-  return UserModel.findOneAndUpdate(
-    { username: args.username },
-    { role: 'PRIVILEGED' }
-  )
+  const modified = await UserModel.findOne({
+    username: args.username
+  })
+  modified.role = args.role
+  modified.save()
+  return modified
 }
-
-const setAdmin = (parent, args, context) => {
-  if (!isAdmin(context) && !args.username) {
-    return null
-  }
-  return UserModel.findOneAndUpdate(
-    { username: args.username },
-    { role: 'ADMIN' }
-  )
-}
-
-const setStudent = (parent, args, context) => {
-  if (!isAdmin(context) && !args.username) {
-    return null
-  }
-  return UserModel.findOneAndUpdate(
-    { username: args.username },
-    { role: 'STUDENT' }
-  )
-}
-
-
 
 const submissions = (parent) => {
   return SubmissionModel.find({
@@ -72,9 +52,7 @@ module.exports = {
   },
   Mutation: {
     login,
-    setAdmin,
-    setPrivilege,
-    setStudent
+    setRole
   },
   User: {
     submissions
