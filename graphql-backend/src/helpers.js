@@ -4,13 +4,13 @@ const roleValues = {
   'ADMIN': 3
 }
 
-const isPriviledged = (context) =>
-  !context.authorization ||
-  roleValues[context.authorization.role] < roleValues['PRIVILEGED']
+const isPrivileged = (context) =>
+  context.authorization &&
+  roleValues[context.authorization.role] >= roleValues['PRIVILEGED']
 
 const isAdmin = (context) =>
-  !context.authorization ||
-  roleValues[context.authorization.role] === roleValues['ADMIN']
+  context.authorization &&
+  roleValues[context.authorization.role] >= roleValues['ADMIN']
 
 
 module.exports = {
