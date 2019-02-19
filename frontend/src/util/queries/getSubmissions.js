@@ -13,12 +13,17 @@ export const getMySubmissions = gql`
   }
 `
 export const getSubmissions = gql`
-  query getSubmissions($token: String!) { 
+  query getSubmissions(
+    $token: String!,
+    $user: UserSearch
+  ) { 
     authenticate(token: $token) {
-      submissions {
+      submissions(user: $user) {
+        id
         url
         user {
           name
+          username
           studentNumber
         }
       }
