@@ -61,13 +61,14 @@ router.post('/assert', async (req: Request, res: Response): Promise<void> => {
   idp = process.env.NODE_ENV === 'development' ? await generateLocalIdp() : idp
   try {
     const response = await sp.parseLoginResponse(idp, 'post', req)
+    console.log('sp parseresponse /assert: ', response)
     const token: string | void = await signToken(response)
+    console.log('signed token? : ', token)
     if (!token) {
       res.redirect(process.env.FRONTEND_LOGIN)
       return
     }
     res.redirect(responseUrl(token))
-
   } catch (error) {
     console.log(error)
   }
