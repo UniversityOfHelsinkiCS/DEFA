@@ -18,6 +18,13 @@ export const testAction = (action, options) => {
       action(options.input)(dispatch)
       expect(dispatch).toHaveBeenCalledWith(options.expectation)
     })
+    it('uses a valid type', () => {
+      const dispatch = jest.fn()
+      action(options.input)(dispatch)
+      expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({
+        type: expect.any(String)
+      }))
+    })
   })
 }
 

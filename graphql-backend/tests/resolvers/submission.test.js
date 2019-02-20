@@ -103,7 +103,7 @@ describe('submission resolvers', () => {
           email: 'test@test.test'
         }
         beforeAll(async () => {
-          const privilegedUser = UserModel.create(privilegedUserData)
+          const privilegedUser = await UserModel.create(privilegedUserData)
           context.authorization = {
             id: privilegedUser.id,
             role: privilegedUser.role

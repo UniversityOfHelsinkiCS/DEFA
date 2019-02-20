@@ -166,6 +166,92 @@ describe('user resolvers', () => {
         })
       })
     })
+
+    describe('editUser', () => {
+      const resolver = resolvers.Mutation.editUser
+      const userData = {
+        username: 'testuseredit',
+        name: 'Test User',
+        role: 'STUDENT',
+        cn: 'Test Test User',
+        studentNumber: '000000010',
+        email: 'test@test.test'
+      }
+      const adminData = {
+        username: 'testadmin',
+        name: 'Test User',
+        role: 'ADMIN',
+        cn: 'Test Test User',
+        studentNumber: '000000000',
+        email: 'test@test.test'
+      }
+      const parent = null
+      const args = {
+        username: userData.username,
+        values: {
+          name: 'Test User edited',
+          role: 'PRIVILEGED',
+          cn: 'Test Test User edited',
+          studentNumber: '000000001',
+          email: 'test@edited.test'
+        }
+      }
+      const ids = {}
+
+      beforeAll(async () => {
+        const [user, admin] = await UserModel.create([userData, adminData])
+        ids.user = user.id
+        ids.admin = admin.id
+      })
+      afterEach(async () => {
+        await UserModel.findByIdAndUpdate(ids.user, userData)
+      })
+      afterAll(async () => {
+        await Promise.all([
+          UserModel.findByIdAndDelete(ids.user),
+          UserModel.findByIdAndDelete(ids.admin)
+        ])
+      })
+
+      describe('when authorized', () => {
+        const context = {
+          authorization: {
+            role: 'ADMIN'
+          }
+        }
+        it('returns updated user.', async () => {
+          const response = await resolver(parent, args, context)
+          expect(response).toMatchObject({
+            ...userData,
+            ...args.values
+          })
+        })
+        it('changes user in database.', async () => {
+          await resolver(parent, args, context)
+          const user = await UserModel.findById(ids.user)
+          expect(user).toMatchObject({
+            ...userData,
+            ...args.values
+          })
+        })
+      })
+      describe('when not authorized', () => {
+        const context = {
+          authorization: {
+            role: 'PRIVILEGED'
+          }
+        }
+        it('returns null.', async () => {
+          const response = await resolver(parent, args, context)
+          expect(response).toBeNull()
+        })
+        it('does not change user in database.', async () => {
+          await resolver(parent, args, context)
+          const user = await UserModel.findById(ids.user)
+          expect(user).toMatchObject(userData)
+        })
+      })
+    })
   })
   describe('children', () => {
     describe('submissions', () => {

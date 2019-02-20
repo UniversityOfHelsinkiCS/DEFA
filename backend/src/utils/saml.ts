@@ -1,7 +1,7 @@
 import saml2 from 'saml2-js'
 import fs from 'fs'
 import dotenv from 'dotenv'
-import { getMetadata } from './controller_helpers/login'
+import { getLocalMetadata } from './controller_helpers/login'
 import { IspOptions } from './typescript'
 // tslint:disable-next-line:no-var-requires
 const samlify = require('samlify')
@@ -28,7 +28,7 @@ const idp_options = {
 }
 
 export const generateLocalIdp = async () => {
-  const m = await getMetadata('http://localhost:7000/metadata')
+  const m = await getLocalMetadata('http://localhost:7000/metadata')
   return samlify.IdentityProvider({
     metadata: m,
     signatureConfig: {

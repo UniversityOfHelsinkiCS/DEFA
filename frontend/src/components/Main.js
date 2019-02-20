@@ -11,6 +11,7 @@ import UploadCreditsContainer from './UploadCredits/UploadCreditsContainer'
 import StudentContainer from './Student/StudentContainer'
 import TeacherContainer from './Teacher/TeacherContainer'
 import ProtectedRoute from '../util/ProtectedRoute'
+import SubmissionSearchPage from './SubmissionSearch/SubmissionSearchPage'
 
 
 class Main extends React.PureComponent {
@@ -26,6 +27,7 @@ class Main extends React.PureComponent {
         />
         <NavBar user={user} />
         <Switch>
+          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/submissions" component={SubmissionSearchPage} />
           <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/upload-credits" component={UploadCreditsContainer} />
           <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/my-uploads" component={TeacherContainer} />
           <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED', 'STUDENT']} exact path="/student" component={StudentContainer} />

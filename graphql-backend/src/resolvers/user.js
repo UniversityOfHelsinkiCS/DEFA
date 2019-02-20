@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { Types } = require('mongoose')
 const { SECRET, JWT_OPTIONS } = require('../config')
+const { isAdmin } = require('../helpers')
 const { UserModel, SubmissionModel } = require('../models')
 
 const me = (parent, args, context) => {
@@ -18,13 +19,25 @@ const login = async (parent, args, context) => {
     username: args.username
   })
   if (!loggedIn) {
-    loggedIn = await UserModel.create(args)
+    loggedIn = await UserModel.create({ ...args, role: 'STUDENT' })
   }
   return jwt.sign({
     id: loggedIn.id,
     role: loggedIn.role,
     name: loggedIn.name
   }, SECRET, JWT_OPTIONS)
+}
+
+const editUser = async (parent, args, context) => {
+  if (!isAdmin(context)) {
+    return null
+  }
+  const toModify = await UserModel.findOne({
+    username: args.username
+  })
+  const modified = Object.assign(toModify, args.values)
+  modified.save()
+  return modified
 }
 
 const submissions = (parent) => {
@@ -38,7 +51,8 @@ module.exports = {
     me
   },
   Mutation: {
-    login
+    login,
+    editUser
   },
   User: {
     submissions
