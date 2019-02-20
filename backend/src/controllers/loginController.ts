@@ -22,14 +22,15 @@ const sp = samlify.ServiceProvider({
 // tslint:disable-next-line:no-any
 let idp: any = null
 
+interface IEntity { entityID: string }
+
 router.get('/', async (req: Request, res: Response): Promise<void> => {
   try {
-    const metadata = await getMetadata(req.query.entityID)
+    const metadata = await getMetadata()
     const parsedMetaData = new DOMParser().parseFromString(metadata, 'text/xml')
-    console.log('parsedMD:', parsedMetaData)
-    parsedMetaData.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
-    console.log('parsedMD setattribute OK')
-
+    const redirectMetadata = Array.prototype.find.call(parsedMetaData.getElementsByTagName('EntityDescriptor'),
+      (entity: IEntity) => entity.entityID === req.query.entityID)
+    redirectMetadata.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
     idp = samlify.IdentityProvider({
       metadata: new XMLSerializer().serializeToString(parsedMetaData),
       isAssertionEncrypted: true,
