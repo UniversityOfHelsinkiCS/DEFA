@@ -22,17 +22,22 @@ const sp = samlify.ServiceProvider({
 // tslint:disable-next-line:no-any
 let idp: any = null
 
-interface IEntity { entityID: string }
+interface IEntityAttribute { name: string, value: string }
+interface IEntity { attributes: [IEntityAttribute] }
 
 router.get('/', async (req: Request, res: Response): Promise<void> => {
   try {
+    const { entityID } = req.query
     const metadata = await getMetadata()
     const parsedMetaData = new DOMParser().parseFromString(metadata, 'text/xml')
     const redirectMetadata = Array.prototype.find.call(parsedMetaData.getElementsByTagName('EntityDescriptor'),
-      (entity: IEntity) => entity.entityID === req.query.entityID)
+      (entity: IEntity) =>
+        Array.prototype.find.call(entity.attributes,
+          (attr: IEntityAttribute) => attr.name === 'entityID')
+          .value === entityID)
     redirectMetadata.getElementsByTagName('IDPSSODescriptor')[0].setAttribute('WantAuthnRequestsSigned', 'true')
     idp = samlify.IdentityProvider({
-      metadata: new XMLSerializer().serializeToString(parsedMetaData),
+      metadata: new XMLSerializer().serializeToString(redirectMetadata),
       isAssertionEncrypted: true,
       wantMessageSigned: true,
       messageSigningOrder: 'encrypt-then-sign',
@@ -44,10 +49,8 @@ router.get('/', async (req: Request, res: Response): Promise<void> => {
         }
       }
     })
-    console.log('idp:', idp)
 
     const { id, context } = sp.createLoginRequest(idp, 'redirect')
-    console.log('sp createloginRQ: ', id, context)
     return res.redirect(context)
   } catch (e) {
     console.log('login failed, error: ', e)

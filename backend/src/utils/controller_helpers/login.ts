@@ -38,6 +38,15 @@ export const getMetadata = async (): Promise<string> => {
   }
 }
 
+export const getLocalMetadata = async (url: string): Promise<string> => {
+  try {
+  const response: AxiosResponse = await axios.get(url)
+  return response.data
+  } catch (e) {
+    console.log('metadata fetch errors,', e)
+  }
+}
+
 const parseUser = (a: { [index: string]: string }): IProtoUser => (
   Object.keys(samlResponseAttributes).reduce(
     (acc: IProtoUser, curr: string) => ({
