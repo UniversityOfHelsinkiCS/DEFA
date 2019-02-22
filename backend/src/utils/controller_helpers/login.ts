@@ -29,9 +29,22 @@ mutation loginService(
 }
 `
 
-export const getMetadata = async (entityId: string): Promise<string> => {
-  const response: AxiosResponse = await axios.get(entityId)
+export const getMetadata = async (): Promise<string> => {
+  try {
+  const response: AxiosResponse = await axios.get('https://haka.funet.fi/metadata/haka-metadata.xml')
   return response.data
+  } catch (e) {
+    console.log('metadata fetch errors,', e)
+  }
+}
+
+export const getLocalMetadata = async (url: string): Promise<string> => {
+  try {
+  const response: AxiosResponse = await axios.get(url)
+  return response.data
+  } catch (e) {
+    console.log('metadata fetch errors,', e)
+  }
 }
 
 const parseUser = (a: { [index: string]: string }): IProtoUser => (
@@ -68,7 +81,7 @@ const backendLogin = async (user: IProtoUser): Promise<string> => {
       {}
     )
   } catch (e) {
-    return null
+    console.log('backend login error: ', e)
   }
   return response.data.data.authenticate.login
 }
@@ -79,6 +92,7 @@ export const signToken = async (response: ISamlResponse): Promise<string | void>
     role: 'STUDENT'
   }
   user.studentNumber = parseStudentNumber(user)
+  console.log('user in signtoken: ', user)
   const token: string = await backendLogin(user)
   return token
 }
