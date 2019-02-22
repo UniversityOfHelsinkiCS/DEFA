@@ -27,11 +27,9 @@ const styles = {
 const NavBar = ({ classes, history, user }) => {
   const getRoutes = role => (
     <div>
-      {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/submissions')}>Submissions</Button> : null}
-      {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/upload-credits')}>Upload Credits</Button> : null}
-      {role === 'ADMIN' ? <Button onClick={() => history.push('/admin')}>All credits (ADMIN)</Button> : null}
-      {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button onClick={() => history.push('/my-uploads')}>My uploads</Button> : null}
-      <Button className={classes.lastButton} onClick={() => history.push('/student')}>My Credits</Button>
+      {role === 'ADMIN' ? <Button color="inherit" onClick={() => history.push('/admin')}>Admin</Button> : null}
+      {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/submissions')}>All Submissions</Button> : null}
+      <Button className={classes.lastButton} onClick={() => history.push('/student')}>My Submissions</Button>
     </div>
   )
 
