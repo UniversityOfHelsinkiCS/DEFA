@@ -187,10 +187,10 @@ describe('user resolvers', () => {
       }
       const parent = null
       const args = {
-        username: userData.username,
         values: {
           name: 'Test User edited',
           role: 'PRIVILEGED',
+          username: 'edited',
           cn: 'Test Test User edited',
           studentNumber: '000000001',
           email: 'test@edited.test'
@@ -200,6 +200,7 @@ describe('user resolvers', () => {
 
       beforeAll(async () => {
         const [user, admin] = await UserModel.create([userData, adminData])
+        args.id = user.id
         ids.user = user.id
         ids.admin = admin.id
       })

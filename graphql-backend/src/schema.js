@@ -31,6 +31,7 @@ input UserSearch {
 input UserEdit {
   name: String
   studentNumber: String
+  username: String
   role: Role
   cn: String
   email: String
@@ -44,6 +45,7 @@ type Submission {
 
 type Query {
   me: User
+  users(user: UserSearch): [User]
   submissions(user: UserSearch): [Submission]
   authenticate(token: String!): Query
 }
@@ -59,7 +61,7 @@ type Mutation {
   ): String
   createSubmission(url: String!): Submission
   authenticate(token: String!): Mutation
-  editUser(username: String!, values: UserEdit!): User
+  editUser(id: ID!, values: UserEdit!): User
 }
 
 schema {
