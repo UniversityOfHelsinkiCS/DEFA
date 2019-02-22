@@ -46,6 +46,91 @@ describe('user resolvers', () => {
         })
       })
     })
+    describe('users', () => {
+      const usersData = [
+        {
+          username: 'testuser10',
+          name: 'Test User',
+          role: 'STUDENT',
+          cn: 'Test Test User',
+          studentNumber: '000000010',
+          email: 'test@test.test'
+        },
+        {
+          username: 'testuser11',
+          name: 'Test User',
+          role: 'STUDENT',
+          cn: 'Test User',
+          studentNumber: '000000011',
+          email: 'test@test.test'
+        }
+      ]
+      const resolver = resolvers.Query.users
+      const parent = null
+      const ids = {}
+      beforeAll(async () => {
+        const users = await UserModel.create(usersData)
+        ids.users = users.map(user => user.id)
+      })
+      afterAll(async () => {
+        await Promise.all(ids.users.map(id => UserModel.findByIdAndDelete(id)))
+      })
+
+      describe('when authorized', () => {
+        const context = {
+          authorization: {
+            role: 'PRIVILEGED'
+          }
+        }
+        describe('when args.user is empty', () => {
+          const args = {
+            user: {}
+          }
+          it('returns all users.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result.length).toEqual(2)
+            expect(result).toContainEqual(expect.objectContaining({
+              ...usersData[0],
+              id: ids.users[0]
+            }))
+            expect(result).toContainEqual(expect.objectContaining({
+              ...usersData[1],
+              id: ids.users[1]
+            }))
+          })
+        })
+        describe('when args.user has fields defined', () => {
+          const args = {
+            user: {
+              name: 'Test',
+              cn: 'Test Test'
+            }
+          }
+          it('returns only matching users.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result.length).toEqual(1)
+            expect(result).toContainEqual(expect.objectContaining({
+              ...usersData[0],
+              id: ids.users[0]
+            }))
+          })
+        })
+      })
+      describe('when not authorized', () => {
+        const context = {
+          authorization: {
+            role: 'STUDENT'
+          }
+        }
+        const args = {
+          user: {}
+        }
+        it('returns null.', async () => {
+          const result = await resolver(parent, args, context)
+          expect(result).toBeNull()
+        })
+      })
+    })
   })
   describe('mutations', () => {
     describe('login', () => {

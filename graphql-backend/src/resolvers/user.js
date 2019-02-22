@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { Types } = require('mongoose')
 const { SECRET, JWT_OPTIONS } = require('../config')
-const { isAdmin } = require('../helpers')
+const { isAdmin, isPrivileged } = require('../helpers')
 const { UserModel, SubmissionModel } = require('../models')
 
 const me = (parent, args, context) => {
@@ -12,7 +12,7 @@ const me = (parent, args, context) => {
 }
 
 const users = (parent, args, context) => {
-  if (!isAdmin(context)) {
+  if (!isPrivileged(context)) {
     return null
   }
   const matcher = Object.entries(args.user).reduce(
