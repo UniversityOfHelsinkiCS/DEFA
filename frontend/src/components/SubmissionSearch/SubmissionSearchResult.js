@@ -4,13 +4,13 @@ import { connect } from 'react-redux'
 import { Typography, Grid } from '@material-ui/core'
 import CardContainer from '../Student/CardContainer'
 
-export const SubmissionSearchResultComponent = ({ submissions }) => (
+export const SubmissionSearchResultComponent = ({ users }) => (
   <Grid container spacing={32}>
-    {submissions.map(submission => {
-      const title = `${submission.user.name} ${submission.user.studentNumber}`
+    {users.map(user => {
+      const title = `${user.name} ${user.studentNumber}`
       return (
         <Grid
-          key={submission.id}
+          key={user.id}
           item
           xs={12}
           lg={3}
@@ -21,10 +21,12 @@ export const SubmissionSearchResultComponent = ({ submissions }) => (
             title={title}
           >
             <div>
-              <Typography>
-                <span>Koski url: </span>
-                <a href={submission.url}>{submission.url}</a>
-              </Typography>
+              {user.submissions.map(submission => (
+                <Typography key={submission.id}>
+                  <span>Koski url: </span>
+                  <a href={submission.url}>{submission.url}</a>
+                </Typography>
+              ))}
             </div>
           </CardContainer>
         </Grid>
@@ -34,18 +36,19 @@ export const SubmissionSearchResultComponent = ({ submissions }) => (
 )
 
 SubmissionSearchResultComponent.propTypes = {
-  submissions: arrayOf(shape({
+  users: arrayOf(shape({
     id: string.isRequired,
-    url: string.isRequired,
-    user: shape({
-      name: string.isRequired,
-      studentNumber: string.isRequired
-    }).isRequired
+    name: string.isRequired,
+    studentNumber: string.isRequired,
+    submissions: arrayOf(shape({
+      id: string.isRequired,
+      url: string.isRequired
+    })).isRequired
   })).isRequired
 }
 
 const mapStateToProps = ({ submissionSearch }) => ({
-  submissions: submissionSearch.results
+  users: submissionSearch.results
 })
 
 export default connect(mapStateToProps, null)(SubmissionSearchResultComponent)

@@ -7,7 +7,7 @@ import { Button } from '@material-ui/core'
 import { getUsers } from '../../util/queries/getUsers'
 import { submitSearchAttempt, submitSearchSuccess } from '../../util/actions/admin'
 
-export class SubmissionSearchQueryComponent extends PureComponent {
+export class AdminSearchQueryComponent extends PureComponent {
   onSubmit = client => () => {
     const { token, inputs, dispatchSubmitSearchAttempt } = this.props
     dispatchSubmitSearchAttempt()
@@ -43,7 +43,7 @@ export class SubmissionSearchQueryComponent extends PureComponent {
   }
 }
 
-SubmissionSearchQueryComponent.propTypes = {
+AdminSearchQueryComponent.propTypes = {
   token: string.isRequired,
   inputs: shape({
     name: string,
@@ -66,4 +66,4 @@ const mapDispatchToProps = {
   dispatchSubmitSearchSuccess: submitSearchSuccess
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubmissionSearchQueryComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(AdminSearchQueryComponent)

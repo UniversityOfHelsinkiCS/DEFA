@@ -18,13 +18,14 @@ export const getSubmissions = gql`
     $user: UserSearch
   ) { 
     authenticate(token: $token) {
-      submissions(user: $user) {
+      users(user: $user) {
         id
-        url
-        user {
-          name
-          username
-          studentNumber
+        name
+        username
+        studentNumber
+        submissions {
+          id
+          url
         }
       }
     }

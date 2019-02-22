@@ -5,22 +5,32 @@ import { findText } from '../../testUtils'
 
 SubmissionSearchResultComponent.propTypes = {}
 
-const submissions = [
+const users = [
   {
-    id: '0',
-    url: 'https://test.test',
-    user: {
-      name: 'Test User',
-      studentNumber: '012345678'
-    }
+    id: '01',
+    name: 'Test User',
+    studentNumber: '012345678',
+    submissions: [
+      {
+        id: '0',
+        url: 'https://test.test'
+      }
+    ]
   },
   {
-    id: '1',
-    url: 'https://test2.test',
-    user: {
-      name: 'Test User 2',
-      studentNumber: '012345679'
-    }
+    id: '02',
+    name: 'Test User 2',
+    studentNumber: '012345679',
+    submissions: [
+      {
+        id: '1',
+        url: 'https://test2.test'
+      },
+      {
+        id: '2',
+        url: 'https://test3.test'
+      }
+    ]
   }
 ]
 
@@ -30,26 +40,28 @@ describe('SubmissionSearchResult component', () => {
   beforeAll(() => {
     wrapper = shallow(<SubmissionSearchResultComponent
       classes={{}}
-      submissions={submissions}
+      users={users}
     />)
   })
 
-  it('renders a CardComponent for each submission.', () => {
-    expect(wrapper.find(CardContainer).length).toEqual(submissions.length)
+  it('renders a CardComponent for each user.', () => {
+    expect(wrapper.find(CardContainer).length).toEqual(users.length)
   })
-  it('shows submission user info in card title', () => {
-    const submissionCards = wrapper.find(CardContainer)
-    submissionCards.forEach((card, index) => {
-      const { user } = submissions[index]
+  it('shows user info in card title', () => {
+    const userCards = wrapper.find(CardContainer)
+    userCards.forEach((card, index) => {
+      const user = users[index]
       expect(card.prop('title').includes(user.name)).toEqual(true)
       expect(card.prop('title').includes(user.studentNumber)).toEqual(true)
     })
   })
   it('shows submission info in card content.', () => {
-    const submissionCards = wrapper.find(CardContainer)
-    submissionCards.forEach((card, index) => {
-      const { url } = submissions[index]
-      expect(findText(url, card)).toBeGreaterThan(0)
+    const userCards = wrapper.find(CardContainer)
+    userCards.forEach((card, index) => {
+      const { submissions } = users[index]
+      submissions.forEach(submission => {
+        expect(findText(submission.url, card)).toBeGreaterThan(0)
+      })
     })
   })
 })

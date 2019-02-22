@@ -1,8 +1,8 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
-import UserSearchForm from './UserSearchForm'
-import UserSearchResult from './UserSearchResult'
+import AdminSearchForm from './AdminSearchForm'
+import AdminSearchResult from './AdminSearchResult'
 import { parseClasses } from '../../util/propTypes'
 
 const HEADER_TEXT = 'Manage Users'
@@ -22,8 +22,8 @@ const AdminPageComponent = ({ classes }) => (
     >
       {HEADER_TEXT}
     </Typography>
-    <UserSearchForm />
-    <UserSearchResult />
+    <AdminSearchForm />
+    <AdminSearchResult />
   </div>
 )
 

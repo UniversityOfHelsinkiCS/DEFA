@@ -3,7 +3,7 @@ import { arrayOf, shape, string, bool } from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import { Grid, CircularProgress } from '@material-ui/core'
-import UserSearchResultItem from './UserSearchResultItem'
+import AdminSearchResultItem from './AdminSearchResultItem'
 import { parseClasses } from '../../util/propTypes'
 
 const styles = {
@@ -13,7 +13,7 @@ const styles = {
   }
 }
 
-export const UserSearchResultComponent = ({ users, loading, classes }) => (
+export const AdminSearchResultComponent = ({ users, loading, classes }) => (
   <div>
     <div className={classes.progress}>
       {loading ? <CircularProgress /> : null}
@@ -28,14 +28,14 @@ export const UserSearchResultComponent = ({ users, loading, classes }) => (
           md={6}
           sm={12}
         >
-          <UserSearchResultItem user={user} />
+          <AdminSearchResultItem user={user} />
         </Grid>
       ))}
     </Grid>
   </div>
 )
 
-UserSearchResultComponent.propTypes = {
+AdminSearchResultComponent.propTypes = {
   users: arrayOf(shape({
     id: string.isRequired
   })).isRequired,
@@ -51,4 +51,4 @@ const mapStateToProps = ({ admin }) => ({
 export default connect(
   mapStateToProps,
   null
-)(withStyles(styles)(UserSearchResultComponent))
+)(withStyles(styles)(AdminSearchResultComponent))

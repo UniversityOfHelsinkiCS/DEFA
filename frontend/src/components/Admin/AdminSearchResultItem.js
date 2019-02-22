@@ -54,7 +54,7 @@ Row.propTypes = {
   value: node.isRequired
 }
 
-class UserSearchResultItemComponent extends PureComponent {
+class AdminSearchResultItemComponent extends PureComponent {
   constructor(props) {
     super(props)
     const user = { ...props.user }
@@ -218,7 +218,7 @@ class UserSearchResultItemComponent extends PureComponent {
   }
 }
 
-UserSearchResultItemComponent.propTypes = {
+AdminSearchResultItemComponent.propTypes = {
   user: shape({
     id: string.isRequired,
     name: string.isRequired,
@@ -244,4 +244,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(UserSearchResultItemComponent))
+)(withStyles(styles)(AdminSearchResultItemComponent))

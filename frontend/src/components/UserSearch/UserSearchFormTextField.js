@@ -1,10 +1,8 @@
 import React, { PureComponent } from 'react'
 import { func, string } from 'prop-types'
-import { connect } from 'react-redux'
 import { TextField } from '@material-ui/core'
-import { changeInput } from '../../util/actions/admin'
 
-export class SubmissionSearchFormTextFieldComponent extends PureComponent {
+export class UserSearchFormTextFieldComponent extends PureComponent {
   onFieldChange = event => {
     const { name, dispatchChangeInput } = this.props
     dispatchChangeInput({
@@ -25,18 +23,14 @@ export class SubmissionSearchFormTextFieldComponent extends PureComponent {
   }
 }
 
-SubmissionSearchFormTextFieldComponent.propTypes = {
+UserSearchFormTextFieldComponent.propTypes = {
   name: string.isRequired,
   label: string.isRequired,
   dispatchChangeInput: func.isRequired
 }
 
-const mapStateToProps = ({ submissionSearch }) => ({
-  inputs: submissionSearch.inputs
+export const mapDispatchToPropsBuilder = changeInput => ({
+  dispatchChangeInput: changeInput
 })
 
-const mapDispatchToProps = {
-  dispatchChangeInput: changeInput
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SubmissionSearchFormTextFieldComponent)
+export default UserSearchFormTextFieldComponent
