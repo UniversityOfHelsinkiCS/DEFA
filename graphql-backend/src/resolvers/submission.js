@@ -25,6 +25,9 @@ const approveSubmission = async (parent, args, context) => {
   const submission = await SubmissionModel.findByIdAndUpdate(args.submission, {
     approval: args.approval
   })
+  if (!submission) {
+    return null
+  }
   submission.approval = args.approval
   return submission
 }
