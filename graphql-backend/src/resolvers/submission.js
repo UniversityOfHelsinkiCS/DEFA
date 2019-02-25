@@ -20,6 +20,15 @@ const createSubmission = (parent, args, context) => {
   })
 }
 
+const approveSubmission = async (parent, args, context) => {
+  checkPrivileged(context)
+  const submission = await SubmissionModel.findByIdAndUpdate(args.submission, {
+    approval: args.approval
+  })
+  submission.approval = args.approval
+  return submission
+}
+
 const user = (parent) => UserModel.findById(parent.user)
 
 module.exports = {
@@ -27,7 +36,8 @@ module.exports = {
     submissions
   },
   Mutation: {
-    createSubmission
+    createSubmission,
+    approveSubmission
   },
   Submission: {
     user
