@@ -15,6 +15,7 @@ const createSubmission = (parent, args, context) => {
   checkLoggedIn(context)
   return SubmissionModel.create({
     ...args,
+    date: Number(new Date()),
     user: Types.ObjectId(context.authorization.id)
   })
 }

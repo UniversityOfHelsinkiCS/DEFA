@@ -7,6 +7,8 @@ enum Role {
   ADMIN
 }
 
+scalar Date
+
 type User {
   id: ID!
   name: String!
@@ -40,12 +42,13 @@ input UserEdit {
 type Submission {
   id: ID!
   url: String!
-  user: User
+  date: Date!
+  user: User!
 }
 
 type Query {
   me: User
-  users(user: UserSearch): [User]
+  users(user: UserSearch): [User]!
   submissions(user: UserSearch): [Submission]
   authenticate(token: String!): Query
 }
