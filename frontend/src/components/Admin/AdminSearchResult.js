@@ -1,10 +1,10 @@
 import React from 'react'
-import { arrayOf, shape, string, bool } from 'prop-types'
+import { arrayOf, shape, bool } from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import { Grid, CircularProgress } from '@material-ui/core'
 import AdminSearchResultItem from './AdminSearchResultItem'
-import { parseClasses } from '../../util/propTypes'
+import { parseClasses, hexadecimal } from '../../util/propTypes'
 
 const styles = {
   progress: {
@@ -37,7 +37,7 @@ export const AdminSearchResultComponent = ({ users, loading, classes }) => (
 
 AdminSearchResultComponent.propTypes = {
   users: arrayOf(shape({
-    id: string.isRequired
+    id: hexadecimal.isRequired
   })).isRequired,
   loading: bool.isRequired,
   classes: parseClasses(styles).isRequired

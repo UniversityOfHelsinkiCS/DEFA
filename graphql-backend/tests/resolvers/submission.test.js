@@ -73,9 +73,9 @@ describe('submission resolvers', () => {
       describe('when not authenticated', () => {
         const context = {}
         const args = {}
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
       })
       describe('when authenticated as unauthorized', () => {
@@ -87,9 +87,9 @@ describe('submission resolvers', () => {
             role: 'STUDENT'
           }
         })
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', async () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
       })
       describe('when authenticated as authorized', () => {
@@ -171,11 +171,14 @@ describe('submission resolvers', () => {
       })
       describe('when not authenticated', () => {
         const context = notAuthenticatedContext
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not create a submission in the database.', async () => {
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           const created = await SubmissionModel.findOne({
             ...args,
             id: ids.user

@@ -1,20 +1,16 @@
 const jwt = require('jsonwebtoken')
 const { Types } = require('mongoose')
 const { SECRET, JWT_OPTIONS } = require('../config')
-const { isAdmin, isPrivileged } = require('../helpers')
+const { checkLoggedIn, checkAdmin, checkPrivileged } = require('../utils/helpers')
 const { UserModel, SubmissionModel } = require('../models')
 
 const me = (parent, args, context) => {
-  if (!context.authorization) {
-    return null
-  }
+  checkLoggedIn(context)
   return UserModel.findById(context.authorization.id)
 }
 
 const users = (parent, args, context) => {
-  if (!isPrivileged(context)) {
-    return null
-  }
+  checkPrivileged(context)
   const matcher = Object.entries(args.user).reduce(
     (acc, [key, value]) => ({
       ...acc,
@@ -29,9 +25,7 @@ const users = (parent, args, context) => {
 }
 
 const login = async (parent, args, context) => {
-  if (!context.authorization || context.authorization.role !== 'ADMIN') {
-    return null
-  }
+  checkAdmin(context)
   let loggedIn = await UserModel.findOne({
     username: args.username
   })
@@ -46,9 +40,7 @@ const login = async (parent, args, context) => {
 }
 
 const editUser = async (parent, args, context) => {
-  if (!isAdmin(context)) {
-    return null
-  }
+  checkAdmin(context)
   const toModify = await UserModel.findById(args.id)
   const modified = Object.assign(toModify, args.values)
   modified.save()

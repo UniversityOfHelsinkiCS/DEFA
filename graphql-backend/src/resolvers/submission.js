@@ -1,11 +1,9 @@
 const { Types } = require('mongoose')
 const { UserModel, SubmissionModel } = require('../models')
-const { isPrivileged } = require('../helpers')
+const { checkLoggedIn, checkPrivileged } = require('../utils/helpers')
 
 const submissions = async (parent, args, context) => {
-  if (!isPrivileged(context)) {
-    return null
-  }
+  checkPrivileged(context)
   const submissions = await SubmissionModel.find({}).populate('user')
   return submissions.filter(submission => Object.entries(args.user || {}).reduce(
     (acc, [key, value]) => acc && submission.user[key].includes(value),
@@ -14,9 +12,7 @@ const submissions = async (parent, args, context) => {
 }
 
 const createSubmission = (parent, args, context) => {
-  if (!context.authorization) {
-    return null
-  }
+  checkLoggedIn(context)
   return SubmissionModel.create({
     ...args,
     user: Types.ObjectId(context.authorization.id)

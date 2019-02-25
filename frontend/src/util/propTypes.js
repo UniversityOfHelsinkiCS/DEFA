@@ -1,12 +1,21 @@
-import { shape, string, number, arrayOf } from 'prop-types'
+import { shape, string, arrayOf } from 'prop-types'
 
-export const file = shape({
-  name: string.isRequired,
-  lastModified: number.isRequired,
-  webkitRelativePath: string.isRequired,
-  size: number.isRequired,
-  type: string.isRequired
-})
+const propType = validator => {
+  const withIsRequired = (
+    props,
+    propName,
+    componentName
+  ) => validator(props, propName, componentName)
+  withIsRequired.isRequired = (props, propName, componentName) => {
+    if (props[propName] === undefined || props[propName] === null) {
+      return new Error(
+        `'Invalid prop ${propName} supplied to ${componentName}. Prop is required.`
+      )
+    }
+    return validator(props, propName, componentName)
+  }
+  return withIsRequired
+}
 
 export const parseClasses = styles => {
   if (typeof styles === 'function') {
@@ -25,21 +34,30 @@ export const parseClasses = styles => {
   )
 }
 
-export const creditProp = shape({
-  student_number: string,
-  course_code: string,
-  date: string,
-  study_credits: number,
-  grade: number,
-  language: string,
-  teacher: string,
-  university: string
+const role = propType((props, propName, componentName) => {
+  // eslint-disable-next-line react/destructuring-assignment
+  if (!/^(STUDENT|PRIVILEGED|ADMIN)$/.test(props[propName])) {
+    return new Error(
+      `'Invalid prop ${propName} supplied to ${componentName}. Validation failed.`
+    )
+  }
+  return null
+})
+
+export const hexadecimal = propType((props, propName, componentName) => {
+  // eslint-disable-next-line react/destructuring-assignment
+  if (!/^[0-9a-f]+$/.test(props[propName])) {
+    return new Error(
+      `'Invalid prop ${propName} supplied to ${componentName}. Validation failed.`
+    )
+  }
+  return null
 })
 
 export const userProp = shape({
-  id: string.isRequired,
+  id: hexadecimal.isRequired,
   name: string,
-  role: string
+  role: role.isRequired
 })
 
 export const headerProp = arrayOf(

@@ -2,6 +2,7 @@ import React from 'react'
 import { shape, arrayOf, string } from 'prop-types'
 import { connect } from 'react-redux'
 import StudentSubmission from './StudentSubmission'
+import { hexadecimal } from '../../util/propTypes'
 
 const StudentSubmissionListComponent = ({ submissions }) => submissions.map(submission => (
   <StudentSubmission
@@ -12,7 +13,7 @@ const StudentSubmissionListComponent = ({ submissions }) => submissions.map(subm
 
 StudentSubmissionListComponent.propTypes = {
   submissions: arrayOf(shape({
-    id: string.isRequired,
+    id: hexadecimal.isRequired,
     url: string.isRequired
   })).isRequired
 }

@@ -80,7 +80,7 @@ describe('Apollo error handling', () => {
             basicError,
             toastableError,
             {
-              toastableError,
+              ...toastableError,
               message: 'Error: other error'
             }
           ]

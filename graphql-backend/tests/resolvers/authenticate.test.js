@@ -13,12 +13,14 @@ describe('authenticate resolvers', () => {
       })
       describe('when no token is provided', () => {
         const args = {}
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not touch context.', async () => {
-          await resolver(parent, args, context)
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           expect(context).toEqual({})
         })
       })
@@ -30,12 +32,14 @@ describe('authenticate resolvers', () => {
         const args = {
           token: jwt.sign(user, 'WRONGSECRET')
         }
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not touch context.', async () => {
-          await resolver(parent, args, context)
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           expect(context).toEqual({})
         })
       })
@@ -70,12 +74,14 @@ describe('authenticate resolvers', () => {
       })
       describe('when no token is provided', () => {
         const args = {}
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not touch context.', async () => {
-          await resolver(parent, args, context)
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           expect(context).toEqual({})
         })
       })
@@ -87,12 +93,14 @@ describe('authenticate resolvers', () => {
         const args = {
           token: jwt.sign(user, 'WRONGSECRET')
         }
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not touch context.', async () => {
-          await resolver(parent, args, context)
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           expect(context).toEqual({})
         })
       })
