@@ -14,6 +14,7 @@ mutation createSubmission(
     ) {
       id
       url
+      date
     }
   }
 }

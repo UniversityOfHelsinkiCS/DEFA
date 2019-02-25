@@ -7,6 +7,7 @@ export const getMySubmissions = gql`
         submissions {
           id
           url
+          date
         }
       }
     }
@@ -26,6 +27,7 @@ export const getSubmissions = gql`
         submissions {
           id
           url
+          date
         }
       }
     }

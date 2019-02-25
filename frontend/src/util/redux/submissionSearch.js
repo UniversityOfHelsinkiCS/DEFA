@@ -1,4 +1,5 @@
 import * as types from '../actionTypes'
+import submissionSorter from './helpers/submissionSorter'
 
 const INITIAL_STATE = {
   inputs: {},
@@ -6,6 +7,11 @@ const INITIAL_STATE = {
   disabled: false,
   loading: false
 }
+
+const resultSubmissionOrderMapper = result => ({
+  ...result,
+  submissions: result.submissions.sort(submissionSorter)
+})
 
 const changeInput = (state, action) => {
   const result = {
@@ -37,7 +43,7 @@ const submissionSearchReducer = (state = INITIAL_STATE, action) => {
     case types.SEARCH_SUBMISSION_SUBMIT_SUCCESS:
       return {
         ...state,
-        results: action.data,
+        results: action.data.map(resultSubmissionOrderMapper),
         loading: false
       }
     default:
