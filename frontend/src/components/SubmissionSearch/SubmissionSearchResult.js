@@ -1,8 +1,9 @@
 import React from 'react'
 import { arrayOf, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
-import { Typography, Grid } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import CardContainer from '../Student/CardContainer'
+import SubmissionSearchResultSubmission from './SubmissionSearchResultSubmission'
 
 export const SubmissionSearchResultComponent = ({ users }) => (
   <Grid container spacing={32}>
@@ -22,10 +23,10 @@ export const SubmissionSearchResultComponent = ({ users }) => (
           >
             <div>
               {user.submissions.map(submission => (
-                <Typography key={submission.id}>
-                  <span>Koski url: </span>
-                  <a href={submission.url}>{submission.url}</a>
-                </Typography>
+                <SubmissionSearchResultSubmission
+                  key={submission.id}
+                  submission={submission}
+                />
               ))}
             </div>
           </CardContainer>

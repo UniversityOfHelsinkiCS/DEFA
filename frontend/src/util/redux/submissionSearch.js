@@ -46,6 +46,19 @@ const submissionSearchReducer = (state = INITIAL_STATE, action) => {
         results: action.data.map(resultSubmissionOrderMapper),
         loading: false
       }
+    case types.SEARCH_SUBMISSION_APPROVE_SUBMISSION_SUCCESS:
+      return {
+        ...state,
+        results: state.results.map(user => ({
+          ...user,
+          submissions: user.submissions.map(submission => (
+            submission.id === action.submission.id ? {
+              ...submission,
+              approval: action.submission.approval
+            } : submission
+          ))
+        }))
+      }
     default:
       return state
   }

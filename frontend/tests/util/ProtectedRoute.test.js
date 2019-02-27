@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { ProtectedRouteComponent } from '../../src/util/ProtectedRoute'
-import SubmissionSearchPage from '../../src/components/SubmissionSearch/SubmissionSearchPage'
 
 describe('ProtectedRoute', () => {
   let wrapper
@@ -11,7 +10,7 @@ describe('ProtectedRoute', () => {
       wrapper = shallow(<ProtectedRouteComponent
         user={{ role: 'STUDENT' }}
         requiredRole={['ADMIN', 'PRIVILEGED']}
-        component={SubmissionSearchPage}
+        component="placeholder component"
         exact
         path="/upload-credits"
       />)

@@ -8,6 +8,7 @@ export const getMySubmissions = gql`
           id
           url
           date
+          approval
         }
       }
     }
@@ -28,6 +29,7 @@ export const getSubmissions = gql`
           id
           url
           date
+          approval
         }
       }
     }

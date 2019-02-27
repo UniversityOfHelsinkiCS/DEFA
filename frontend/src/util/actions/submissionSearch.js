@@ -13,3 +13,8 @@ export const submitSearchSuccess = data => dispatch => dispatch({
   type: types.SEARCH_SUBMISSION_SUBMIT_SUCCESS,
   data
 })
+
+export const approveSubmissionSuccess = submission => dispatch => dispatch({
+  type: types.SEARCH_SUBMISSION_APPROVE_SUBMISSION_SUCCESS,
+  submission
+})

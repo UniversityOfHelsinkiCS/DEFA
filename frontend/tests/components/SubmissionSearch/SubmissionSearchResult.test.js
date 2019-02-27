@@ -1,7 +1,7 @@
 import React from 'react'
 import { SubmissionSearchResultComponent } from '../../../src/components/SubmissionSearch/SubmissionSearchResult'
 import CardContainer from '../../../src/components/Student/CardContainer'
-import { findText } from '../../testUtils'
+import SubmissionSearchResultSubmission from '../../../src/components/SubmissionSearch/SubmissionSearchResultSubmission'
 
 SubmissionSearchResultComponent.propTypes = {}
 
@@ -60,7 +60,10 @@ describe('SubmissionSearchResult component', () => {
     userCards.forEach((card, index) => {
       const { submissions } = users[index]
       submissions.forEach(submission => {
-        expect(findText(submission.url, card)).toBeGreaterThan(0)
+        const submissionInfo = card.find(SubmissionSearchResultSubmission)
+        expect(submissionInfo.exists()).toEqual(true)
+        const submissionProps = submissionInfo.map(info => info.prop('submission'))
+        expect(submissionProps).toContain(submission)
       })
     })
   })
