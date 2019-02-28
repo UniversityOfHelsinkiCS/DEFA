@@ -47,8 +47,8 @@ const StudentSubmissionContainer = ({ classes, token, dispatchGetStudentSubmissi
               }
               return (
                 <div>
-                  <StudentSubmissionList />
                   <StudentSubmissionAddForm />
+                  <StudentSubmissionList />
                 </div>
               )
             } catch (e) {

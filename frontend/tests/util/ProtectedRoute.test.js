@@ -10,7 +10,7 @@ describe('ProtectedRoute', () => {
       wrapper = shallow(<ProtectedRouteComponent
         user={{ role: 'STUDENT' }}
         requiredRole={['ADMIN', 'PRIVILEGED']}
-        component="placeholder component"
+        component={() => <div />}
         exact
         path="/upload-credits"
       />)

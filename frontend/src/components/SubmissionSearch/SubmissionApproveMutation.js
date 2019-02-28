@@ -61,12 +61,14 @@ class SubmissionApproveMutationComponent extends PureComponent {
               <ToggleButton
                 value="APPROVED"
                 selected={submission.approval === 'APPROVED'}
+                color="primary"
               >
                 {APPROVED_TEXT}
               </ToggleButton>
               <ToggleButton
                 value="REJECTED"
                 selected={submission.approval === 'REJECTED'}
+                color="secondary"
               >
                 {REJECTED_TEXT}
               </ToggleButton>

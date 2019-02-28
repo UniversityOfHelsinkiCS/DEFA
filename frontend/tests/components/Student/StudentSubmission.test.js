@@ -1,50 +1,42 @@
 import React from 'react'
 import {
-  StudentSubmissionComponent,
-  AddSubmissionText,
-  EditSubmissionText
+  StudentSubmissionComponent
 } from '../../../src/components/Student/StudentSubmission'
 import { findText } from '../../testUtils'
+import parseDate from '../../../src/util/parseDate'
 
 StudentSubmissionComponent.propTypes = {}
 
 const submission = {
-  url: 'https://defa.cs.helsinki.fi'
+  url: 'https://defa.cs.helsinki.fi',
+  date: (new Date()).toISOString(),
+  approval: 'APPROVED'
 }
 
 describe('StudentInformation component', () => {
   let wrapper
-  describe('When a submission has not been submitted', () => {
-    beforeAll(() => {
-      wrapper = mount(<StudentSubmissionComponent
-        submission={null}
-      />)
-    })
-    afterAll(() => {
-      wrapper.unmount()
-    })
-
-    it('Displays "Add submission" when no submission', () => {
-      expect(findText(AddSubmissionText, wrapper)).toBeGreaterThan(0)
-    })
-  })
 
   describe('When a submission has been submitted', () => {
     beforeAll(() => {
       wrapper = mount(<StudentSubmissionComponent
         submission={submission}
+        classes={{}}
       />)
     })
     afterAll(() => {
       wrapper.unmount()
     })
 
-    it('Displays "Edit submission"', () => {
-      expect(findText(EditSubmissionText, wrapper)).toBeGreaterThan(0)
-    })
-
     it('Renders the submission link', () => {
       expect(findText(submission.url, wrapper)).toBeGreaterThan(0)
+    })
+
+    it('Renders the submission approval status.', () => {
+      expect(findText(submission.approval, wrapper)).toBeGreaterThan(0)
+    })
+
+    it('Renders the submission date.', () => {
+      expect(findText(parseDate(submission.date), wrapper)).toBeGreaterThan(0)
     })
   })
 })
