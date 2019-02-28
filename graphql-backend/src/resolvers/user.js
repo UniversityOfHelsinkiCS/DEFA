@@ -39,6 +39,17 @@ const login = async (parent, args, context) => {
   }, SECRET, JWT_OPTIONS)
 }
 
+const refreshToken = async (parent, args, context) => {
+  checkAdmin(context)
+  const loggedIn = await UserModel.findById(args.id)
+
+  return jwt.sign({
+    id: loggedIn.id,
+    role: loggedIn.role,
+    name: loggedIn.name
+  }, SECRET, JWT_OPTIONS)
+}
+
 const editUser = async (parent, args, context) => {
   checkAdmin(context)
   const toModify = await UserModel.findById(args.id)
@@ -56,7 +67,8 @@ const submissions = (parent) => {
 module.exports = {
   Query: {
     me,
-    users
+    users,
+    refreshToken
   },
   Mutation: {
     login,

@@ -51,6 +51,7 @@ type Query {
   users(user: UserSearch): [User]!
   submissions(user: UserSearch): [Submission]
   authenticate(token: String!): Query
+  refreshToken(id: ID!): String
 }
 
 type Mutation {

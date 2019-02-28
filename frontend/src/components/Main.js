@@ -11,10 +11,20 @@ import ProtectedRoute from '../util/ProtectedRoute'
 import SubmissionSearchPage from './SubmissionSearch/SubmissionSearchPage'
 import AdminPage from './Admin/AdminPage'
 
-
 class Main extends React.PureComponent {
+  tokenRefresher = () => {
+    const intervalId = setInterval(() => {
+      const { user } = this.props
+      console.log('insert refresh request here, set interval to 15min', user)
+      if (!user) clearInterval(intervalId)
+    }, 5000)
+  }
+
   render() {
     const { user } = this.props
+    if (user) {
+      this.tokenRefresher()
+    }
     return (
       <main>
         <ToastContainer
