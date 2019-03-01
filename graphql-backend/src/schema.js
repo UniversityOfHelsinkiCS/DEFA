@@ -58,6 +58,7 @@ type Query {
   me: User
   users(user: UserSearch): [User]!
   submissions(user: UserSearch): [Submission]
+  refreshToken(id: ID!): String
 }
 
 type Mutation {

@@ -3,7 +3,7 @@ const dotenv = require('dotenv')
 dotenv.config()
 
 const JWT_OPTIONS = {
-  expiresIn: '24h'
+  expiresIn: '30m'
 }
 
 module.exports = {

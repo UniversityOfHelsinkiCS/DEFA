@@ -26,11 +26,11 @@ const styles = {
 
 const NavBar = ({ classes, history, user }) => {
   const getRoutes = role => (
-    <div>
+    <React.Fragment>
       {role === 'ADMIN' ? <Button color="inherit" onClick={() => history.push('/admin')}>Admin</Button> : null}
       {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/submissions')}>All Submissions</Button> : null}
       <Button className={classes.lastButton} onClick={() => history.push('/student')}>My Submissions</Button>
-    </div>
+    </React.Fragment>
   )
 
   return (
