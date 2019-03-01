@@ -3,7 +3,7 @@ import { shape, string } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography, Card, CardContent, CardHeader } from '@material-ui/core'
 import SubmissionApproveMutation from './SubmissionApproveMutation'
-import { parseClasses } from '../../util/propTypes'
+import { parseClasses, ISODateString } from '../../util/propTypes'
 import parseDate from '../../util/parseDate'
 
 const styles = {
@@ -33,7 +33,7 @@ const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
 SubmissionSearchResultSubmissionComponent.propTypes = {
   submission: shape({
     url: string.isRequired,
-    date: string.isRequired
+    date: ISODateString.isRequired
   }).isRequired,
   classes: parseClasses(styles).isRequired
 }

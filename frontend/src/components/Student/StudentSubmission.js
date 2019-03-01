@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { Typography, Button, Card, CardHeader, CardContent } from '@material-ui/core'
 import { shape, string, bool } from 'prop-types'
 import './StudentSubmission.css'
-import { parseClasses } from '../../util/propTypes'
+import { parseClasses, approval, ISODateString } from '../../util/propTypes'
 import parseDate from '../../util/parseDate'
 
 export const AddSubmissionText = 'Add Submission'
@@ -49,7 +49,10 @@ export const StudentSubmissionComponent = ({ submission, classes }) => {
   }
   return (
     <Card className={classes.card}>
-      <CardHeader title={parseDate(submission.date)} />
+      <CardHeader
+        className={submission.updated ? classes.updated : null}
+        title={parseDate(submission.date)}
+      />
       <CardContent className={submission.updated ? classes.updated : null}>
         <Typography variant="h6">
           <span>Koski url: </span>
@@ -68,8 +71,8 @@ StudentSubmissionComponent.propTypes = {
   classes: parseClasses(styles).isRequired,
   submission: shape({
     url: string.isRequired,
-    date: string.isRequired,
-    approval: string.isRequired,
+    date: ISODateString.isRequired,
+    approval: approval.isRequired,
     updated: bool
   }).isRequired
 }
