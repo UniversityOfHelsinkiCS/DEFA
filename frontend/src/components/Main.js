@@ -4,20 +4,27 @@ import { connect } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import { userProp } from '../util/propTypes'
 import 'react-toastify/dist/ReactToastify.css'
-import Credits from './Credits'
 import NavBar from './NavBar'
 import Welcome from './Welcome'
-import UploadCreditsContainer from './UploadCredits/UploadCreditsContainer'
 import StudentContainer from './Student/StudentContainer'
-import TeacherContainer from './Teacher/TeacherContainer'
 import ProtectedRoute from '../util/ProtectedRoute'
 import SubmissionSearchPage from './SubmissionSearch/SubmissionSearchPage'
-
+import AdminPage from './Admin/AdminPage'
 
 class Main extends React.PureComponent {
+  tokenRefresher = () => {
+    const intervalId = setInterval(() => {
+      const { user } = this.props
+      console.log('insert refresh request here, set interval to 15min', user)
+      if (!user) clearInterval(intervalId)
+    }, 5000)
+  }
+
   render() {
     const { user } = this.props
-    const userRole = user ? user.role : null
+    if (user) {
+      this.tokenRefresher()
+    }
     return (
       <main>
         <ToastContainer
@@ -27,12 +34,10 @@ class Main extends React.PureComponent {
         />
         <NavBar user={user} />
         <Switch>
+          <ProtectedRoute requiredRole={['ADMIN']} exact path="/admin" component={AdminPage} />
           <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/submissions" component={SubmissionSearchPage} />
-          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/upload-credits" component={UploadCreditsContainer} />
-          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/my-uploads" component={TeacherContainer} />
           <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED', 'STUDENT']} exact path="/student" component={StudentContainer} />
           <Route exact path="/" component={Welcome} />
-          <ProtectedRoute requiredRole={['ADMIN']} userRole={userRole} exact path="/admin" component={Credits} />
         </Switch>
       </main>
 

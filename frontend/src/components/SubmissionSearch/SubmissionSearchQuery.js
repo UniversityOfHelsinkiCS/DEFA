@@ -18,8 +18,8 @@ export class SubmissionSearchQueryComponent extends PureComponent {
 
   onCompleted = ({ data }) => {
     const { dispatchSubmitSearchSuccess } = this.props
-    const { submissions } = data.authenticate
-    dispatchSubmitSearchSuccess(submissions)
+    const { users } = data.authenticate
+    dispatchSubmitSearchSuccess(users)
   }
 
   render() {

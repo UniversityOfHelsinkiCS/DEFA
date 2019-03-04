@@ -81,7 +81,7 @@ const backendLogin = async (user: IProtoUser): Promise<string> => {
       {}
     )
   } catch (e) {
-    return null
+    console.log('backend login error: ', e)
   }
   return response.data.data.authenticate.login
 }
@@ -92,6 +92,7 @@ export const signToken = async (response: ISamlResponse): Promise<string | void>
     role: 'STUDENT'
   }
   user.studentNumber = parseStudentNumber(user)
+  console.log('user in signtoken: ', user)
   const token: string = await backendLogin(user)
   return token
 }

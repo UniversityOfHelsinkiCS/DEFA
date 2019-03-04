@@ -11,9 +11,9 @@ describe('user resolvers', () => {
       const args = {}
       describe('when not authenticated', () => {
         const context = {}
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
       })
       describe('when authenticated', () => {
@@ -43,6 +43,91 @@ describe('user resolvers', () => {
           const value = await resolver(parent, args, context)
           expect(value._doc).toBeTruthy()
           expect(value._doc).toEqual(expectations.user._doc)
+        })
+      })
+    })
+    describe('users', () => {
+      const usersData = [
+        {
+          username: 'testuser10',
+          name: 'Test User',
+          role: 'STUDENT',
+          cn: 'Test Test User',
+          studentNumber: '000000010',
+          email: 'test@test.test'
+        },
+        {
+          username: 'testuser11',
+          name: 'Test User',
+          role: 'STUDENT',
+          cn: 'Test User',
+          studentNumber: '000000011',
+          email: 'test@test.test'
+        }
+      ]
+      const resolver = resolvers.Query.users
+      const parent = null
+      const ids = {}
+      beforeAll(async () => {
+        const users = await UserModel.create(usersData)
+        ids.users = users.map(user => user.id)
+      })
+      afterAll(async () => {
+        await Promise.all(ids.users.map(id => UserModel.findByIdAndDelete(id)))
+      })
+
+      describe('when authorized', () => {
+        const context = {
+          authorization: {
+            role: 'PRIVILEGED'
+          }
+        }
+        describe('when args.user is empty', () => {
+          const args = {
+            user: {}
+          }
+          it('returns all users.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result.length).toEqual(2)
+            expect(result).toContainEqual(expect.objectContaining({
+              ...usersData[0],
+              id: ids.users[0]
+            }))
+            expect(result).toContainEqual(expect.objectContaining({
+              ...usersData[1],
+              id: ids.users[1]
+            }))
+          })
+        })
+        describe('when args.user has fields defined', () => {
+          const args = {
+            user: {
+              name: 'Test',
+              cn: 'Test Test'
+            }
+          }
+          it('returns only matching users.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result.length).toEqual(1)
+            expect(result).toContainEqual(expect.objectContaining({
+              ...usersData[0],
+              id: ids.users[0]
+            }))
+          })
+        })
+      })
+      describe('when not authorized', () => {
+        const context = {
+          authorization: {
+            role: 'STUDENT'
+          }
+        }
+        const args = {
+          user: {}
+        }
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
       })
     })
@@ -103,24 +188,28 @@ describe('user resolvers', () => {
       })
       describe('when not authenticated', () => {
         const context = notAuthenticatedContext
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not create a user in database.', async () => {
-          await resolver(parent, args, context)
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           const user = await UserModel.findOne(args)
           expect(user).toBeNull()
         })
       })
       describe('when authenticated as unauthorized', () => {
         const context = unauthorizedContext
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not create a user in database.', async () => {
-          await resolver(parent, args, context)
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           const user = await UserModel.findOne(args)
           expect(user).toBeNull()
         })
@@ -187,10 +276,10 @@ describe('user resolvers', () => {
       }
       const parent = null
       const args = {
-        username: userData.username,
         values: {
           name: 'Test User edited',
           role: 'PRIVILEGED',
+          username: 'edited',
           cn: 'Test Test User edited',
           studentNumber: '000000001',
           email: 'test@edited.test'
@@ -200,6 +289,7 @@ describe('user resolvers', () => {
 
       beforeAll(async () => {
         const [user, admin] = await UserModel.create([userData, adminData])
+        args.id = user.id
         ids.user = user.id
         ids.admin = admin.id
       })
@@ -241,12 +331,14 @@ describe('user resolvers', () => {
             role: 'PRIVILEGED'
           }
         }
-        it('returns null.', async () => {
-          const response = await resolver(parent, args, context)
-          expect(response).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not change user in database.', async () => {
-          await resolver(parent, args, context)
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           const user = await UserModel.findById(ids.user)
           expect(user).toMatchObject(userData)
         })

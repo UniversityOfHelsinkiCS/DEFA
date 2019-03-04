@@ -1,57 +1,18 @@
 import React from 'react'
-import { Grid } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
-import SubmissionSearchFormTextField from './SubmissionSearchFormTextField'
 import SubmissionSearchQuery from './SubmissionSearchQuery'
-import CardContainer from '../Student/CardContainer'
-import { parseClasses } from '../../util/propTypes'
+import UserSearchForm from '../UserSearch/UserSearchForm'
+import { changeInput } from '../../util/actions/submissionSearch'
 
-const styles = {
-  filtersCardContainer: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    marginBottom: '20px'
-  },
-  filtersCard: {
-    flexShrink: 1
-  },
-  queryButtonContainer: {
-    marginTop: '10px'
-  }
-}
-
-export const SubmissionSearchFormComponent = ({ classes }) => (
-  <div className={classes.filtersCardContainer}>
-    <CardContainer title="Filters" className={classes.filtersCard}>
-      <Grid container spacing={16}>
-        <Grid item>
-          <SubmissionSearchFormTextField
-            label="Name"
-            name="cn"
-          />
-        </Grid>
-        <Grid item>
-          <SubmissionSearchFormTextField
-            label="Student Number"
-            name="studentNumber"
-          />
-        </Grid>
-        <Grid item>
-          <SubmissionSearchFormTextField
-            label="Username"
-            name="username"
-          />
-        </Grid>
-      </Grid>
-      <div className={classes.queryButtonContainer}>
-        <SubmissionSearchQuery />
-      </div>
-    </CardContainer>
-  </div>
+export const SubmissionSearchFormComponent = () => (
+  <UserSearchForm
+    submitButton={<SubmissionSearchQuery />}
+    changeInput={changeInput}
+    fields={{
+      cn: 'Name',
+      studentNumber: 'Student Number',
+      username: 'Username'
+    }}
+  />
 )
 
-SubmissionSearchFormComponent.propTypes = {
-  classes: parseClasses(styles).isRequired
-}
-
-export default withStyles(styles)(SubmissionSearchFormComponent)
+export default SubmissionSearchFormComponent

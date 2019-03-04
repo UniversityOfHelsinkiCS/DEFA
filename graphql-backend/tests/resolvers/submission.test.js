@@ -73,9 +73,9 @@ describe('submission resolvers', () => {
       describe('when not authenticated', () => {
         const context = {}
         const args = {}
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
       })
       describe('when authenticated as unauthorized', () => {
@@ -87,9 +87,9 @@ describe('submission resolvers', () => {
             role: 'STUDENT'
           }
         })
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', async () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
       })
       describe('when authenticated as authorized', () => {
@@ -171,11 +171,14 @@ describe('submission resolvers', () => {
       })
       describe('when not authenticated', () => {
         const context = notAuthenticatedContext
-        it('returns null.', async () => {
-          const value = await resolver(parent, args, context)
-          expect(value).toBeNull()
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
         })
         it('does not create a submission in the database.', async () => {
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
           const created = await SubmissionModel.findOne({
             ...args,
             id: ids.user
@@ -204,6 +207,112 @@ describe('submission resolvers', () => {
             ...args,
             id: expect.any(String),
             user: mongoose.Types.ObjectId(ids.user)
+          })
+        })
+      })
+    })
+    describe('approveSubmission', () => {
+      const resolver = resolvers.Mutation.approveSubmission
+      const parent = null
+      const userData = {
+        username: 'testuser12',
+        name: 'Test User',
+        role: 'STUDENT',
+        cn: 'Test Test User',
+        studentNumber: '000000010',
+        email: 'test@test.test'
+      }
+      const submissionData = {
+        url: 'https://test.test',
+        date: Number(new Date()),
+        approval: 'PENDING'
+      }
+      const argsStub = {
+        approval: 'APPROVED'
+      }
+      const ids = {}
+      beforeAll(async () => {
+        const user = await UserModel.create(userData)
+        ids.user = user.id
+        const submission = await SubmissionModel.create({
+          ...submissionData,
+          user: user._id
+        })
+        ids.submission = submission.id
+      })
+      afterEach(async () => {
+        await SubmissionModel.findByIdAndUpdate(ids.submission, submissionData)
+      })
+      afterAll(async () => {
+        await SubmissionModel.findByIdAndDelete(ids.submission)
+        await UserModel.findByIdAndDelete(ids.user)
+      })
+
+      describe('when authorized', () => {
+        const context = {
+          authorization: {
+            role: 'PRIVILEGED'
+          }
+        }
+        describe('when args.submission points to a submission', () => {
+          const args = { ...argsStub }
+          beforeAll(() => {
+            args.submission = ids.submission
+          })
+
+          it('returns the edited submission.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result).toMatchObject({
+              ...submissionData,
+              date: new Date(submissionData.date),
+              approval: args.approval,
+              id: ids.submission
+            })
+          })
+          it('changes the submission in the database.', async () => {
+            await resolver(parent, args, context)
+            const result = await SubmissionModel.findById(ids.submission)
+            expect(result).toMatchObject({
+              ...submissionData,
+              date: new Date(submissionData.date),
+              approval: args.approval,
+              id: ids.submission
+            })
+          })
+        })
+        describe('when args.submission points to no submission.', () => {
+          const args = argsStub
+
+          it('returns null.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result).toBeNull()
+          })
+        })
+      })
+      describe('when unauthorized', () => {
+        const context = {
+          authorization: {
+            role: 'STUDENT'
+          }
+        }
+        const args = { ...argsStub }
+        beforeAll(() => {
+          args.submission = ids.submission
+        })
+
+        it('throws an error.', () => {
+          const asyncResolver = async () => await resolver(parent, args, context)
+          expect(asyncResolver()).rejects.toThrow()
+        })
+        it('does not change the submission in the database.', async () => {
+          try {
+            await resolver(parent, args, context)
+          } catch (e) {}
+          const result = await SubmissionModel.findById(ids.submission)
+          expect(result).toMatchObject({
+            ...submissionData,
+            date: new Date(submissionData.date),
+            id: ids.submission
           })
         })
       })

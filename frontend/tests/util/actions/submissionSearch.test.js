@@ -1,5 +1,10 @@
 import * as types from '../../../src/util/actionTypes'
-import { changeInput, submitSearchAttempt, submitSearchSuccess } from '../../../src/util/actions/submissionSearch'
+import {
+  changeInput,
+  submitSearchAttempt,
+  submitSearchSuccess,
+  approveSubmissionSuccess
+} from '../../../src/util/actions/submissionSearch'
 import { testAction } from '../../testUtils'
 
 let input
@@ -29,5 +34,17 @@ testAction(submitSearchSuccess, {
   expectation: {
     type: types.SEARCH_SUBMISSION_SUBMIT_SUCCESS,
     data: input
+  }
+})
+
+input = {
+  id: 'aaaaa',
+  approval: 'APPROVED'
+}
+testAction(approveSubmissionSuccess, {
+  input,
+  expectation: {
+    type: types.SEARCH_SUBMISSION_APPROVE_SUBMISSION_SUCCESS,
+    submission: input
   }
 })

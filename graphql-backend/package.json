@@ -5,8 +5,9 @@
   "repository": "UniversityOfHelsinkiCS/DEFA",
   "main": "dist/src/server.js",
   "scripts": {
-    "lint": "tslint 'src/**/*.js'",
+    "lint": "eslint src/ --ext .js",
     "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
     "test": "jest",
     "login_service_token": "node src/scripts/login_service_token.js"
   },
@@ -23,6 +24,9 @@
     "mongoose": "^5.3.10"
   },
   "devDependencies": {
+    "eslint": "^5.15.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "jest": "^23.6.0",
     "mongodb-memory-server": "^3.0.0",
     "nodemon": "^1.18.6"

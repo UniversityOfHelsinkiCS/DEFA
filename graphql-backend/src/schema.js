@@ -7,6 +7,14 @@ enum Role {
   ADMIN
 }
 
+scalar Date
+
+enum Approval {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 type User {
   id: ID!
   name: String!
@@ -31,6 +39,7 @@ input UserSearch {
 input UserEdit {
   name: String
   studentNumber: String
+  username: String
   role: Role
   cn: String
   email: String
@@ -39,16 +48,21 @@ input UserEdit {
 type Submission {
   id: ID!
   url: String!
-  user: User
+  date: Date!
+  approval: Approval!
+  user: User!
 }
 
 type Query {
-  me: User
-  submissions(user: UserSearch): [Submission]
   authenticate(token: String!): Query
+  me: User
+  users(user: UserSearch): [User]!
+  submissions(user: UserSearch): [Submission]
+  refreshToken(id: ID!): String
 }
 
 type Mutation {
+  authenticate(token: String!): Mutation
   login(
     name: String!,
     studentNumber: String,
@@ -58,8 +72,11 @@ type Mutation {
     email: String!
   ): String
   createSubmission(url: String!): Submission
-  authenticate(token: String!): Mutation
-  editUser(username: String!, values: UserEdit!): User
+  editUser(id: ID!, values: UserEdit!): User
+  approveSubmission(
+    submission: ID!
+    approval: Approval!
+  ): Submission
 }
 
 schema {
