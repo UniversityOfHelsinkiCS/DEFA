@@ -19,9 +19,8 @@ class SubmissionApproveMutationComponent extends PureComponent {
     }
   }
 
-  onChange = client => event => {
+  onChange = (client, value) => () => {
     const { token, submission } = this.props
-    const { value } = event.target
     if (value === submission.approval) return
     client.mutate({
       mutation: approveSubmission,
@@ -50,25 +49,25 @@ class SubmissionApproveMutationComponent extends PureComponent {
           loading ? <CircularProgress /> : (
             <ToggleButtonGroup
               exclusive
-              onChange={this.onChange(client)}
             >
               <ToggleButton
                 value="PENDING"
                 selected={submission.approval === 'PENDING'}
+                onClick={this.onChange(client, 'PENDING')}
               >
                 {PENDING_TEXT}
               </ToggleButton>
               <ToggleButton
                 value="APPROVED"
                 selected={submission.approval === 'APPROVED'}
-                color="primary"
+                onClick={this.onChange(client, 'APPROVED')}
               >
                 {APPROVED_TEXT}
               </ToggleButton>
               <ToggleButton
                 value="REJECTED"
                 selected={submission.approval === 'REJECTED'}
-                color="secondary"
+                onClick={this.onChange(client, 'REJECTED')}
               >
                 {REJECTED_TEXT}
               </ToggleButton>
