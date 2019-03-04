@@ -1,22 +1,25 @@
 const UnauthorizedError = require('./errors/UnauthorizedError')
 
 const roleValues = {
-  'STUDENT': 1,
-  'PRIVILEGED': 2, // teachers
-  'ADMIN': 3
+  STUDENT: 1,
+  PRIVILEGED: 2, // teachers
+  ADMIN: 3
 }
 
-const isLoggedIn = (context) =>
-context.authorization &&
-roleValues[context.authorization.role] >= roleValues['STUDENT']
+const isLoggedIn = (context) => (
+  context.authorization
+  && roleValues[context.authorization.role] >= roleValues.STUDENT
+)
 
-const isPrivileged = (context) =>
-  context.authorization &&
-  roleValues[context.authorization.role] >= roleValues['PRIVILEGED']
+const isPrivileged = (context) => (
+  context.authorization
+  && roleValues[context.authorization.role] >= roleValues.PRIVILEGED
+)
 
-const isAdmin = (context) =>
-  context.authorization &&
-  roleValues[context.authorization.role] >= roleValues['ADMIN']
+const isAdmin = (context) => (
+  context.authorization
+  && roleValues[context.authorization.role] >= roleValues.ADMIN
+)
 
 const checkLoggedIn = (context) => {
   if (!isLoggedIn(context)) {

@@ -4,8 +4,8 @@ const { checkLoggedIn, checkPrivileged } = require('../utils/helpers')
 
 const submissions = async (parent, args, context) => {
   checkPrivileged(context)
-  const submissions = await SubmissionModel.find({}).populate('user')
-  return submissions.filter(submission => Object.entries(args.user || {}).reduce(
+  const databaseSubmissions = await SubmissionModel.find({}).populate('user')
+  return databaseSubmissions.filter(submission => Object.entries(args.user || {}).reduce(
     (acc, [key, value]) => acc && submission.user[key].includes(value),
     true
   ))

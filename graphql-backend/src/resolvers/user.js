@@ -58,11 +58,9 @@ const editUser = async (parent, args, context) => {
   return modified
 }
 
-const submissions = (parent) => {
-  return SubmissionModel.find({
-    user: Types.ObjectId(parent.id)
-  })
-}
+const submissions = parent => SubmissionModel.find({
+  user: Types.ObjectId(parent.id)
+})
 
 module.exports = {
   Query: {

@@ -1,6 +1,5 @@
 class ActionableError extends Error {
   /**
-   * 
    * @param {string} message
    * @param {{ toastable: boolean, code: string }} extensions
    */

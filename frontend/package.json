@@ -92,8 +92,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && cd ../backend && npm run lint",
-      "pre-push": "npm run lint && npm test && cd ../backend && npm run lint && npm test && cd ../graphql-backend && npm test"
+      "pre-commit": "npm run lint && cd ../backend && npm run lint && cd ../graphql-backend && npm run lint",
+      "pre-push": "npm run lint && npm test && cd ../backend && npm run lint && npm test && cd ../graphql-backend && npm run lint && npm test"
     }
   }
 }
