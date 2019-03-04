@@ -20,7 +20,13 @@ const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
     <CardContent>
       <Typography>
         <span>Koski url: </span>
-        <a href={submission.url}>{submission.url}</a>
+        <a
+          href={submission.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {submission.url}
+        </a>
       </Typography>
     </CardContent>
     <CardContent>
