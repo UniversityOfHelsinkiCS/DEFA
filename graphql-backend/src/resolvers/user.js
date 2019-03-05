@@ -48,7 +48,7 @@ const login = async (parent, args, context) => {
 }
 
 const refreshToken = async (parent, args, context) => {
-  checkAdmin(context)
+  checkLoggedIn(context)
   const loggedIn = await UserModel.findById(args.id)
 
   return jwt.sign({

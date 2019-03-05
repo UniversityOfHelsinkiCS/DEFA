@@ -12,7 +12,7 @@ const authenticate = async (parent, args, context) => {
   try {
     decoded = jwt.verify(args.token, SECRET)
   } catch (e) {
-    throw new ActionableError('Failed to authenticate: expired token.', TOKEN_ERROR_EXTENSIONS)
+    throw new ActionableError('You have been logged out due to inactivity', TOKEN_ERROR_EXTENSIONS)
   }
   if (decoded && decoded.id && decoded.role) {
     // Mutating context is the whole point of this query.

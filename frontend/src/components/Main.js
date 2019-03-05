@@ -2,6 +2,9 @@ import React from 'react'
 import { withRouter, Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
+import { string, shape } from 'prop-types'
+import { Query } from 'react-apollo'
+import { refreshToken } from '../util/queries/refreshToken'
 import { userProp } from '../util/propTypes'
 import 'react-toastify/dist/ReactToastify.css'
 import NavBar from './NavBar'
@@ -12,21 +15,25 @@ import SubmissionSearchPage from './SubmissionSearch/SubmissionSearchPage'
 import AdminPage from './Admin/AdminPage'
 
 class Main extends React.PureComponent {
-  tokenRefresher = () => {
-    const intervalId = setInterval(() => {
-      const { user } = this.props
-      console.log('insert refresh request here, set interval to 15min', user)
-      if (!user) clearInterval(intervalId)
-    }, 5000)
-  }
-
   render() {
-    const { user } = this.props
-    if (user) {
-      this.tokenRefresher()
-    }
+    // eslint-disable-next-line react/destructuring-assignment
+    const { user, token } = this.props.user
     return (
       <main>
+        {user ? (
+          <Query
+            query={refreshToken}
+            variables={{ token, id: user.id }}
+            pollInterval={300000}
+          >
+            {({ data, stopPolling }) => {
+              if (!user) stopPolling()
+              if (data.authenticate) window.localStorage.setItem('DEFA-token', data.authenticate.refreshToken)
+              return null
+            }}
+          </Query>
+        )
+          : null}
         <ToastContainer
           position="top-center"
           autoClose={5000}
@@ -45,15 +52,15 @@ class Main extends React.PureComponent {
   }
 }
 const mapStateToProps = state => ({
-  user: state.user.user
+  user: state.user
 })
 
 Main.defaultProps = {
-  user: null
+  user: { user: null, token: null }
 }
 
 Main.propTypes = {
-  user: userProp
+  user: shape({ token: string, user: userProp })
 }
 
 export default withRouter(connect(mapStateToProps, null)(Main))
