@@ -41,6 +41,7 @@ describe('SubmissionSearchResult component', () => {
     wrapper = shallow(<SubmissionSearchResultComponent
       classes={{}}
       users={users}
+      inputs={{}}
     />)
   })
 

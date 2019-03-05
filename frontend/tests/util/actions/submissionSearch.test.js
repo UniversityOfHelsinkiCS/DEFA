@@ -1,7 +1,6 @@
 import * as types from '../../../src/util/actionTypes'
 import {
   changeInput,
-  submitSearchAttempt,
   submitSearchSuccess,
   approveSubmissionSuccess
 } from '../../../src/util/actions/submissionSearch'
@@ -20,19 +19,11 @@ testAction(changeInput, {
   }
 })
 
-input = {}
-testAction(submitSearchAttempt, {
-  input,
-  expectation: {
-    type: types.SEARCH_SUBMISSION_SUBMIT_ATTEMPT
-  }
-})
-
 input = [{}, { field: 'value' }]
 testAction(submitSearchSuccess, {
   input,
   expectation: {
-    type: types.SEARCH_SUBMISSION_SUBMIT_SUCCESS,
+    type: types.SEARCH_SUBMISSION_SUCCESS,
     data: input
   }
 })

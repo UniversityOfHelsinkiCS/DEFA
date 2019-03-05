@@ -39,9 +39,11 @@ const UserSearchForm = ({ classes, submitButton, changeInput, fields }) => {
             </Grid>
           ))}
         </Grid>
-        <div className={classes.queryButtonContainer}>
-          {submitButton}
-        </div>
+        {submitButton ? (
+          <div className={classes.queryButtonContainer}>
+            {submitButton}
+          </div>
+        ) : null}
       </CardContainer>
     </div>
   )
@@ -49,9 +51,13 @@ const UserSearchForm = ({ classes, submitButton, changeInput, fields }) => {
 
 UserSearchForm.propTypes = {
   classes: parseClasses(styles).isRequired,
-  submitButton: node.isRequired,
+  submitButton: node,
   changeInput: func.isRequired,
   fields: objectOf(string.isRequired).isRequired
+}
+
+UserSearchForm.defaultProps = {
+  submitButton: null
 }
 
 export default withStyles(styles)(UserSearchForm)

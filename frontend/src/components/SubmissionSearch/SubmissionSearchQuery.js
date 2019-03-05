@@ -1,57 +1,56 @@
 import React, { PureComponent } from 'react'
-import { shape, string, func, bool } from 'prop-types'
+import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
-import { ApolloConsumer } from 'react-apollo'
-import { Button } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { Query } from 'react-apollo'
+import { CircularProgress } from '@material-ui/core'
 import { getSubmissions } from '../../util/queries/getSubmissions'
-import { submitSearchAttempt, submitSearchSuccess } from '../../util/actions/submissionSearch'
+import { submitSearchSuccess } from '../../util/actions/submissionSearch'
+import SubmissionSearchResult from './SubmissionSearchResult'
+import { parseClasses } from '../../util/propTypes'
+
+const styles = {
+  progressContainer: {
+    width: '100%',
+    textAlign: 'center'
+  }
+}
 
 export class SubmissionSearchQueryComponent extends PureComponent {
-  onSubmit = client => () => {
-    const { token, inputs, dispatchSubmitSearchAttempt } = this.props
-    dispatchSubmitSearchAttempt()
-    client.query({
-      query: getSubmissions,
-      variables: { token, user: inputs }
-    }).then(this.onCompleted) // TODO: catch
-  }
-
-  onCompleted = ({ data }) => {
+  onCompleted = data => {
     const { dispatchSubmitSearchSuccess } = this.props
     const { users } = data.authenticate
     dispatchSubmitSearchSuccess(users)
   }
 
   render() {
-    const { disabled } = this.props
+    const { token, classes } = this.props
     return (
-      <ApolloConsumer>
-        {client => (
-          <Button
-            onClick={this.onSubmit(client)}
-            variant="contained"
-            color="primary"
-            size="large"
-            disabled={disabled}
-          >
-            Search
-          </Button>
-        )}
-      </ApolloConsumer>
+      <Query
+        query={getSubmissions}
+        variables={{ token }}
+        onCompleted={this.onCompleted}
+      >
+        {({ loading, error }) => {
+          if (error) return null
+          if (loading) {
+            return (
+              <div className={classes.progressContainer}>
+                <CircularProgress />
+              </div>
+            )
+          }
+          return <SubmissionSearchResult />
+        }}
+      </Query>
     )
   }
 }
 
 SubmissionSearchQueryComponent.propTypes = {
   token: string.isRequired,
-  inputs: shape({
-    name: string,
-    studentNumber: string,
-    username: string
-  }).isRequired,
   dispatchSubmitSearchSuccess: func.isRequired,
-  dispatchSubmitSearchAttempt: func.isRequired,
-  disabled: bool.isRequired
+  classes: parseClasses(styles).isRequired
 }
 
 const mapStateToProps = ({ user, submissionSearch }) => ({
@@ -61,8 +60,10 @@ const mapStateToProps = ({ user, submissionSearch }) => ({
 })
 
 const mapDispatchToProps = {
-  dispatchSubmitSearchAttempt: submitSearchAttempt,
   dispatchSubmitSearchSuccess: submitSearchSuccess
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubmissionSearchQueryComponent)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(SubmissionSearchQueryComponent))

@@ -6,9 +6,13 @@ import CardContainer from '../Student/CardContainer'
 import SubmissionSearchResultSubmission from './SubmissionSearchResultSubmission'
 
 const hasSubmissionsFilter = user => user.submissions.length > 0
+const inputsFilter = inputs => user => Object.entries(inputs).reduce(
+  (acc, [key, value]) => acc && user[key].toLowerCase().includes(value.toLowerCase()),
+  true
+)
 
-export const SubmissionSearchResultComponent = ({ users }) => {
-  const filteredUsers = users.filter(hasSubmissionsFilter)
+export const SubmissionSearchResultComponent = ({ users, inputs }) => {
+  const filteredUsers = users.filter(hasSubmissionsFilter).filter(inputsFilter(inputs))
   return (
     <Grid container spacing={32}>
       {filteredUsers.map(user => {
@@ -46,15 +50,23 @@ SubmissionSearchResultComponent.propTypes = {
     id: string.isRequired,
     name: string.isRequired,
     studentNumber: string.isRequired,
+    username: string.isRequired,
+    cn: string.isRequired,
     submissions: arrayOf(shape({
       id: string.isRequired,
       url: string.isRequired
     })).isRequired
-  })).isRequired
+  })).isRequired,
+  inputs: shape({
+    cn: string,
+    studentNumber: string,
+    username: string
+  }).isRequired
 }
 
 const mapStateToProps = ({ submissionSearch }) => ({
-  users: submissionSearch.results
+  users: submissionSearch.results,
+  inputs: submissionSearch.inputs
 })
 
 export default connect(mapStateToProps, null)(SubmissionSearchResultComponent)
