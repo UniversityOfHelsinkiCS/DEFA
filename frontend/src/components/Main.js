@@ -2,6 +2,7 @@ import React from 'react'
 import { withRouter, Switch, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
+import { string, shape } from 'prop-types'
 import { Query } from 'react-apollo'
 import { refreshToken } from '../util/queries/refreshToken'
 import { userProp } from '../util/propTypes'
@@ -55,11 +56,11 @@ const mapStateToProps = state => ({
 })
 
 Main.defaultProps = {
-  user: null
+  user: { user: null, token: null }
 }
 
 Main.propTypes = {
-  user: userProp
+  user: shape({ token: string, user: userProp })
 }
 
 export default withRouter(connect(mapStateToProps, null)(Main))
