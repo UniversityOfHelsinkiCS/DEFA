@@ -4,8 +4,8 @@ const { checkLoggedIn, checkPrivileged } = require('../utils/helpers')
 
 const submissions = async (parent, args, context) => {
   checkPrivileged(context)
-  const submissions = await SubmissionModel.find({}).populate('user')
-  return submissions.filter(submission => Object.entries(args.user || {}).reduce(
+  const databaseSubmissions = await SubmissionModel.find({}).populate('user')
+  return databaseSubmissions.filter(submission => Object.entries(args.user || {}).reduce(
     (acc, [key, value]) => acc && submission.user[key].includes(value),
     true
   ))
@@ -20,6 +20,18 @@ const createSubmission = (parent, args, context) => {
   })
 }
 
+const approveSubmission = async (parent, args, context) => {
+  checkPrivileged(context)
+  const submission = await SubmissionModel.findByIdAndUpdate(args.submission, {
+    approval: args.approval
+  })
+  if (!submission) {
+    return null
+  }
+  submission.approval = args.approval
+  return submission
+}
+
 const user = (parent) => UserModel.findById(parent.user)
 
 module.exports = {
@@ -27,7 +39,8 @@ module.exports = {
     submissions
   },
   Mutation: {
-    createSubmission
+    createSubmission,
+    approveSubmission
   },
   Submission: {
     user

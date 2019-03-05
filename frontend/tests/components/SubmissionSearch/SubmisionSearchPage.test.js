@@ -1,7 +1,7 @@
 import React from 'react'
 import { SubmissionSearchPageComponent, HEADER_TEXT } from '../../../src/components/SubmissionSearch/SubmissionSearchPage'
 import SubmissionSearchForm from '../../../src/components/SubmissionSearch/SubmissionSearchForm'
-import SubmissionSearchResult from '../../../src/components/SubmissionSearch/SubmissionSearchResult'
+import SubmissionSearchQuery from '../../../src/components/SubmissionSearch/SubmissionSearchQuery'
 import { findText } from '../../testUtils'
 
 SubmissionSearchPageComponent.propTypes = {}
@@ -21,7 +21,7 @@ describe('SubmissionSearchPage component', () => {
   it('renders a SubmissionSearchForm.', () => {
     expect(wrapper.find(SubmissionSearchForm).exists()).toEqual(true)
   })
-  it('renders a SubmissionSearchResult.', () => {
-    expect(wrapper.find(SubmissionSearchResult).exists()).toEqual(true)
+  it('renders a SubmissionSearchQuery.', () => {
+    expect(wrapper.find(SubmissionSearchQuery).exists()).toEqual(true)
   })
 })

@@ -25,6 +25,9 @@ const INITIAL_STATE = {
   }
 }
 
+const KOSKI_URL_REGEXP = new RegExp('^(http://|https://|)(www\\.|)opintopolku\\.fi/koski/opinnot/[0-9a-f]+$')
+const TEXT_FIELD_HELPER_TEXT = 'Link to your published studies in Koski service. Should look like: https://opintopolku.fi/koski/opinnot/{your unique code}'
+
 export class StudentSubmissionAddFormComponent extends PureComponent {
   constructor(props) {
     super(props)
@@ -79,7 +82,9 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
           <div>
             <div>
               <TextField
+                error={!KOSKI_URL_REGEXP.test(formData.url)}
                 label="Koski URL"
+                helperText={TEXT_FIELD_HELPER_TEXT}
                 value={formData.url}
                 onChange={this.onFormChange}
                 margin="normal"

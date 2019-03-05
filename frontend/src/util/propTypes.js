@@ -35,7 +35,6 @@ export const parseClasses = styles => {
 }
 
 const role = propType((props, propName, componentName) => {
-  // eslint-disable-next-line react/destructuring-assignment
   if (!/^(STUDENT|PRIVILEGED|ADMIN)$/.test(props[propName])) {
     return new Error(
       `'Invalid prop ${propName} supplied to ${componentName}. Validation failed.`
@@ -45,8 +44,26 @@ const role = propType((props, propName, componentName) => {
 })
 
 export const hexadecimal = propType((props, propName, componentName) => {
-  // eslint-disable-next-line react/destructuring-assignment
   if (!/^[0-9a-f]+$/.test(props[propName])) {
+    return new Error(
+      `'Invalid prop ${propName} supplied to ${componentName}. Validation failed.`
+    )
+  }
+  return null
+})
+
+export const approval = propType((props, propName, componentName) => {
+  if (!/^(PENDING|APPROVED|REJECTED)$/.test(props[propName])) {
+    return new Error(
+      `'Invalid prop ${propName} supplied to ${componentName}. Validation failed.`
+    )
+  }
+  return null
+})
+
+export const ISODateString = propType((props, propName, componentName) => {
+  // Credit to Brock Adams https://stackoverflow.com/questions/3143070/javascript-regex-iso-datetime
+  if (!/(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/.test(props[propName])) {
     return new Error(
       `'Invalid prop ${propName} supplied to ${componentName}. Validation failed.`
     )

@@ -31,6 +31,14 @@ const login = async (parent, args, context) => {
   })
   if (!loggedIn) {
     loggedIn = await UserModel.create({ ...args, role: 'STUDENT' })
+  } else if (Object.entries(args).reduce(
+    (acc, [key, value]) => acc || loggedIn[key] !== value,
+    false
+  )) {
+    Object.entries(args).forEach(([key, value]) => {
+      loggedIn[key] = value
+    })
+    await loggedIn.save()
   }
   return jwt.sign({
     id: loggedIn.id,
@@ -58,11 +66,9 @@ const editUser = async (parent, args, context) => {
   return modified
 }
 
-const submissions = (parent) => {
-  return SubmissionModel.find({
-    user: Types.ObjectId(parent.id)
-  })
-}
+const submissions = parent => SubmissionModel.find({
+  user: Types.ObjectId(parent.id)
+})
 
 module.exports = {
   Query: {

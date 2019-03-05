@@ -1,5 +1,5 @@
 import React from 'react'
-import { ApolloConsumer } from 'react-apollo'
+import { Query } from 'react-apollo'
 import { SubmissionSearchQueryComponent } from '../../../src/components/SubmissionSearch/SubmissionSearchQuery'
 
 SubmissionSearchQueryComponent.propTypes = {}
@@ -13,8 +13,8 @@ describe('SubmissionSearchForm component', () => {
     />)
   })
 
-  it('renders an ApolloConsumer.', () => {
-    expect(wrapper.find(ApolloConsumer).exists()).toEqual(true)
+  it('renders a Query component.', () => {
+    expect(wrapper.find(Query).exists()).toEqual(true)
   })
   // TODO: more specific tests
 })

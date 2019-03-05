@@ -5,11 +5,12 @@ export const changeInput = values => dispatch => dispatch({
   values
 })
 
-export const submitSearchAttempt = () => dispatch => dispatch({
-  type: types.SEARCH_SUBMISSION_SUBMIT_ATTEMPT
+export const submitSearchSuccess = data => dispatch => dispatch({
+  type: types.SEARCH_SUBMISSION_SUCCESS,
+  data
 })
 
-export const submitSearchSuccess = data => dispatch => dispatch({
-  type: types.SEARCH_SUBMISSION_SUBMIT_SUCCESS,
-  data
+export const approveSubmissionSuccess = submission => dispatch => dispatch({
+  type: types.SEARCH_SUBMISSION_APPROVE_SUBMISSION_SUCCESS,
+  submission
 })

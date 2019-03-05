@@ -3,9 +3,7 @@ import submissionSorter from './helpers/submissionSorter'
 
 const INITIAL_STATE = {
   inputs: {},
-  results: [],
-  disabled: false,
-  loading: false
+  results: []
 }
 
 const resultSubmissionOrderMapper = result => ({
@@ -19,8 +17,7 @@ const changeInput = (state, action) => {
     inputs: {
       ...state.inputs,
       ...action.values
-    },
-    disabled: false
+    }
   }
   Object.entries(action.values).forEach(([key, value]) => {
     if (value.length === 0) {
@@ -34,17 +31,23 @@ const submissionSearchReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case types.SEARCH_SUBMISSION_CHANGE_INPUT:
       return changeInput(state, action)
-    case types.SEARCH_SUBMISSION_SUBMIT_ATTEMPT:
+    case types.SEARCH_SUBMISSION_SUCCESS:
       return {
         ...state,
-        loading: true,
-        disabled: true
+        results: action.data.map(resultSubmissionOrderMapper)
       }
-    case types.SEARCH_SUBMISSION_SUBMIT_SUCCESS:
+    case types.SEARCH_SUBMISSION_APPROVE_SUBMISSION_SUCCESS:
       return {
         ...state,
-        results: action.data.map(resultSubmissionOrderMapper),
-        loading: false
+        results: state.results.map(user => ({
+          ...user,
+          submissions: user.submissions.map(submission => (
+            submission.id === action.submission.id ? {
+              ...submission,
+              approval: action.submission.approval
+            } : submission
+          ))
+        }))
       }
     default:
       return state

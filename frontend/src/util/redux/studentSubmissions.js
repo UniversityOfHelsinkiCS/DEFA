@@ -7,10 +7,10 @@ const INITIAL_STATE = {
 
 const studentSubmissionReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case types.SUBMISSION_STUDENT_GET_ALL:
+    case types.STUDENT_GET_ME:
       return {
         ...state,
-        submissions: action.submissions.sort(submissionSorter)
+        submissions: action.user.submissions.sort(submissionSorter)
       }
     case types.SUBMISSION_CREATE:
       return {

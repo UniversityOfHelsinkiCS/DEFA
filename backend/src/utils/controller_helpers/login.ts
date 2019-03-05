@@ -87,10 +87,7 @@ const backendLogin = async (user: IProtoUser): Promise<string> => {
 }
 export const signToken = async (response: ISamlResponse): Promise<string | void> => {
   const { attributes } = response.extract
-  const user: IProtoUser = {
-    ...parseUser(attributes),
-    role: 'STUDENT'
-  }
+  const user: IProtoUser = parseUser(attributes)
   user.studentNumber = parseStudentNumber(user)
   console.log('user in signtoken: ', user)
   const token: string = await backendLogin(user)

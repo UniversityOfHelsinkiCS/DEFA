@@ -4,8 +4,7 @@ const resolvers = require('./resolvers')
 
 const app = new ApolloServer({
   typeDefs: schema,
-  resolvers,
-  graphiql: true
+  resolvers
 })
 
 module.exports = app

@@ -8,13 +8,15 @@ const TOKEN_ERROR_EXTENSIONS = {
 }
 
 const authenticate = async (parent, args, context) => {
+  let decoded
   try {
-    const decoded = jwt.verify(args.token, SECRET)
+    decoded = jwt.verify(args.token, SECRET)
   } catch (e) {
     throw new ActionableError('Failed to authenticate: expired token.', TOKEN_ERROR_EXTENSIONS)
   }
-  const decoded = jwt.verify(args.token, SECRET)
   if (decoded && decoded.id && decoded.role) {
+    // Mutating context is the whole point of this query.
+    // eslint-disable-next-line no-param-reassign
     context.authorization = decoded
     return true
   }

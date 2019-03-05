@@ -9,6 +9,12 @@ enum Role {
 
 scalar Date
 
+enum Approval {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 type User {
   id: ID!
   name: String!
@@ -43,18 +49,20 @@ type Submission {
   id: ID!
   url: String!
   date: Date!
+  approval: Approval!
   user: User!
 }
 
 type Query {
+  authenticate(token: String!): Query
   me: User
   users(user: UserSearch): [User]!
   submissions(user: UserSearch): [Submission]
-  authenticate(token: String!): Query
   refreshToken(id: ID!): String
 }
 
 type Mutation {
+  authenticate(token: String!): Mutation
   login(
     name: String!,
     studentNumber: String,
@@ -64,8 +72,11 @@ type Mutation {
     email: String!
   ): String
   createSubmission(url: String!): Submission
-  authenticate(token: String!): Mutation
   editUser(id: ID!, values: UserEdit!): User
+  approveSubmission(
+    submission: ID!
+    approval: Approval!
+  ): Submission
 }
 
 schema {

@@ -11,7 +11,7 @@ const options = {
   dbName: process.env.NODE_ENV === 'test' ? process.env.TEST_DATABASE_NAME : process.env.DATABASE_NAME
 }
 const connect = (
-  (extraOptions = {}) => mongoose.connect(`mongodb://${process.env.DATABASE_URI}`, { ...options, ...extraOptions})
+  (extraOptions = {}) => mongoose.connect(`mongodb://${process.env.DATABASE_URI}`, { ...options, ...extraOptions })
 )
 
 module.exports = {
