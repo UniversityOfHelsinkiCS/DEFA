@@ -7,7 +7,11 @@ import {
   Button,
   ExpansionPanel,
   ExpansionPanelSummary,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Grid
 } from '@material-ui/core'
 import { Mutation } from 'react-apollo'
 import { connect } from 'react-redux'
@@ -20,12 +24,14 @@ const INITIAL_STATE = {
   expanded: false,
   loading: false,
   disableSubmit: true,
+  dialogOpen: false,
   formData: {
     url: ''
   }
 }
 
 const KOSKI_URL_REGEXP = new RegExp('^(http://|https://|)(www\\.|)opintopolku\\.fi/koski/opinnot/[0-9a-f]+$')
+
 const TEXT_FIELD_HELPER_TEXT = 'Link to your published studies in Koski service. Should look like: https://opintopolku.fi/koski/opinnot/{your unique code}'
 
 export class StudentSubmissionAddFormComponent extends PureComponent {
@@ -35,8 +41,6 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
   }
 
   onSubmit = mutate => () => {
-    const { disableSubmit } = this.state
-    if (disableSubmit) return
     this.setState({
       loading: true
     })
@@ -65,6 +69,46 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
     this.setState({
       expanded: !expanded
     })
+  }
+
+  toggleDialog = value => () => {
+    this.setState({
+      dialogOpen: value
+    })
+  }
+
+  dialog = mutate => {
+    const { dialogOpen, formData } = this.state
+    return (
+      <Dialog
+        open={dialogOpen}
+        onClose={this.toggleDialog(false)}
+      >
+        <DialogTitle>Confirm submit</DialogTitle>
+        <DialogContent>
+          <Grid container spacing={32}>
+            <Grid item xs={12}>
+              <Typography>
+                <span>The url you provided does not match the expected format. </span>
+                <span>Are you sure you want to make this submission anyway?</span>
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>
+                <span>Your url: </span>
+                <span>{formData.url}</span>
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button onClick={this.toggleDialog(false)} variant="contained">Cancel</Button>
+            </Grid>
+            <Grid item>
+              <Button onClick={this.onSubmit(mutate)} variant="contained" color="primary">Confirm</Button>
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </Dialog>
+    )
   }
 
   render() {
@@ -101,17 +145,25 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
                 onError={() => undefined}
                 onCompleted={this.onCompleted}
               >
-                {mutate => (
-                  <Button
-                    type="button"
-                    onClick={this.onSubmit(mutate)}
-                    disabled={disableSubmit}
-                    variant="contained"
-                    color="primary"
-                  >
-                    <Typography>Submit</Typography>
-                  </Button>
-                )}
+                {mutate => {
+                  const onClick = KOSKI_URL_REGEXP.test(formData.url)
+                    ? this.onSubmit(mutate)
+                    : this.toggleDialog(true)
+                  return (
+                    <div>
+                      {this.dialog(mutate)}
+                      <Button
+                        type="button"
+                        onClick={onClick}
+                        disabled={disableSubmit}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Submit
+                      </Button>
+                    </div>
+                  )
+                }}
               </Mutation>
               {loading ? <CircularProgress /> : null}
             </div>
