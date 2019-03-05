@@ -9,6 +9,7 @@ import StudentInformation from './StudentInformation'
 import StudentSubmissionContainer from './StudentSubmissionContainer'
 import { parseClasses } from '../../util/propTypes'
 import { getStudent } from '../../util/actions/submission'
+import CardContainer from './CardContainer'
 
 const styles = {
   pageContainer: {
@@ -17,7 +18,7 @@ const styles = {
   header: {
     marginTop: '20px'
   },
-  gridContainer: {
+  resultContainer: {
     marginTop: '12px'
   },
   anomaly: {
@@ -25,10 +26,18 @@ const styles = {
   }
 }
 
-const QueryLoading = () => <div><CircularProgress /></div>
+const QueryLoading = () => <CircularProgress />
 
-// TODO: proper error message
-const QueryError = () => <div><Typography>Error</Typography></div>
+const ERROR_HEADER = 'Error'
+const ERROR_TEXT = 'Failed to load user data. Refresh the page to try again.'
+
+const QueryError = () => (
+  <CardContainer
+    title={ERROR_HEADER}
+  >
+    <Typography>{ERROR_TEXT}</Typography>
+  </CardContainer>
+)
 
 class StudentContainerComponent extends Component {
   // This method keeps this component from updating in an infinite loop.
@@ -57,13 +66,21 @@ class StudentContainerComponent extends Component {
           {({ loading, error }) => {
             try {
               if (loading) {
-                return <QueryLoading className={classes.anomaly} />
+                return (
+                  <div className={[classes.anomaly, classes.resultContainer].join(' ')}>
+                    <QueryLoading />
+                  </div>
+                )
               }
               if (error) {
-                return <QueryError className={classes.anomaly} />
+                return (
+                  <div className={[classes.anomaly, classes.resultContainer].join(' ')}>
+                    <QueryError />
+                  </div>
+                )
               }
               return (
-                <Grid className={classes.gridContainer} container spacing={8}>
+                <Grid className={classes.resultContainer} container spacing={8}>
                   <Grid item xs={4}>
                     <StudentInformation />
                   </Grid>
