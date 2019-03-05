@@ -1,8 +1,8 @@
 import * as types from '../actionTypes'
 
-export const getStudentSubmissions = submissions => dispatch => dispatch({
-  type: types.SUBMISSION_STUDENT_GET_ALL,
-  submissions
+export const getStudent = user => dispatch => dispatch({
+  type: types.STUDENT_GET_ME,
+  user
 })
 
 export const createSubmissionAction = submission => dispatch => dispatch({

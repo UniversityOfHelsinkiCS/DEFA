@@ -22,6 +22,18 @@ export const StudentInformationComponent = ({ user }) => (
             }}
           />
         </ListItem>
+        <ListItem>
+          <ListItemText
+            primary="email"
+            primaryTypographyProps={{
+              variant: 'subtitle1'
+            }}
+            secondary={user.email}
+            secondaryTypographyProps={{
+              variant: 'subtitle2'
+            }}
+          />
+        </ListItem>
       </List>
     </CardContainer>
   </div>
