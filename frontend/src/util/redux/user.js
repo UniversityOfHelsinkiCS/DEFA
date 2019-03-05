@@ -15,6 +15,14 @@ const userReducer = (state = INITIAL_STATE, action) => {
       }
     case types.USER_LOG_OUT:
       return INITIAL_STATE
+    case types.STUDENT_GET_ME:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          email: action.user.email
+        }
+      }
     default:
       return state
   }

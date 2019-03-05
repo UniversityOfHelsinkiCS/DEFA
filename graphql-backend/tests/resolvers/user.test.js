@@ -233,8 +233,16 @@ describe('user resolvers', () => {
           expect(user).toBeTruthy()
         })
         describe('and user already exists in database', () => {
+          const userData = {
+            username: 'testuser1',
+            name: 'Test',
+            role: 'STUDENT',
+            cn: 'Test Test',
+            studentNumber: '00000001',
+            email: 'test@edit.test'
+          }
           beforeEach(async () => {
-            await UserModel.create(args)
+            await UserModel.create(userData)
           })
           it('returns a json web token.', async () => {
             const value = await resolver(parent, args, context)
@@ -251,6 +259,11 @@ describe('user resolvers', () => {
             await resolver(parent, args, context)
             const users = await UserModel.find(args)
             expect(users.length).toEqual(1)
+          })
+          it('updates fields in the database.', async () => {
+            await resolver(parent, args, context)
+            const user = await UserModel.findOne(args)
+            expect(user).toMatchObject(args)
           })
         })
       })

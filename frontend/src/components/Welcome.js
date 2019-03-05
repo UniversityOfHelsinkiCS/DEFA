@@ -5,6 +5,9 @@ import { parseClasses } from '../util/propTypes'
 
 import toskaLogo from '../assets/toska.png'
 
+const TEACHER_TEXT = 'Once you\'ve received privileges from an administrator you can view and approve DEFA submissions.'
+const STUDENT_TEXT = 'Once you\'ve logged in you can submit a link to your published studies in Koski.'
+
 const styles = {
   header: {
     padding: '22px'
@@ -46,7 +49,7 @@ const Welcome = ({ classes }) => (
               Teacher
             </Typography>
             <Typography>
-              Here you can upload your DEFA-students credits
+              {TEACHER_TEXT}
             </Typography>
           </CardContent>
         </Card>
@@ -61,7 +64,7 @@ const Welcome = ({ classes }) => (
               Student
             </Typography>
             <Typography>
-              This is the place for you to check your DEFA course credits
+              {STUDENT_TEXT}
             </Typography>
           </CardContent>
         </Card>

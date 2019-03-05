@@ -2,8 +2,8 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 import SubmissionSearchForm from './SubmissionSearchForm'
-import SubmissionSearchResult from './SubmissionSearchResult'
 import { parseClasses } from '../../util/propTypes'
+import SubmissionSearchQuery from './SubmissionSearchQuery'
 
 export const HEADER_TEXT = 'View DEFA submissions'
 
@@ -23,7 +23,7 @@ export const SubmissionSearchPageComponent = ({ classes }) => (
       {HEADER_TEXT}
     </Typography>
     <SubmissionSearchForm />
-    <SubmissionSearchResult />
+    <SubmissionSearchQuery />
   </div>
 )
 

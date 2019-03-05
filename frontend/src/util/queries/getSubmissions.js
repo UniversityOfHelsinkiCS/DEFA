@@ -1,28 +1,15 @@
 import { gql } from 'apollo-boost'
 
-export const getMySubmissions = gql`
-  query getMySubmission($token: String!) { 
-    authenticate(token: $token) {
-      me {
-        submissions {
-          id
-          url
-          date
-          approval
-        }
-      }
-    }
-  }
-`
+// eslint-disable-next-line import/prefer-default-export
 export const getSubmissions = gql`
   query getSubmissions(
-    $token: String!,
-    $user: UserSearch
+    $token: String!
   ) { 
     authenticate(token: $token) {
-      users(user: $user) {
+      users(user: {}) {
         id
         name
+        cn
         username
         studentNumber
         submissions {
