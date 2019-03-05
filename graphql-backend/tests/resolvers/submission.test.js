@@ -74,7 +74,7 @@ describe('submission resolvers', () => {
         const context = {}
         const args = {}
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
       })
@@ -88,7 +88,7 @@ describe('submission resolvers', () => {
           }
         })
         it('throws an error.', async () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
       })
@@ -172,12 +172,13 @@ describe('submission resolvers', () => {
       describe('when not authenticated', () => {
         const context = notAuthenticatedContext
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not create a submission in the database.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           const created = await SubmissionModel.findOne({
             ...args,
@@ -301,12 +302,13 @@ describe('submission resolvers', () => {
         })
 
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not change the submission in the database.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           const result = await SubmissionModel.findById(ids.submission)
           expect(result).toMatchObject({
@@ -324,7 +326,7 @@ describe('submission resolvers', () => {
       const parent = {}
       const args = {}
       const context = {}
-      userData = {
+      const userData = {
         username: 'testuser4',
         name: 'Test User',
         role: 'STUDENT',
@@ -332,7 +334,7 @@ describe('submission resolvers', () => {
         studentNumber: '000000010',
         email: 'test@test.test'
       }
-      submissionData = {
+      const submissionData = {
         url: 'https://skeleton.doot'
       }
       const ids = {}
