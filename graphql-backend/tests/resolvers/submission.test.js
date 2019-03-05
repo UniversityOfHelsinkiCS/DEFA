@@ -142,7 +142,8 @@ describe('submission resolvers', () => {
     const parent = null
     describe('createSubmission', () => {
       const args = {
-        url: 'https://pepe.hands'
+        url: 'https://pepe.hands',
+        comment: 'Additional information.'
       }
       const userData = {
         username: 'testuser3',
@@ -163,11 +164,11 @@ describe('submission resolvers', () => {
           role: user.role
         }
       })
+      afterEach(async () => {
+        await SubmissionModel.findOneAndDelete(args)
+      })
       afterAll(async () => {
-        await Promise.all([
-          UserModel.findByIdAndDelete(ids.user),
-          SubmissionModel.deleteMany(args)
-        ])
+        await UserModel.findByIdAndDelete(ids.user)
       })
       describe('when not authenticated', () => {
         const context = notAuthenticatedContext
@@ -180,10 +181,7 @@ describe('submission resolvers', () => {
             await resolver(parent, args, context)
           // eslint-disable-next-line no-empty
           } catch (e) {}
-          const created = await SubmissionModel.findOne({
-            ...args,
-            id: ids.user
-          })
+          const created = await SubmissionModel.findOne(args)
           expect(created).toBeNull()
         })
       })

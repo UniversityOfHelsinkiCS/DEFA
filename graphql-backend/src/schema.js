@@ -50,6 +50,7 @@ type Submission {
   url: String!
   date: Date!
   approval: Approval!
+  comment: String!
   user: User!
 }
 
@@ -71,7 +72,7 @@ type Mutation {
     cn: String!,
     email: String!
   ): String
-  createSubmission(url: String!): Submission
+  createSubmission(url: String!, comment: String): Submission
   editUser(id: ID!, values: UserEdit!): User
   approveSubmission(
     submission: ID!

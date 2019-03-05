@@ -58,6 +58,12 @@ export const StudentSubmissionComponent = ({ submission, classes }) => {
           <span>Koski url: </span>
           <span>{submission.url}</span>
         </Typography>
+        {submission.comment.length > 0 ? (
+          <div>
+            <Typography variant="h6">Additional information:</Typography>
+            <Typography>{submission.comment}</Typography>
+          </div>
+        ) : null}
         <Typography variant="h6">
           <span>Approval status: </span>
           <span className={pickColor(classes, submission.approval)}>{submission.approval}</span>
@@ -73,6 +79,7 @@ StudentSubmissionComponent.propTypes = {
     url: string.isRequired,
     date: ISODateString.isRequired,
     approval: approval.isRequired,
+    comment: string.isRequired,
     updated: bool
   }).isRequired
 }

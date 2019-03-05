@@ -17,6 +17,7 @@ export const getSubmissions = gql`
           url
           date
           approval
+          comment
         }
       }
     }

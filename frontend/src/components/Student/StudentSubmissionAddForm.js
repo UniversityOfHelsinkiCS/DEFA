@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { func, string } from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
 import {
   Typography,
   CircularProgress,
@@ -17,8 +18,15 @@ import { Mutation } from 'react-apollo'
 import { connect } from 'react-redux'
 import { createSubmission } from '../../util/queries/createSubmission'
 import { createSubmissionAction } from '../../util/actions/submission'
+import { parseClasses } from '../../util/propTypes'
 
 export const AddSubmissionText = 'Add Submission'
+
+const styles = {
+  textFieldContainer: {
+    width: '100%'
+  }
+}
 
 const INITIAL_STATE = {
   expanded: false,
@@ -26,7 +34,8 @@ const INITIAL_STATE = {
   disableSubmit: true,
   dialogOpen: false,
   formData: {
-    url: ''
+    url: '',
+    comment: ''
   }
 }
 
@@ -55,11 +64,15 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
   }
 
   onFormChange = event => {
-    const { value } = event.target
+    const { formData, disableSubmit } = this.state
+    const { value, name } = event.target
     this.setState({
-      disableSubmit: value.length === 0,
+      disableSubmit: name === 'url'
+        ? value.length === 0
+        : disableSubmit,
       formData: {
-        url: value
+        ...formData,
+        [name]: value
       }
     })
   }
@@ -113,7 +126,8 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
 
   render() {
     const { formData, disableSubmit, loading, expanded } = this.state
-    const { token } = this.props
+    const { token, classes } = this.props
+    const urlIsValid = KOSKI_URL_REGEXP.test(formData.url)
     return (
       <ExpansionPanel
         expanded={expanded}
@@ -124,15 +138,28 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <div>
-            <div>
+            <div className={classes.textFieldContainer}>
               <TextField
-                error={!KOSKI_URL_REGEXP.test(formData.url)}
+                error={!urlIsValid}
                 label="Koski URL"
                 helperText={TEXT_FIELD_HELPER_TEXT}
                 value={formData.url}
                 onChange={this.onFormChange}
                 margin="normal"
                 variant="outlined"
+                fullWidth
+                name="url"
+              />
+              <TextField
+                label="Additional information"
+                value={formData.comment}
+                onChange={this.onFormChange}
+                margin="normal"
+                variant="outlined"
+                multiline
+                fullWidth
+                rows={4}
+                name="comment"
               />
             </div>
             <div>
@@ -146,7 +173,7 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
                 onCompleted={this.onCompleted}
               >
                 {mutate => {
-                  const onClick = KOSKI_URL_REGEXP.test(formData.url)
+                  const onClick = urlIsValid
                     ? this.onSubmit(mutate)
                     : this.toggleDialog(true)
                   return (
@@ -157,7 +184,7 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
                         onClick={onClick}
                         disabled={disableSubmit}
                         variant="contained"
-                        color="primary"
+                        color={urlIsValid ? 'primary' : null}
                       >
                         Submit
                       </Button>
@@ -176,7 +203,8 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
 
 StudentSubmissionAddFormComponent.propTypes = {
   dispatchCreateSubmission: func.isRequired,
-  token: string.isRequired
+  token: string.isRequired,
+  classes: parseClasses(styles).isRequired
 }
 
 const mapStateToProps = ({ user }) => ({
@@ -187,4 +215,7 @@ const mapDispatchToProps = {
   dispatchCreateSubmission: createSubmissionAction
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StudentSubmissionAddFormComponent)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(StudentSubmissionAddFormComponent))
