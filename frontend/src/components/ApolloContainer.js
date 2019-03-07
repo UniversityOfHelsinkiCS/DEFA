@@ -26,7 +26,17 @@ const ApolloContainer = ({ errorHandler, children }) => (
   <ApolloProvider
     client={new ApolloClient({
       link: onError(errorHandler).concat(auth.concat(httpLink)),
-      cache: new InMemoryCache()
+      cache: new InMemoryCache(),
+      defaultOptions: {
+        watchQuery: {
+          fetchPolicy: 'network-only',
+          errorPolicy: 'ignore'
+        },
+        query: {
+          fetchPolicy: 'network-only',
+          errorPolicy: 'all'
+        }
+      }
     })}
   >
     {children}
