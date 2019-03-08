@@ -1,6 +1,7 @@
 const { Types } = require('mongoose')
+const axios = require('axios')
 const { UserModel, SubmissionModel } = require('../models')
-const { checkLoggedIn, checkPrivileged } = require('../utils/helpers')
+const { checkLoggedIn, checkPrivileged, parseKoskiModel } = require('../utils/helpers')
 
 const submissions = async (parent, args, context) => {
   checkPrivileged(context)
@@ -45,6 +46,45 @@ const approveSubmission = async (parent, args, context) => {
 
 const user = (parent) => UserModel.findById(parent.user)
 
+const koski = async (parent) => {
+  let json
+  try {
+    const secret = parent.url.split('/').pop()
+    const response = await axios.post(
+      'https://opintopolku.fi/koski/api/suoritusjako/editor',
+      { secret },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+    json = parseKoskiModel(response.data)
+  } catch (e) {
+    return null
+  }
+  const courses = json.opiskeluoikeudet.reduce(
+    (acc, opiskeluoikeus) => acc.concat({
+      name: opiskeluoikeus.oppilaitos.nimi.en,
+      courses: opiskeluoikeus.opiskeluoikeudet.reduce(
+        (acc2, opiskeluoikeus2) => acc2.concat(opiskeluoikeus2.suoritukset
+          .filter(suoritus => suoritus.arviointi.reduce(
+            (acc3, arviointi) => acc3 || arviointi['hyväksytty'],
+            false
+          ))
+          .map(suoritus => ({
+            name: suoritus.koulutusmoduuli.nimi.en,
+            credits: suoritus.koulutusmoduuli.laajuus.arvo
+          }))
+        ),
+        []
+      )
+    }),
+    []
+  )
+  return courses
+}
+
 module.exports = {
   Query: {
     submissions
@@ -55,6 +95,7 @@ module.exports = {
     deleteSubmission
   },
   Submission: {
-    user
+    user,
+    koski
   }
 }

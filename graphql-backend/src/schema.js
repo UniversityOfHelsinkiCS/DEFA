@@ -15,6 +15,16 @@ enum Approval {
   REJECTED
 }
 
+type KoskiUniversity {
+  name: String!
+  courses: [KoskiCourse]!
+}
+
+type KoskiCourse {
+  name: String!
+  credits: Int!
+}
+
 type User {
   id: ID!
   name: String!
@@ -52,6 +62,7 @@ type Submission {
   approval: Approval!
   comment: String!
   user: User!
+  koski: [KoskiUniversity]
 }
 
 type Query {
