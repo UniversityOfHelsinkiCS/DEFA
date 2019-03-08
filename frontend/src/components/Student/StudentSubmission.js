@@ -2,6 +2,7 @@ import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography, Button, Card, CardHeader, CardContent } from '@material-ui/core'
 import { shape, string, bool } from 'prop-types'
+import DeleteSubmission from './DeleteSubmission'
 import './StudentSubmission.css'
 import { parseClasses, approval, ISODateString } from '../../util/propTypes'
 import parseDate from '../../util/parseDate'
@@ -62,6 +63,7 @@ export const StudentSubmissionComponent = ({ submission, classes }) => {
           <span>Approval status: </span>
           <span className={pickColor(classes, submission.approval)}>{submission.approval}</span>
         </Typography>
+        <DeleteSubmission id={submission.id} />
       </CardContent>
     </Card>
   )

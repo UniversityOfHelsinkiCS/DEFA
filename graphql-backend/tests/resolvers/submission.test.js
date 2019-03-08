@@ -138,9 +138,9 @@ describe('submission resolvers', () => {
     })
   })
   describe('mutations', () => {
-    const resolver = resolvers.Mutation.createSubmission
     const parent = null
     describe('createSubmission', () => {
+      const resolver = resolvers.Mutation.createSubmission
       const args = {
         url: 'https://pepe.hands'
       }
@@ -178,7 +178,7 @@ describe('submission resolvers', () => {
         it('does not create a submission in the database.', async () => {
           try {
             await resolver(parent, args, context)
-          } catch (e) {}
+          } catch (e) { }
           const created = await SubmissionModel.findOne({
             ...args,
             id: ids.user
@@ -307,13 +307,85 @@ describe('submission resolvers', () => {
         it('does not change the submission in the database.', async () => {
           try {
             await resolver(parent, args, context)
-          } catch (e) {}
+          } catch (e) { }
           const result = await SubmissionModel.findById(ids.submission)
           expect(result).toMatchObject({
             ...submissionData,
             date: new Date(submissionData.date),
             id: ids.submission
           })
+        })
+      })
+    })
+  })
+  describe('deleteSubmission', () => {
+    const resolver = resolvers.Mutation.deleteSubmission
+    const parent = null
+    const userData = {
+      username: 'testuser12',
+      name: 'Test User',
+      role: 'STUDENT',
+      cn: 'Test Test User',
+      studentNumber: '000000010',
+      email: 'test@test.test'
+    }
+    const submissionData = {
+      url: 'https://test.test',
+      date: Number(new Date()),
+      approval: 'PENDING'
+    }
+    const authenticatedContext = {}
+    const argsStub = {}
+    const ids = {}
+    beforeAll(async () => {
+      const user = await UserModel.create(userData)
+      ids.user = user.id
+      authenticatedContext.authorization = {
+        id: user.id,
+        role: user.role
+      }
+      const submission = await SubmissionModel.create({
+        ...submissionData,
+        user: user._id
+      })
+      ids.submission = submission.id
+    })
+    // afterEach(async () => {
+    //   await SubmissionModel.findByIdAndUpdate(ids.submission, submissionData)
+    // })
+    afterAll(async () => {
+      await UserModel.findByIdAndDelete(ids.user)
+    })
+
+    describe('when authorized', () => {
+      const context = {
+        authorization: {
+          role: 'STUDENT'
+        }
+      }
+      describe('when args point to own submission', () => {
+        const args = { ...argsStub }
+        beforeAll(() => {
+          args.id = ids.submission
+        })
+
+
+        it('returns the deleted submissions Id.', async () => {
+          const result = await resolver(parent, args, authenticatedContext)
+          expect(result).toEqual(ids.submission)
+        })
+        it('removes the submission in the database.', async () => {
+          await resolver(parent, args, authenticatedContext)
+          const result = await SubmissionModel.findById(ids.submission)
+          expect(result).toBeNull()
+        })
+      })
+      describe('when args.submission points to no submission.', () => {
+        const args = { id: ids.user, ...argsStub }
+
+        it('returns null.', async () => {
+          const result = await resolver(parent, args, context)
+          expect(result).toBeNull()
         })
       })
     })

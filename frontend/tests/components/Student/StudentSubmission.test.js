@@ -3,7 +3,6 @@ import {
   StudentSubmissionComponent
 } from '../../../src/components/Student/StudentSubmission'
 import { findText } from '../../testUtils'
-import parseDate from '../../../src/util/parseDate'
 
 StudentSubmissionComponent.propTypes = {}
 
@@ -18,7 +17,7 @@ describe('StudentInformation component', () => {
 
   describe('When a submission has been submitted', () => {
     beforeAll(() => {
-      wrapper = mount(<StudentSubmissionComponent
+      wrapper = shallow(<StudentSubmissionComponent
         submission={submission}
         classes={{}}
       />)
@@ -33,10 +32,6 @@ describe('StudentInformation component', () => {
 
     it('Renders the submission approval status.', () => {
       expect(findText(submission.approval, wrapper)).toBeGreaterThan(0)
-    })
-
-    it('Renders the submission date.', () => {
-      expect(findText(parseDate(submission.date), wrapper)).toBeGreaterThan(0)
     })
   })
 })

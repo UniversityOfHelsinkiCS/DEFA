@@ -2,7 +2,8 @@ import * as types from '../actionTypes'
 import submissionSorter from './helpers/submissionSorter'
 
 const INITIAL_STATE = {
-  submissions: []
+  submissions: [],
+  updated: false
 }
 
 const studentSubmissionReducer = (state = INITIAL_STATE, action) => {
@@ -21,6 +22,13 @@ const studentSubmissionReducer = (state = INITIAL_STATE, action) => {
             updated: true
           },
           ...state.submissions
+        ]
+      }
+    case types.SUBMISSION_DELETE:
+      return {
+        ...state,
+        submissions: [
+          ...state.submissions.filter(sub => sub.id !== action.id)
         ]
       }
     default:

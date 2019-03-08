@@ -72,6 +72,7 @@ type Mutation {
     email: String!
   ): String
   createSubmission(url: String!): Submission
+  deleteSubmission(id: ID!): String
   editUser(id: ID!, values: UserEdit!): User
   approveSubmission(
     submission: ID!

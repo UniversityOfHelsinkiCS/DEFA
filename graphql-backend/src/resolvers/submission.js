@@ -20,6 +20,17 @@ const createSubmission = (parent, args, context) => {
   })
 }
 
+const deleteSubmission = async (parent, args, context) => {
+  checkLoggedIn(context)
+  const res = await SubmissionModel.deleteOne({
+    _id: Types.ObjectId(args.id),
+    user: Types.ObjectId(context.authorization.id)
+  })
+  if (res.n === 0) return null
+
+  return args.id
+}
+
 const approveSubmission = async (parent, args, context) => {
   checkPrivileged(context)
   const submission = await SubmissionModel.findByIdAndUpdate(args.submission, {
@@ -40,7 +51,8 @@ module.exports = {
   },
   Mutation: {
     createSubmission,
-    approveSubmission
+    approveSubmission,
+    deleteSubmission
   },
   Submission: {
     user
