@@ -18,8 +18,8 @@ const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
       title={parseDate(submission.date)}
     />
     <CardContent>
+      <Typography variant="h6">Koski url</Typography>
       <Typography>
-        <span>Koski url: </span>
         <a
           href={submission.url}
           target="_blank"
@@ -29,8 +29,14 @@ const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
         </a>
       </Typography>
     </CardContent>
+    {submission.comment.length > 0 ? (
+      <CardContent>
+        <Typography variant="h6">Additional information</Typography>
+        <Typography>{submission.comment}</Typography>
+      </CardContent>
+    ) : null}
     <CardContent>
-      <Typography>Approval status</Typography>
+      <Typography variant="h6">Approval status</Typography>
       <SubmissionApproveMutation submission={submission} />
     </CardContent>
   </Card>
@@ -39,6 +45,7 @@ const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
 SubmissionSearchResultSubmissionComponent.propTypes = {
   submission: shape({
     url: string.isRequired,
+    comment: string.isRequired,
     date: ISODateString.isRequired
   }).isRequired,
   classes: parseClasses(styles).isRequired

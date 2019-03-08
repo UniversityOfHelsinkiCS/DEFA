@@ -5,17 +5,20 @@ export const createSubmission = gql`
 mutation createSubmission(
   $token: String!
   $url: String!
+  $comment: String
 ) { 
   authenticate(
     token: $token
   ) {
     createSubmission(
-      url: $url
+      url: $url,
+      comment: $comment
     ) {
       id
       url
       date
       approval
+      comment
     }
   }
 }

@@ -13,6 +13,7 @@ const inputsFilter = inputs => user => Object.entries(inputs).reduce(
 
 export const SubmissionSearchResultComponent = ({ users, inputs }) => {
   const filteredUsers = users.filter(hasSubmissionsFilter).filter(inputsFilter(inputs))
+  const minUserWidth = filteredUsers.length > 0 ? 12 / filteredUsers.length : 12
   return (
     <Grid container spacing={32}>
       {filteredUsers.map(user => {
@@ -22,8 +23,8 @@ export const SubmissionSearchResultComponent = ({ users, inputs }) => {
             key={user.id}
             item
             xs={12}
-            lg={3}
-            md={6}
+            lg={Math.max(minUserWidth, 3)}
+            md={Math.max(minUserWidth, 6)}
             sm={12}
           >
             <CardContainer

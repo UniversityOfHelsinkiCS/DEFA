@@ -9,7 +9,7 @@ import { userProp } from '../util/propTypes'
 import 'react-toastify/dist/ReactToastify.css'
 import NavBar from './NavBar'
 import Welcome from './Welcome'
-import StudentContainer from './Student/StudentContainer'
+import StudentPage from './Student/StudentPage'
 import ProtectedRoute from '../util/ProtectedRoute'
 import SubmissionSearchPage from './SubmissionSearch/SubmissionSearchPage'
 import AdminPage from './Admin/AdminPage'
@@ -28,7 +28,8 @@ class Main extends React.PureComponent {
           >
             {({ data, stopPolling }) => {
               if (!user) stopPolling()
-              if (data.authenticate) window.localStorage.setItem('DEFA-token', data.authenticate.refreshToken)
+              if (!data || !data.authenticate) return null // refactor to bubble error
+              window.localStorage.setItem('DEFA-token', data.authenticate.refreshToken)
               return null
             }}
           </Query>
@@ -43,7 +44,7 @@ class Main extends React.PureComponent {
         <Switch>
           <ProtectedRoute requiredRole={['ADMIN']} exact path="/admin" component={AdminPage} />
           <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/submissions" component={SubmissionSearchPage} />
-          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED', 'STUDENT']} exact path="/student" component={StudentContainer} />
+          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED', 'STUDENT']} exact path="/student" component={StudentPage} />
           <Route exact path="/" component={Welcome} />
         </Switch>
       </main>

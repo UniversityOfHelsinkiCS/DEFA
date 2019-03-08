@@ -37,7 +37,7 @@ const styles = {
     color: 'orange'
   },
   approved: {
-    color: 'green'
+    color: '#4cd642'
   },
   rejected: {
     color: 'red'
@@ -57,8 +57,14 @@ export const StudentSubmissionComponent = ({ submission, classes }) => {
       <CardContent className={submission.updated ? classes.updated : null}>
         <Typography variant="h6">
           <span>Koski url: </span>
-          <span>{submission.url}</span>
+          <a href={submission.url} target="_blank" rel="noopener noreferrer">{submission.url}</a>
         </Typography>
+        {submission.comment.length > 0 ? (
+          <div>
+            <Typography variant="h6">Additional information:</Typography>
+            <Typography>{submission.comment}</Typography>
+          </div>
+        ) : null}
         <Typography variant="h6">
           <span>Approval status: </span>
           <span className={pickColor(classes, submission.approval)}>{submission.approval}</span>
@@ -75,6 +81,7 @@ StudentSubmissionComponent.propTypes = {
     url: string.isRequired,
     date: ISODateString.isRequired,
     approval: approval.isRequired,
+    comment: string.isRequired,
     updated: bool
   }).isRequired
 }

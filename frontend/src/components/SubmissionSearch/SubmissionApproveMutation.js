@@ -51,6 +51,10 @@ class SubmissionApproveMutationComponent extends PureComponent {
               exclusive
             >
               <ToggleButton
+                style={{
+                  // These styles somehow don't work when applied as material-ui classes.
+                  backgroundColor: submission.approval === 'PENDING' ? 'orange' : null
+                }}
                 value="PENDING"
                 selected={submission.approval === 'PENDING'}
                 onClick={this.onChange(client, 'PENDING')}
@@ -58,6 +62,7 @@ class SubmissionApproveMutationComponent extends PureComponent {
                 {PENDING_TEXT}
               </ToggleButton>
               <ToggleButton
+                style={{ backgroundColor: submission.approval === 'APPROVED' ? '#4cd642' : null }}
                 value="APPROVED"
                 selected={submission.approval === 'APPROVED'}
                 onClick={this.onChange(client, 'APPROVED')}
@@ -65,6 +70,7 @@ class SubmissionApproveMutationComponent extends PureComponent {
                 {APPROVED_TEXT}
               </ToggleButton>
               <ToggleButton
+                style={{ backgroundColor: submission.approval === 'REJECTED' ? 'red' : null }}
                 value="REJECTED"
                 selected={submission.approval === 'REJECTED'}
                 onClick={this.onChange(client, 'REJECTED')}

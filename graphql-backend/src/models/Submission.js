@@ -7,6 +7,10 @@ const schema = new mongoose.Schema({
     type: String,
     default: 'PENDING'
   },
+  comment: {
+    type: String,
+    default: ''
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId, ref: 'User'
   }

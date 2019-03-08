@@ -9,13 +9,14 @@ StudentSubmissionComponent.propTypes = {}
 const submission = {
   url: 'https://defa.cs.helsinki.fi',
   date: (new Date()).toISOString(),
-  approval: 'APPROVED'
+  approval: 'APPROVED',
+  comment: 'Filled with filler text...'
 }
 
 describe('StudentInformation component', () => {
   let wrapper
 
-  describe('When a submission has been submitted', () => {
+  describe('when a submission has been submitted', () => {
     beforeAll(() => {
       wrapper = shallow(<StudentSubmissionComponent
         submission={submission}
@@ -32,6 +33,10 @@ describe('StudentInformation component', () => {
 
     it('Renders the submission approval status.', () => {
       expect(findText(submission.approval, wrapper)).toBeGreaterThan(0)
+    })
+
+    it('renders the comment.', () => {
+      expect(findText(submission.comment, wrapper)).toBeGreaterThan(0)
     })
   })
 })
