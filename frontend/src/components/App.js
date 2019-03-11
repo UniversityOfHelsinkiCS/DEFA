@@ -1,7 +1,7 @@
 import React from 'react'
-
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { BrowserRouter } from 'react-router-dom'
+import { LocalizeProvider } from 'react-localize-redux'
 import ApolloContainer from './ApolloContainer'
 import Main from './Main'
 
@@ -25,7 +25,9 @@ const App = () => (
   <MuiThemeProvider theme={theme}>
     <ApolloContainer>
       <BrowserRouter>
-        <Main />
+        <LocalizeProvider>
+          <Main />
+        </LocalizeProvider>
       </BrowserRouter>
     </ApolloContainer>
   </MuiThemeProvider>
