@@ -19,15 +19,6 @@ const styles = {
   updated: {
     animationName: 'new',
     animationDuration: '2s'
-  },
-  pending: {
-    color: 'orange'
-  },
-  approved: {
-    color: '#4cd642'
-  },
-  rejected: {
-    color: 'red'
   }
 }
 
