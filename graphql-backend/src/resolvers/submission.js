@@ -3,11 +3,21 @@ const axios = require('axios')
 const { UserModel, SubmissionModel } = require('../models')
 const { checkLoggedIn, checkPrivileged, parseKoskiModel } = require('../utils/helpers')
 
+const submission = async (parent, args, context) => {
+  const databaseSubmission = await SubmissionModel.findById(args.id)
+  if (!databaseSubmission) return null
+  if (context.authorization.id !== String(databaseSubmission.user)) {
+    // TODO: make if comparison with object ids instead of strings.
+    checkPrivileged(context)
+  }
+  return databaseSubmission
+}
+
 const submissions = async (parent, args, context) => {
   checkPrivileged(context)
   const databaseSubmissions = await SubmissionModel.find({}).populate('user')
-  return databaseSubmissions.filter(submission => Object.entries(args.user || {}).reduce(
-    (acc, [key, value]) => acc && submission.user[key].includes(value),
+  return databaseSubmissions.filter(databaseSubmission => Object.entries(args.user || {}).reduce(
+    (acc, [key, value]) => acc && databaseSubmission.user[key].includes(value),
     true
   ))
 }
@@ -34,14 +44,14 @@ const deleteSubmission = async (parent, args, context) => {
 
 const approveSubmission = async (parent, args, context) => {
   checkPrivileged(context)
-  const submission = await SubmissionModel.findByIdAndUpdate(args.submission, {
+  const databaseSubmission = await SubmissionModel.findByIdAndUpdate(args.submission, {
     approval: args.approval
   })
-  if (!submission) {
+  if (!databaseSubmission) {
     return null
   }
-  submission.approval = args.approval
-  return submission
+  databaseSubmission.approval = args.approval
+  return databaseSubmission
 }
 
 const user = (parent) => UserModel.findById(parent.user)
@@ -87,6 +97,7 @@ const koski = async (parent) => {
 
 module.exports = {
   Query: {
+    submission,
     submissions
   },
   Mutation: {

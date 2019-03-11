@@ -1,7 +1,9 @@
 import React from 'react'
+import { arrayOf, string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import { Route, Redirect } from 'react-router-dom'
 import { parseUser, loginError } from './actions/user'
+import { userProp } from './propTypes'
 
 export class ProtectedRouteComponent extends React.PureComponent {
   async componentDidMount() {
@@ -35,6 +37,13 @@ export class ProtectedRouteComponent extends React.PureComponent {
         : <Redirect to="/" />
     )
   }
+}
+
+ProtectedRouteComponent.propTypes = {
+  requiredRole: arrayOf(string).isRequired,
+  dispatchErrorToast: func.isRequired,
+  dispatchParseUser: func.isRequired,
+  user: userProp.isRequired
 }
 
 const mapStateToProps = state => ({

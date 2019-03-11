@@ -27,9 +27,19 @@ const studentSubmissionReducer = (state = INITIAL_STATE, action) => {
     case types.SUBMISSION_DELETE:
       return {
         ...state,
-        submissions: [
-          ...state.submissions.filter(sub => sub.id !== action.id)
-        ]
+        submissions: state.submissions.filter(sub => sub.id !== action.id)
+      }
+    case types.SUBMISSION_GET_KOSKI_SUCCESS:
+      return {
+        ...state,
+        submissions: state.submissions.map(submission => (
+          submission.id === action.submission.id
+            ? {
+              ...submission,
+              koski: action.submission.koski
+            }
+            : submission
+        ))
       }
     default:
       return state

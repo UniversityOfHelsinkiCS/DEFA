@@ -1,6 +1,24 @@
 import { gql } from 'apollo-boost'
 
-// eslint-disable-next-line import/prefer-default-export
+export const getSubmissionKoski = gql`
+  query getSubmission(
+    $token: String!,
+    $id: ID!
+  ) {
+    authenticate(token: $token) {
+      submission(id: $id) {
+        koski {
+          name
+          courses {
+            name
+            credits
+          }
+        }
+      }
+    }
+  }
+`
+
 export const getSubmissions = gql`
   query getSubmissions(
     $token: String!

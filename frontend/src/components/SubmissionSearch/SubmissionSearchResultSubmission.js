@@ -3,8 +3,11 @@ import { shape, string } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography, Card, CardContent, CardHeader } from '@material-ui/core'
 import SubmissionApproveMutation from './SubmissionApproveMutation'
+import SubmissionAutoParse, { context } from '../SubmissionAutoParse'
 import { parseClasses, ISODateString } from '../../util/propTypes'
 import parseDate from '../../util/parseDate'
+
+const { SUBMISSION_SEARCH } = context
 
 const styles = {
   card: {
@@ -28,6 +31,7 @@ const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
           {submission.url}
         </a>
       </Typography>
+      <SubmissionAutoParse submissionID={submission.id} context={SUBMISSION_SEARCH} />
     </CardContent>
     {submission.comment.length > 0 ? (
       <CardContent>

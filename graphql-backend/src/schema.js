@@ -69,6 +69,7 @@ type Query {
   authenticate(token: String!): Query
   me: User
   users(user: UserSearch): [User]!
+  submission(id: ID!): Submission
   submissions(user: UserSearch): [Submission]
   refreshToken(id: ID!): String
 }

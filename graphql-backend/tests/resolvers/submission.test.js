@@ -5,6 +5,105 @@ const asymmetricMatcher = require('../testUtils/asymmetricMatcher')
 
 describe('submission resolvers', () => {
   describe('queries', () => {
+    describe('submission', () => {
+      const resolver = resolvers.Query.submission
+      const parent = null
+      const userData = {
+        username: 'testuser20',
+        name: 'Test User',
+        role: 'STUDENT',
+        cn: 'Test Test User',
+        studentNumber: '000000010',
+        email: 'test@test.test'
+      }
+      const submissionData = {
+        url: 'https://test.test',
+        date: Number(new Date())
+      }
+      const ids = {}
+      beforeAll(async () => {
+        const user = await UserModel.create(userData)
+        ids.user = user.id
+        const submission = await SubmissionModel.create({
+          ...submissionData,
+          user: user._id
+        })
+        ids.submission = submission.id
+      })
+      afterAll(async () => {
+        await SubmissionModel.findByIdAndDelete(ids.submission)
+        await UserModel.findByIdAndDelete(ids.user)
+      })
+
+      describe('when args.id points to nonexistent submission', () => {
+        const args = {}
+        const context = {
+          authorization: {
+            role: 'ADMIN'
+          }
+        }
+
+        it('returns null.', async () => {
+          const result = await resolver(parent, args, context)
+          expect(result).toBeNull()
+        })
+      })
+      describe('when args.id points to a submission', () => {
+        const args = {}
+        beforeAll(() => {
+          args.id = ids.submission
+        })
+
+        describe('when authorized as uploader', () => {
+          const context = {
+            authorization: {
+              role: 'STUDENT'
+            }
+          }
+          beforeAll(() => {
+            context.authorization.id = ids.user
+          })
+
+          it('returns the submission.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result).toMatchObject({
+              url: submissionData.url,
+              id: asymmetricMatcher(actual => actual === ids.submission)
+            })
+          })
+        })
+
+        describe('when authorized as privileged', () => {
+          const context = {
+            authorization: {
+              role: 'PRIVILEGED'
+            }
+          }
+
+          it('returns the submission.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result).toMatchObject({
+              url: submissionData.url,
+              id: asymmetricMatcher(actual => actual === ids.submission)
+            })
+          })
+        })
+
+        describe('when authorized as third party', () => {
+          const context = {
+            authorization: {
+              id: '0000000000000000',
+              role: 'STUDENT'
+            }
+          }
+
+          it('throws an error.', async () => {
+            const asyncResolver = async () => resolver(parent, args, context)
+            expect(asyncResolver()).rejects.toThrow()
+          })
+        })
+      })
+    })
     describe('submissions', () => {
       const resolver = resolvers.Query.submissions
       const parent = null
