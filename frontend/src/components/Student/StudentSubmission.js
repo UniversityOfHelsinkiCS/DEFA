@@ -11,19 +11,6 @@ export const AddSubmissionText = 'Add Submission'
 
 export const EditSubmissionText = 'Edit Submission'
 
-const pickColor = (classes, approvalText) => {
-  switch (approvalText) {
-    case 'PENDING':
-      return classes.pending
-    case 'APPROVED':
-      return classes.approved
-    case 'REJECTED':
-      return classes.rejected
-    default:
-      return null
-  }
-}
-
 const styles = {
   card: {
     marginTop: '10px',
@@ -32,15 +19,6 @@ const styles = {
   updated: {
     animationName: 'new',
     animationDuration: '2s'
-  },
-  pending: {
-    color: 'orange'
-  },
-  approved: {
-    color: '#4cd642'
-  },
-  rejected: {
-    color: 'red'
   }
 }
 
@@ -65,10 +43,6 @@ export const StudentSubmissionComponent = ({ submission, classes }) => {
             <Typography>{submission.comment}</Typography>
           </div>
         ) : null}
-        <Typography variant="h6">
-          <span>Approval status: </span>
-          <span className={pickColor(classes, submission.approval)}>{submission.approval}</span>
-        </Typography>
         <DeleteSubmission id={submission.id} />
       </CardContent>
     </Card>

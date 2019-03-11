@@ -31,8 +31,8 @@ describe('StudentInformation component', () => {
       expect(findText(submission.url, wrapper)).toBeGreaterThan(0)
     })
 
-    it('Renders the submission approval status.', () => {
-      expect(findText(submission.approval, wrapper)).toBeGreaterThan(0)
+    it('Doesnt render the submission approval status.', () => {
+      expect(findText(submission.approval, wrapper)).toBe(0)
     })
 
     it('renders the comment.', () => {
