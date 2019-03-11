@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { shape, func, object, oneOfType, arrayOf, string } from 'prop-types'
 import { connect } from 'react-redux'
 import { withApollo } from 'react-apollo'
+import { withStyles } from '@material-ui/core/styles'
 import {
   Button,
   List,
@@ -12,13 +13,17 @@ import {
   Typography,
   CircularProgress
 } from '@material-ui/core'
-import { hexadecimal } from '../util/propTypes'
+import { hexadecimal, parseClasses } from '../util/propTypes'
 import { getKoskiSuccess } from '../util/actions/submissionSearch'
 import { getSubmissionKoski } from '../util/queries/getSubmissions'
 
 export const context = {
   SUBMISSION_SEARCH: 0,
   STUDENT_SUBMISSIONS: 1
+}
+
+const styles = {
+  errorText: { color: 'red' }
 }
 
 class SubmissionAutoParseComponent extends PureComponent {
@@ -54,10 +59,10 @@ class SubmissionAutoParseComponent extends PureComponent {
   }
 
   renderCourses = () => {
-    const { submission } = this.props
+    const { submission, classes } = this.props
     if (submission.koski === null) {
       return (
-        <Typography variant="h6">Could not parse courses from provided url.</Typography>
+        <Typography variant="h6" className={classes.errorText}>Could not parse courses from provided url.</Typography>
       )
     }
     return (
@@ -88,7 +93,10 @@ class SubmissionAutoParseComponent extends PureComponent {
     const { loading } = this.state
     if (loading) {
       return (
-        <CircularProgress />
+        <div>
+          <CircularProgress />
+          <Typography>Connecting to Koski service...</Typography>
+        </div>
       )
     }
     return (
@@ -121,7 +129,8 @@ SubmissionAutoParseComponent.propTypes = {
     query: func.isRequired
   }).isRequired,
   dispatchGetKoskiSuccess: func.isRequired,
-  token: string.isRequired
+  token: string.isRequired,
+  classes: parseClasses(styles).isRequired
 }
 
 const mapStateToProps = (
@@ -137,7 +146,7 @@ const mapStateToProps = (
       })
       break
     case context.STUDENT_SUBMISSIONS:
-      submission = studentSubmissions.find(sub => sub.id === submissionID)
+      submission = studentSubmissions.submissions.find(sub => sub.id === submissionID)
       break
     default:
       submission = null
@@ -156,4 +165,6 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withApollo(SubmissionAutoParseComponent))
+)(withApollo(
+  withStyles(styles)(SubmissionAutoParseComponent)
+))

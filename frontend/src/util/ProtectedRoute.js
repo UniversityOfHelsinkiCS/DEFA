@@ -43,7 +43,11 @@ ProtectedRouteComponent.propTypes = {
   requiredRole: arrayOf(string).isRequired,
   dispatchErrorToast: func.isRequired,
   dispatchParseUser: func.isRequired,
-  user: userProp.isRequired
+  user: userProp
+}
+
+ProtectedRouteComponent.defaultProps = {
+  user: null
 }
 
 const mapStateToProps = state => ({

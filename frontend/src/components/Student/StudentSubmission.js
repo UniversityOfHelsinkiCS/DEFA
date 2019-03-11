@@ -3,13 +3,15 @@ import { withStyles } from '@material-ui/core/styles'
 import { Typography, Button, Card, CardHeader, CardContent } from '@material-ui/core'
 import { shape, string, bool } from 'prop-types'
 import DeleteSubmission from './DeleteSubmission'
+import SubmissionAutoParse, { context } from '../SubmissionAutoParse'
 import './StudentSubmission.css'
-import { parseClasses, approval, ISODateString } from '../../util/propTypes'
+import { parseClasses, ISODateString } from '../../util/propTypes'
 import parseDate from '../../util/parseDate'
 
 export const AddSubmissionText = 'Add Submission'
-
 export const EditSubmissionText = 'Edit Submission'
+
+const { STUDENT_SUBMISSIONS } = context
 
 const styles = {
   card: {
@@ -19,6 +21,9 @@ const styles = {
   updated: {
     animationName: 'new',
     animationDuration: '2s'
+  },
+  deleteButtonContainer: {
+    marginTop: '10px'
   }
 }
 
@@ -37,13 +42,16 @@ export const StudentSubmissionComponent = ({ submission, classes }) => {
           <span>Koski url: </span>
           <a href={submission.url} target="_blank" rel="noopener noreferrer">{submission.url}</a>
         </Typography>
+        <SubmissionAutoParse submissionID={submission.id} context={STUDENT_SUBMISSIONS} />
         {submission.comment.length > 0 ? (
           <div>
             <Typography variant="h6">Additional information:</Typography>
             <Typography>{submission.comment}</Typography>
           </div>
         ) : null}
-        <DeleteSubmission id={submission.id} />
+        <div className={classes.deleteButtonContainer}>
+          <DeleteSubmission id={submission.id} />
+        </div>
       </CardContent>
     </Card>
   )
@@ -54,7 +62,6 @@ StudentSubmissionComponent.propTypes = {
   submission: shape({
     url: string.isRequired,
     date: ISODateString.isRequired,
-    approval: approval.isRequired,
     comment: string.isRequired,
     updated: bool
   }).isRequired
