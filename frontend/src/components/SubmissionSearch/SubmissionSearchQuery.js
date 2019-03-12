@@ -9,6 +9,9 @@ import { submitSearchSuccess } from '../../util/actions/submissionSearch'
 import SubmissionSearchResult from './SubmissionSearchResult'
 import { parseClasses } from '../../util/propTypes'
 import CardContainer from '../Student/CardContainer'
+import withLocalize from '../../util/tieredLocalize'
+
+const TRANSLATION_BASE = 'SubmissionSearch.SubmissionSearchQuery'
 
 const styles = {
   anomalyContainer: {
@@ -17,22 +20,22 @@ const styles = {
   }
 }
 
-const ERROR_HEADER = 'Error'
-const ERROR_TEXT = 'Failed to load submission data. Refresh the page to try again.'
-
-const QueryError = (
-  <CardContainer
-    title={ERROR_HEADER}
-  >
-    <Typography>{ERROR_TEXT}</Typography>
-  </CardContainer>
-)
-
 export class SubmissionSearchQueryComponent extends PureComponent {
   onCompleted = data => {
     const { dispatchSubmitSearchSuccess } = this.props
     const { users } = data.authenticate
     dispatchSubmitSearchSuccess(users)
+  }
+
+  renderQueryError = () => {
+    const { translate } = this.props
+    return (
+      <CardContainer
+        title={translate('error_header')}
+      >
+        <Typography>{translate('error_text')}</Typography>
+      </CardContainer>
+    )
   }
 
   render() {
@@ -47,7 +50,7 @@ export class SubmissionSearchQueryComponent extends PureComponent {
           if (error) {
             return (
               <div className={classes.anomalyContainer}>
-                <QueryError />
+                {this.renderQueryError()}
               </div>
             )
           }
@@ -68,7 +71,8 @@ export class SubmissionSearchQueryComponent extends PureComponent {
 SubmissionSearchQueryComponent.propTypes = {
   token: string.isRequired,
   dispatchSubmitSearchSuccess: func.isRequired,
-  classes: parseClasses(styles).isRequired
+  classes: parseClasses(styles).isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = ({ user, submissionSearch }) => ({
@@ -84,4 +88,6 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(SubmissionSearchQueryComponent))
+)(withStyles(styles)(
+  withLocalize(TRANSLATION_BASE)(SubmissionSearchQueryComponent)
+))

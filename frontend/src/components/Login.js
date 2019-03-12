@@ -9,6 +9,7 @@ import parseQueryParams from '../util/parseQueryParams'
 import { parseUser } from '../util/actions/user'
 import { primary } from '../common/colors'
 import { userProp } from '../util/propTypes'
+import withLocalize from '../util/tieredLocalize'
 
 
 class Login extends PureComponent {
@@ -42,7 +43,7 @@ class Login extends PureComponent {
   }
 
   render() {
-    const { user } = this.props
+    const { user, translate } = this.props
     const url = process.env.MODE === 'development' ? 'http://localhost:7000' : `${process.env.DS_URL}?entityID=${process.env.ENTITY_ID}&return=${process.env.LOGIN_URL}`
     if (!user) {
       return (
@@ -51,7 +52,7 @@ class Login extends PureComponent {
           style={{ background: primary.light }}
           onClick={this.prepareRedirect}
         >
-          Login
+          {translate('log_in')}
         </Button>
       )
     }
@@ -73,7 +74,8 @@ Login.propTypes = {
   token: string,
   history: shape({
     push: func.isRequired
-  }).isRequired
+  }).isRequired,
+  translate: func.isRequired
 }
 
 Login.defaultProps = {
@@ -90,4 +92,9 @@ const mapDispatchToProps = {
   dispatchParseUser: parseUser
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login))
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(
+  withLocalize('Login')(Login)
+))

@@ -9,14 +9,12 @@ import {
 } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
-import { withLocalize } from 'react-localize-redux'
 import { shape, func } from 'prop-types'
 import { userProp, parseClasses } from '../util/propTypes'
 import { getLanguage, saveLanguage } from '../util/language'
 import Login from './Login'
 import LogOut from './LogOut'
-
-const TRANSLATE_ROOT = 'NavBar'
+import withLocalize from '../util/tieredLocalize'
 
 const styles = {
   root: {
@@ -36,8 +34,7 @@ const styles = {
   }
 }
 
-const NavBar = ({ classes, history, user, setActiveLanguage, translate: baseTranslate }) => {
-  const translate = id => baseTranslate(`${TRANSLATE_ROOT}.${id}`)
+const NavBar = ({ classes, history, user, setActiveLanguage, translate }) => {
   const getRoutes = role => (
     <React.Fragment>
       {role === 'ADMIN' ? <Button color="inherit" onClick={() => history.push('/admin')}>{translate('admin')}</Button> : null}
@@ -96,4 +93,8 @@ NavBar.propTypes = {
   translate: func.isRequired
 }
 
-export default withLocalize(withRouter(withStyles(styles)(NavBar)))
+export default withLocalize('NavBar')(
+  withRouter(
+    withStyles(styles)(NavBar)
+  )
+)

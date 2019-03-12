@@ -1,16 +1,22 @@
 import React from 'react'
+import { func } from 'prop-types'
 import UserSearchForm from '../UserSearch/UserSearchForm'
 import { changeInput } from '../../util/actions/submissionSearch'
+import withLocalize from '../../util/tieredLocalize'
 
-export const SubmissionSearchFormComponent = () => (
+export const SubmissionSearchFormComponent = ({ translate }) => (
   <UserSearchForm
     changeInput={changeInput}
     fields={{
-      cn: 'Name',
-      studentNumber: 'Student Number',
-      username: 'Username'
+      cn: translate('name'),
+      studentNumber: translate('student_number'),
+      username: translate('username')
     }}
   />
 )
 
-export default SubmissionSearchFormComponent
+SubmissionSearchFormComponent.propTypes = {
+  translate: func.isRequired
+}
+
+export default withLocalize('SubmissionSearch.SubmissionSearchForm')(SubmissionSearchFormComponent)

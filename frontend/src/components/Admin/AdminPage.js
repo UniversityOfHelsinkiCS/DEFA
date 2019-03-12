@@ -1,11 +1,11 @@
 import React from 'react'
+import { func } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 import AdminSearchForm from './AdminSearchForm'
 import AdminSearchResult from './AdminSearchResult'
 import { parseClasses } from '../../util/propTypes'
-
-const HEADER_TEXT = 'Manage Users'
+import withLocalize from '../../util/tieredLocalize'
 
 const styles = {
   header: {
@@ -13,14 +13,14 @@ const styles = {
   }
 }
 
-const AdminPageComponent = ({ classes }) => (
+const AdminPageComponent = ({ classes, translate }) => (
   <div>
     <Typography
       variant="h2"
       align="center"
       className={classes.header}
     >
-      {HEADER_TEXT}
+      {translate('page_header')}
     </Typography>
     <AdminSearchForm />
     <AdminSearchResult />
@@ -28,7 +28,10 @@ const AdminPageComponent = ({ classes }) => (
 )
 
 AdminPageComponent.propTypes = {
-  classes: parseClasses(styles).isRequired
+  classes: parseClasses(styles).isRequired,
+  translate: func.isRequired
 }
 
-export default withStyles(styles)(AdminPageComponent)
+export default withStyles(styles)(
+  withLocalize('Admin.AdminPage')(AdminPageComponent)
+)

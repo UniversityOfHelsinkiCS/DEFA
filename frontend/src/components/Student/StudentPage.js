@@ -3,15 +3,13 @@ import { string, func, shape } from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import { withApollo } from 'react-apollo'
-import { withLocalize } from 'react-localize-redux'
 import { Typography, CircularProgress } from '@material-ui/core'
 import { getMe } from '../../util/queries/getUsers'
 import StudentContainer from './StudentContainer'
 import { parseClasses } from '../../util/propTypes'
 import { getStudent } from '../../util/actions/submission'
 import CardContainer from './CardContainer'
-
-const TRANSLATION_BASE = 'Student.StudentPage'
+import withLocalize from '../../util/tieredLocalize'
 
 const styles = {
   pageContainer: {
@@ -29,17 +27,6 @@ const styles = {
 }
 
 const QueryLoading = () => <CircularProgress />
-
-const ERROR_HEADER = 'Error'
-const ERROR_TEXT = 'Failed to load user data. Refresh the page to try again.'
-
-const QueryError = () => (
-  <CardContainer
-    title={ERROR_HEADER}
-  >
-    <Typography>{ERROR_TEXT}</Typography>
-  </CardContainer>
-)
 
 class StudentPageComponent extends PureComponent {
   constructor(props) {
@@ -65,6 +52,17 @@ class StudentPageComponent extends PureComponent {
     dispatchGetStudent(me)
   }
 
+  queryError = () => {
+    const { translate } = this.props
+    return (
+      <CardContainer
+        title={translate('error_header')}
+      >
+        <Typography>{translate('error_text')}</Typography>
+      </CardContainer>
+    )
+  }
+
   queryResult = () => {
     const { classes } = this.props
     const { loading, error } = this.state
@@ -78,7 +76,7 @@ class StudentPageComponent extends PureComponent {
     if (error) {
       return (
         <div className={[classes.anomaly, classes.resultContainer].join(' ')}>
-          <QueryError />
+          {this.queryError()}
         </div>
       )
     }
@@ -91,10 +89,9 @@ class StudentPageComponent extends PureComponent {
 
   render() {
     const { classes, translate } = this.props
-    this.translate = id => translate(`${TRANSLATION_BASE}.${id}`)
     return (
       <div className={classes.pageContainer}>
-        <Typography align="center" variant="h2" className={classes.header}>{this.translate('header')}</Typography>
+        <Typography align="center" variant="h2" className={classes.header}>{translate('header')}</Typography>
         {this.queryResult()}
       </div>
     )
@@ -125,7 +122,7 @@ export default connect(
 )(
   withStyles(styles)(
     withApollo(
-      withLocalize(StudentPageComponent)
+      withLocalize('Student.StudentPage')(StudentPageComponent)
     )
   )
 )

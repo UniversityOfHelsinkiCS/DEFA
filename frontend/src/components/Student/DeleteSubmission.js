@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { string, func } from 'prop-types'
-import { withLocalize } from 'react-localize-redux'
 import {
   Button,
   Dialog,
@@ -12,8 +11,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { Mutation } from 'react-apollo'
 import { deleteSubmission } from '../../util/queries/deleteSubmission'
 import { deleteSubmissionAction } from '../../util/actions/submission'
-
-const TRANSLATION_BASE = 'Student.DeleteSubmission'
+import withLocalize from '../../util/tieredLocalize'
 
 export class DeleteSubmissionComponent extends React.Component {
   state = {
@@ -31,7 +29,6 @@ export class DeleteSubmissionComponent extends React.Component {
   render() {
     const { id, token, dispatchDeleteSubmission, translate } = this.props
     const { open } = this.state
-    this.translate = translateId => translate(`${TRANSLATION_BASE}.${translateId}`)
 
     return (
       <Mutation
@@ -45,7 +42,7 @@ export class DeleteSubmissionComponent extends React.Component {
         {mutate => (
           <div>
             <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
-              {this.translate('delete')}
+              {translate('delete')}
               <DeleteIcon />
             </Button>
             <Dialog
@@ -54,17 +51,17 @@ export class DeleteSubmissionComponent extends React.Component {
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">{this.translate('dialogTitle')}</DialogTitle>
+              <DialogTitle id="alert-dialog-title">{translate('dialogTitle')}</DialogTitle>
               <DialogActions>
                 <Button
                   color="primary"
                   variant="contained"
                   onClick={mutate}
                 >
-                  {this.translate('yes')}
+                  {translate('yes')}
                 </Button>
                 <Button onClick={this.handleClose} color="primary">
-                  {this.translate('no')}
+                  {translate('no')}
                 </Button>
               </DialogActions>
             </Dialog>
@@ -95,5 +92,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(
-  withLocalize(DeleteSubmissionComponent)
+  withLocalize('Student.DeleteSubmission')(DeleteSubmissionComponent)
 )

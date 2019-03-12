@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react'
 import { func, string } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import { withLocalize } from 'react-localize-redux'
 import {
   Typography,
   CircularProgress,
@@ -20,8 +19,7 @@ import { connect } from 'react-redux'
 import { createSubmission } from '../../util/queries/createSubmission'
 import { createSubmissionAction } from '../../util/actions/submission'
 import { parseClasses } from '../../util/propTypes'
-
-const TRANSLATION_BASE = 'Student.StudentSubmissionAddForm'
+import withLocalize from '../../util/tieredLocalize'
 
 const styles = {
   textFieldContainer: {
@@ -126,7 +124,6 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
   render() {
     const { formData, disableSubmit, loading, expanded } = this.state
     const { token, classes, translate } = this.props
-    this.translate = id => translate(`${TRANSLATION_BASE}.${id}`)
     const urlIsValid = KOSKI_URL_REGEXP.test(formData.url)
     return (
       <ExpansionPanel
@@ -134,15 +131,15 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
         onChange={this.toggleExpand}
       >
         <ExpansionPanelSummary>
-          <Typography>{this.translate('add_submission')}</Typography>
+          <Typography>{translate('add_submission')}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <div>
             <div className={classes.textFieldContainer}>
               <TextField
                 error={!urlIsValid}
-                label={this.translate('url')}
-                helperText={this.translate('url_helper')}
+                label={translate('url')}
+                helperText={translate('url_helper')}
                 value={formData.url}
                 onChange={this.onFormChange}
                 margin="normal"
@@ -151,7 +148,7 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
                 name="url"
               />
               <TextField
-                label={this.translate('comment')}
+                label={translate('comment')}
                 value={formData.comment}
                 onChange={this.onFormChange}
                 margin="normal"
@@ -186,7 +183,7 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
                         variant="contained"
                         color={urlIsValid ? 'primary' : null}
                       >
-                        {this.translate('submit')}
+                        {translate('submit')}
                       </Button>
                     </div>
                   )
@@ -220,5 +217,5 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(withStyles(styles)(
-  withLocalize(StudentSubmissionAddFormComponent)
+  withLocalize('Student.StudentSubmissionAddForm')(StudentSubmissionAddFormComponent)
 ))

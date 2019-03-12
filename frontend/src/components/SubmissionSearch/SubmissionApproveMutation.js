@@ -6,10 +6,7 @@ import { CircularProgress } from '@material-ui/core'
 import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab'
 import { approveSubmission } from '../../util/queries/editSubmissions'
 import { approveSubmissionSuccess } from '../../util/actions/submissionSearch'
-
-const PENDING_TEXT = 'PENDING'
-const APPROVED_TEXT = 'APPROVED'
-const REJECTED_TEXT = 'REJECTED'
+import withLocalize from '../../util/tieredLocalize'
 
 class SubmissionApproveMutationComponent extends PureComponent {
   constructor(props) {
@@ -41,7 +38,7 @@ class SubmissionApproveMutationComponent extends PureComponent {
   }
 
   render() {
-    const { submission } = this.props
+    const { submission, translate } = this.props
     const { loading } = this.state
     return (
       <ApolloConsumer>
@@ -59,7 +56,7 @@ class SubmissionApproveMutationComponent extends PureComponent {
                 selected={submission.approval === 'PENDING'}
                 onClick={this.onChange(client, 'PENDING')}
               >
-                {PENDING_TEXT}
+                {translate('pending')}
               </ToggleButton>
               <ToggleButton
                 style={{ backgroundColor: submission.approval === 'APPROVED' ? '#4cd642' : null }}
@@ -67,7 +64,7 @@ class SubmissionApproveMutationComponent extends PureComponent {
                 selected={submission.approval === 'APPROVED'}
                 onClick={this.onChange(client, 'APPROVED')}
               >
-                {APPROVED_TEXT}
+                {translate('approved')}
               </ToggleButton>
               <ToggleButton
                 style={{ backgroundColor: submission.approval === 'REJECTED' ? 'red' : null }}
@@ -75,7 +72,7 @@ class SubmissionApproveMutationComponent extends PureComponent {
                 selected={submission.approval === 'REJECTED'}
                 onClick={this.onChange(client, 'REJECTED')}
               >
-                {REJECTED_TEXT}
+                {translate('rejected')}
               </ToggleButton>
             </ToggleButtonGroup>
           )
@@ -90,7 +87,8 @@ SubmissionApproveMutationComponent.propTypes = {
     approval: string.isRequired
   }).isRequired,
   token: string.isRequired,
-  dispatchApproveSubmissionSuccess: func.isRequired
+  dispatchApproveSubmissionSuccess: func.isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = ({ user }) => ({
@@ -101,4 +99,9 @@ const mapDispatchToProps = {
   dispatchApproveSubmissionSuccess: approveSubmissionSuccess
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SubmissionApproveMutationComponent)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  withLocalize('SubmissionSearch.SubmissionApproveMutation')(SubmissionApproveMutationComponent)
+)

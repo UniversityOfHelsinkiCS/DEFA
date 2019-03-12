@@ -6,6 +6,7 @@ import { Grid } from '@material-ui/core'
 import CardContainer from '../Student/CardContainer'
 import { parseClasses } from '../../util/propTypes'
 import UserSearchFormTextField, { mapDispatchToPropsBuilder } from './UserSearchFormTextField'
+import withLocalize from '../../util/tieredLocalize'
 
 const styles = {
   filtersCardContainer: {
@@ -21,14 +22,14 @@ const styles = {
   }
 }
 
-const UserSearchForm = ({ classes, submitButton, changeInput, fields }) => {
+const UserSearchForm = ({ classes, submitButton, changeInput, fields, translate }) => {
   const SearchFormTextField = connect(
     null,
     mapDispatchToPropsBuilder(changeInput)
   )(UserSearchFormTextField)
   return (
     <div className={classes.filtersCardContainer}>
-      <CardContainer title="Filters" className={classes.filtersCard}>
+      <CardContainer title={translate('card_title')} className={classes.filtersCard}>
         <Grid container spacing={16}>
           {Object.entries(fields).map(([name, label]) => (
             <Grid key={name} item>
@@ -53,11 +54,14 @@ UserSearchForm.propTypes = {
   classes: parseClasses(styles).isRequired,
   submitButton: node,
   changeInput: func.isRequired,
-  fields: objectOf(string.isRequired).isRequired
+  fields: objectOf(string.isRequired).isRequired,
+  translate: func.isRequired
 }
 
 UserSearchForm.defaultProps = {
   submitButton: null
 }
 
-export default withStyles(styles)(UserSearchForm)
+export default withStyles(styles)(
+  withLocalize('UserSearch.UserSearchForm')(UserSearchForm)
+)

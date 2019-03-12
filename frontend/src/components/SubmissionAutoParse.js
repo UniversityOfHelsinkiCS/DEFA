@@ -16,6 +16,7 @@ import {
 import { hexadecimal, parseClasses } from '../util/propTypes'
 import { getKoskiSuccess } from '../util/actions/submissionSearch'
 import { getSubmissionKoski } from '../util/queries/getSubmissions'
+import withLocalize from '../util/tieredLocalize'
 
 export const context = {
   SUBMISSION_SEARCH: 0,
@@ -59,16 +60,16 @@ class SubmissionAutoParseComponent extends PureComponent {
   }
 
   renderCourses = () => {
-    const { submission, classes } = this.props
+    const { submission, classes, translate } = this.props
     if (submission.koski === null) {
       return (
-        <Typography variant="h6" className={classes.errorText}>Could not parse courses from provided url.</Typography>
+        <Typography variant="h6" className={classes.errorText}>{translate('error_text')}</Typography>
       )
     }
     return (
       <List>
         {submission.koski.map(({ name, courses }) => (
-          <ListItem>
+          <ListItem key={name}>
             <ExpansionPanel>
               <ExpansionPanelSummary>
                 <Typography>{name}</Typography>
@@ -76,8 +77,8 @@ class SubmissionAutoParseComponent extends PureComponent {
               <ExpansionPanelDetails>
                 <List>
                   {courses.map(course => (
-                    <ListItem>
-                      <Typography>{`${course.name} (${course.credits} cr)`}</Typography>
+                    <ListItem key={course.name}>
+                      <Typography>{`${course.name} (${course.credits} ${translate('cr')})`}</Typography>
                     </ListItem>
                   ))}
                 </List>
@@ -90,18 +91,19 @@ class SubmissionAutoParseComponent extends PureComponent {
   }
 
   renderButton = () => {
+    const { translate } = this.props
     const { loading } = this.state
     if (loading) {
       return (
         <div>
           <CircularProgress />
-          <Typography>Connecting to Koski service...</Typography>
+          <Typography>{translate('loading_text')}</Typography>
         </div>
       )
     }
     return (
       <Button onClick={this.onClick} variant="outlined">
-        Parse courses
+        {translate('parse')}
       </Button>
     )
   }
@@ -130,7 +132,8 @@ SubmissionAutoParseComponent.propTypes = {
   }).isRequired,
   dispatchGetKoskiSuccess: func.isRequired,
   token: string.isRequired,
-  classes: parseClasses(styles).isRequired
+  classes: parseClasses(styles).isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = (
@@ -166,5 +169,7 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(withApollo(
-  withStyles(styles)(SubmissionAutoParseComponent)
+  withStyles(styles)(
+    withLocalize('SubmissionAutoParse')(SubmissionAutoParseComponent)
+  )
 ))
