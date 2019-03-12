@@ -1,5 +1,5 @@
 import React from 'react'
-import { SubmissionSearchPageComponent, HEADER_TEXT } from '../../../src/components/SubmissionSearch/SubmissionSearchPage'
+import { SubmissionSearchPageComponent } from '../../../src/components/SubmissionSearch/SubmissionSearchPage'
 import SubmissionSearchForm from '../../../src/components/SubmissionSearch/SubmissionSearchForm'
 import SubmissionSearchQuery from '../../../src/components/SubmissionSearch/SubmissionSearchQuery'
 import { findText } from '../../testUtils'
@@ -12,11 +12,12 @@ describe('SubmissionSearchPage component', () => {
   beforeAll(() => {
     wrapper = shallow(<SubmissionSearchPageComponent
       classes={{}}
+      translate={id => id}
     />)
   })
 
   it('renders the header text.', () => {
-    expect(findText(HEADER_TEXT, wrapper)).toBeGreaterThan(0)
+    expect(findText('page_header', wrapper)).toBeGreaterThan(0)
   })
   it('renders a SubmissionSearchForm.', () => {
     expect(wrapper.find(SubmissionSearchForm).exists()).toEqual(true)
