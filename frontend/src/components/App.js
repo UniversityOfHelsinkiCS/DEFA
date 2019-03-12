@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { LocalizeProvider } from 'react-localize-redux'
 import ApolloContainer from './ApolloContainer'
 import Main from './Main'
+import LocalizeWrapper from './LocalizeWrapper'
 
 const palette = {
   primary: {
@@ -24,11 +25,13 @@ const theme = createMuiTheme({ palette, themeName, typography: { useNextVariants
 const App = () => (
   <MuiThemeProvider theme={theme}>
     <ApolloContainer>
-      <BrowserRouter>
-        <LocalizeProvider>
-          <Main />
-        </LocalizeProvider>
-      </BrowserRouter>
+      <LocalizeProvider>
+        <LocalizeWrapper>
+          <BrowserRouter>
+            <Main />
+          </BrowserRouter>
+        </LocalizeWrapper>
+      </LocalizeProvider>
     </ApolloContainer>
   </MuiThemeProvider>
 )

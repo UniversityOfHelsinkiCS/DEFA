@@ -1,7 +1,8 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { Typography, Button, Card, CardHeader, CardContent } from '@material-ui/core'
-import { shape, string, bool } from 'prop-types'
+import { withLocalize } from 'react-localize-redux'
+import { Typography, Card, CardHeader, CardContent } from '@material-ui/core'
+import { shape, string, bool, func } from 'prop-types'
 import DeleteSubmission from './DeleteSubmission'
 import SubmissionAutoParse, { context } from '../SubmissionAutoParse'
 import './StudentSubmission.css'
@@ -12,7 +13,7 @@ export const AddSubmissionText = 'Add Submission'
 export const EditSubmissionText = 'Edit Submission'
 
 const { STUDENT_SUBMISSIONS } = context
-
+const TRANSLATION_BASE = 'Student.StudentSubmission'
 const styles = {
   card: {
     marginTop: '10px',
@@ -27,10 +28,8 @@ const styles = {
   }
 }
 
-export const StudentSubmissionComponent = ({ submission, classes }) => {
-  if (!submission) {
-    return <Button>{AddSubmissionText}</Button>
-  }
+export const StudentSubmissionComponent = ({ submission, classes, translate: baseTranslate }) => {
+  const translate = id => baseTranslate(`${TRANSLATION_BASE}.${id}`)
   return (
     <Card className={classes.card}>
       <CardHeader
@@ -39,13 +38,13 @@ export const StudentSubmissionComponent = ({ submission, classes }) => {
       />
       <CardContent className={submission.updated ? classes.updated : null}>
         <Typography variant="h6">
-          <span>Koski url: </span>
+          <span>{`${translate('url')}: `}</span>
           <a href={submission.url} target="_blank" rel="noopener noreferrer">{submission.url}</a>
         </Typography>
         <SubmissionAutoParse submissionID={submission.id} context={STUDENT_SUBMISSIONS} />
         {submission.comment.length > 0 ? (
           <div>
-            <Typography variant="h6">Additional information:</Typography>
+            <Typography variant="h6">{`${translate('comment')}:`}</Typography>
             <Typography>{submission.comment}</Typography>
           </div>
         ) : null}
@@ -64,7 +63,8 @@ StudentSubmissionComponent.propTypes = {
     date: ISODateString.isRequired,
     comment: string.isRequired,
     updated: bool
-  }).isRequired
+  }).isRequired,
+  translate: func.isRequired
 }
 
-export default withStyles(styles)(StudentSubmissionComponent)
+export default withStyles(styles)(withLocalize(StudentSubmissionComponent))

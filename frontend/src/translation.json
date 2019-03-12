@@ -1,1 +1,108 @@
-{}
+{
+  "common": {
+    "yes": [
+      "Yes",
+      "Kyllä"
+    ],
+    "comment": [
+      "Additional information",
+      "Lisätietoja"
+    ],
+    "url": [
+      "Koski URL",
+      "Koski URL"
+    ]
+  },
+  "NavBar": {
+    "admin": [
+      "Admin",
+      "Ylläpito"
+    ],
+    "submissions": [
+      "All Submissions",
+      "Kaikki Hakemukset"
+    ],
+    "student": [
+      "My Submissions",
+      "Minun Hakemukseni"
+    ]
+  },
+  "Welcome": {
+    "welcome_message": [
+      "Welcome to DEFA-tool",
+      "Tervetuloa DEFA-työkaluun"
+    ],
+    "teacher": [
+      "Teacher",
+      "Opettaja"
+    ],
+    "student": [
+      "Student",
+      "Opiskelija"
+    ],
+    "teacher_text": [
+      "Once you've received privileges from an administrator you can view students' DEFA submissions.",
+      "Kun olet saanut oikeudet ylläpitäjältä, voit tarkastaa opiskelijoiden DEFA suorituksia."
+    ],
+    "student_text": [
+      "Once you've logged in you can submit a link to your published studies in the Koski service.",
+      "Kun olet kirjautunut sisään, voit jättää linkin Koski-palvelussa julkaistuihin kurssisuorituksiisi."
+    ]
+  },
+  "Student": {
+    "DeleteSubmission": {
+      "delete": [
+        "Delete",
+        "Poista"
+      ],
+      "dialogTitle": [
+        "Delete this submission?",
+        "Poistetaanko tämä hakemus?"
+      ],
+      "no": [
+        "No wait",
+        "Ei, odotapas"
+      ]
+    },
+    "StudentInformation": {
+      "card_title": [
+        "Your Info",
+        "Omat tietosi"
+      ],
+      "name": [
+        "name",
+        "nimi"
+      ],
+      "email": [
+        "email",
+        "sähköposti"
+      ]
+    },
+    "StudentPage": {
+      "header": [
+        "Your Page",
+        "Oma Sivusi"
+      ]
+    },
+    "StudentSubmissionAddForm": {
+      "url_helper": [
+        "Link to your published studies in Koski service. It should look like https://opintopolku.fi/koski/opinnot/{your unique code}",
+        "Linkki Koski-palvelussa julkaistuihin kurssisuorituksiisi. Sen tulisi olla muotoa https://opintopolku.fi/koski/opinnot/{uniikki koodisi}"
+      ],
+      "add_submission": [
+        "Add a new submission",
+        "Luo uusi hakemus"
+      ],
+      "submit": [
+        "Submit",
+        "Lähetä"
+      ]
+    },
+    "StudentSubmissionContainer": {
+      "card_title": [
+        "Your submissions",
+        "Omat hakemuksesi"
+      ]
+    }
+  }
+}

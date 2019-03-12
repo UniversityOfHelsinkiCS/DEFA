@@ -13,7 +13,7 @@ const submission = {
   comment: 'Filled with filler text...'
 }
 
-describe('StudentInformation component', () => {
+describe('StudentSubmission component', () => {
   let wrapper
 
   describe('when a submission has been submitted', () => {
@@ -21,6 +21,7 @@ describe('StudentInformation component', () => {
       wrapper = shallow(<StudentSubmissionComponent
         submission={submission}
         classes={{}}
+        translate={id => id}
       />)
     })
     afterAll(() => {

@@ -3,12 +3,15 @@ import { string, func, shape } from 'prop-types'
 import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles'
 import { withApollo } from 'react-apollo'
+import { withLocalize } from 'react-localize-redux'
 import { Typography, CircularProgress } from '@material-ui/core'
 import { getMe } from '../../util/queries/getUsers'
 import StudentContainer from './StudentContainer'
 import { parseClasses } from '../../util/propTypes'
 import { getStudent } from '../../util/actions/submission'
 import CardContainer from './CardContainer'
+
+const TRANSLATION_BASE = 'Student.StudentPage'
 
 const styles = {
   pageContainer: {
@@ -87,10 +90,11 @@ class StudentPageComponent extends PureComponent {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, translate } = this.props
+    this.translate = id => translate(`${TRANSLATION_BASE}.${id}`)
     return (
       <div className={classes.pageContainer}>
-        <Typography align="center" variant="h2" className={classes.header}>Your page</Typography>
+        <Typography align="center" variant="h2" className={classes.header}>{this.translate('header')}</Typography>
         {this.queryResult()}
       </div>
     )
@@ -103,7 +107,8 @@ StudentPageComponent.propTypes = {
   dispatchGetStudent: func.isRequired,
   client: shape({
     query: func.isRequired
-  }).isRequired
+  }).isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = ({ user }) => ({
@@ -119,6 +124,8 @@ export default connect(
   mapDispatchToProps
 )(
   withStyles(styles)(
-    withApollo(StudentPageComponent)
+    withApollo(
+      withLocalize(StudentPageComponent)
+    )
   )
 )

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import { node, func } from 'prop-types'
 import { withLocalize } from 'react-localize-redux'
 import { renderToStaticMarkup } from 'react-dom/server'
 import translation from '../translation.json'
@@ -12,8 +12,7 @@ class LocalizeWrapper extends PureComponent {
     initialize({
       languages: [
         { name: 'English', code: 'eng' },
-        { name: 'Suomi', code: 'fin' },
-        { name: 'Svenska', code: 'swe' }
+        { name: 'Suomi', code: 'fin' }
       ],
       translation,
       options: {
@@ -26,7 +25,7 @@ class LocalizeWrapper extends PureComponent {
   componentDidMount() {
     const { setActiveLanguage } = this.props
     const code = getLanguage()
-    setActiveLanguage(code || 'fin')
+    setActiveLanguage(code || 'eng')
   }
 
   missingTranslationHandler = ({ translationId }) => {
@@ -59,10 +58,10 @@ class LocalizeWrapper extends PureComponent {
 }
 
 LocalizeWrapper.propTypes = {
-  children: PropTypes.node.isRequired,
-  initialize: PropTypes.func.isRequired,
-  setActiveLanguage: PropTypes.func.isRequired,
-  translate: PropTypes.func.isRequired
+  children: node.isRequired,
+  initialize: func.isRequired,
+  setActiveLanguage: func.isRequired,
+  translate: func.isRequired
 }
 
 export default withLocalize(LocalizeWrapper)

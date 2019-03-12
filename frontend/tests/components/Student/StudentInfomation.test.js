@@ -16,6 +16,7 @@ describe('StudentInformation component', () => {
   beforeAll(() => {
     wrapper = mount(<StudentInformationComponent
       user={user}
+      translate={id => id}
     />)
   })
   afterAll(() => {
