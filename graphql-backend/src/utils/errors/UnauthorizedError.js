@@ -1,6 +1,6 @@
 const ActionableError = require('./ActionableError')
 
-const MESSAGE = 'Access denied.'
+const MESSAGE = 'Pääsy estetty.'
 const EXTENSIONS = {
   toastable: true,
   code: 'UnauthorizedError'

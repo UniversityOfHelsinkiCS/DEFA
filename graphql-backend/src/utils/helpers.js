@@ -72,10 +72,18 @@ const parseKoskiModel = json => {
   }
 }
 
+const parseKoskiName = name => {
+  if (name.fi) return name.fi
+  if (name.en) return name.en
+  if (name.sv) return name.sv
+  return name
+}
+
 module.exports = {
   roleValues,
   checkLoggedIn,
   checkPrivileged,
   checkAdmin,
-  parseKoskiModel
+  parseKoskiModel,
+  parseKoskiName
 }
