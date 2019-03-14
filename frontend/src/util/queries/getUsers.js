@@ -9,7 +9,7 @@ query getMySubmission($token: String!) {
         id
         url
         date
-        approval
+        comment
       }
     }
   }

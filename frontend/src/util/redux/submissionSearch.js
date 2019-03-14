@@ -49,6 +49,21 @@ const submissionSearchReducer = (state = INITIAL_STATE, action) => {
           ))
         }))
       }
+    case types.SUBMISSION_GET_KOSKI_SUCCESS:
+      return {
+        ...state,
+        results: state.results.map(user => ({
+          ...user,
+          submissions: user.submissions.map(submission => (
+            submission.id === action.submission.id
+              ? {
+                ...submission,
+                koski: action.submission.koski
+              }
+              : submission
+          ))
+        }))
+      }
     default:
       return state
   }

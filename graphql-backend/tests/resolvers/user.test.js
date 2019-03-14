@@ -12,7 +12,7 @@ describe('user resolvers', () => {
       describe('when not authenticated', () => {
         const context = {}
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
       })
@@ -35,7 +35,7 @@ describe('user resolvers', () => {
             role: user.role
           }
         })
-       afterAll(async () => {
+        afterAll(async () => {
           await UserModel.findByIdAndDelete(expectations.user.id)
         })
 
@@ -126,7 +126,7 @@ describe('user resolvers', () => {
           user: {}
         }
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
       })
@@ -189,12 +189,13 @@ describe('user resolvers', () => {
       describe('when not authenticated', () => {
         const context = notAuthenticatedContext
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not create a user in database.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           const user = await UserModel.findOne(args)
           expect(user).toBeNull()
@@ -203,12 +204,13 @@ describe('user resolvers', () => {
       describe('when authenticated as unauthorized', () => {
         const context = unauthorizedContext
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not create a user in database.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           const user = await UserModel.findOne(args)
           expect(user).toBeNull()
@@ -345,12 +347,13 @@ describe('user resolvers', () => {
           }
         }
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not change user in database.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           const user = await UserModel.findById(ids.user)
           expect(user).toMatchObject(userData)
@@ -372,11 +375,11 @@ describe('user resolvers', () => {
         studentNumber: '000000010',
         email: 'test@test.test'
       }
-      submissionsData = [
+      const submissionsData = [
         { url: 'https://test.test' },
         { url: 'https://test1.test' }
       ]
-      expectations = {}
+      const expectations = {}
       beforeAll(async () => {
         const user = await UserModel.create(userData)
         const submissions = await SubmissionModel.create(submissionsData.map(submission => ({

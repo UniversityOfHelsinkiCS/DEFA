@@ -16,5 +16,4 @@ describe('SubmissionSearchForm component', () => {
   it('renders a Query component.', () => {
     expect(wrapper.find(Query).exists()).toEqual(true)
   })
-  // TODO: more specific tests
 })

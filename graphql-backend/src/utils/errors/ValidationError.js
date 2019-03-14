@@ -1,12 +1,12 @@
 const ActionableError = require('./ActionableError')
 
-const MESSAGE = 'Pääsy estetty.'
+const MESSAGE = 'Syötteet ovat epäkelpoja.'
 const EXTENSIONS = {
   toastable: true,
-  code: 'UnauthorizedError'
+  code: 'ValidationError'
 }
 
-class UnauthorizedError extends ActionableError {
+class ValidationError extends ActionableError {
   constructor(message, extensions) {
     super(
       message || MESSAGE,
@@ -18,4 +18,4 @@ class UnauthorizedError extends ActionableError {
   }
 }
 
-module.exports = UnauthorizedError
+module.exports = ValidationError

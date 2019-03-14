@@ -6,6 +6,7 @@ import { ApolloConsumer } from 'react-apollo'
 import { Button } from '@material-ui/core'
 import { getUsers } from '../../util/queries/getUsers'
 import { submitSearchAttempt, submitSearchSuccess } from '../../util/actions/admin'
+import withLocalize from '../../util/tieredLocalize'
 
 export class AdminSearchQueryComponent extends PureComponent {
   onSubmit = client => () => {
@@ -24,7 +25,7 @@ export class AdminSearchQueryComponent extends PureComponent {
   }
 
   render() {
-    const { disabled } = this.props
+    const { disabled, translate } = this.props
     return (
       <ApolloConsumer>
         {client => (
@@ -35,7 +36,7 @@ export class AdminSearchQueryComponent extends PureComponent {
             size="large"
             disabled={disabled}
           >
-            Search
+            {translate('search')}
           </Button>
         )}
       </ApolloConsumer>
@@ -52,7 +53,8 @@ AdminSearchQueryComponent.propTypes = {
   }).isRequired,
   dispatchSubmitSearchSuccess: func.isRequired,
   dispatchSubmitSearchAttempt: func.isRequired,
-  disabled: bool.isRequired
+  disabled: bool.isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = ({ user, admin }) => ({
@@ -66,4 +68,6 @@ const mapDispatchToProps = {
   dispatchSubmitSearchSuccess: submitSearchSuccess
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminSearchQueryComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withLocalize('Admin.AdminSearchQuery')(AdminSearchQueryComponent)
+)

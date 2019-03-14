@@ -1,18 +1,18 @@
 import React from 'react'
+import { func } from 'prop-types'
 import { connect } from 'react-redux'
 import { List, ListItem, ListItemText } from '@material-ui/core'
 import { userProp } from '../../util/propTypes'
 import CardContainer from './CardContainer'
+import withLocalize from '../../util/tieredLocalize'
 
-const cardTitle = 'Your Info'
-
-export const StudentInformationComponent = ({ user }) => (
+export const StudentInformationComponent = ({ user, translate }) => (
   <div>
-    <CardContainer title={cardTitle}>
+    <CardContainer title={translate('card_title')}>
       <List>
         <ListItem>
           <ListItemText
-            primary="name"
+            primary={translate('name')}
             primaryTypographyProps={{
               variant: 'subtitle1'
             }}
@@ -24,7 +24,7 @@ export const StudentInformationComponent = ({ user }) => (
         </ListItem>
         <ListItem>
           <ListItemText
-            primary="email"
+            primary={translate('email')}
             primaryTypographyProps={{
               variant: 'subtitle1'
             }}
@@ -40,11 +40,17 @@ export const StudentInformationComponent = ({ user }) => (
 )
 
 StudentInformationComponent.propTypes = {
-  user: userProp.isRequired
+  user: userProp.isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = state => ({
   user: state.user.user
 })
 
-export default connect(mapStateToProps)(StudentInformationComponent)
+export default connect(
+  mapStateToProps,
+  null
+)(
+  withLocalize('Student.StudentInformation')(StudentInformationComponent)
+)

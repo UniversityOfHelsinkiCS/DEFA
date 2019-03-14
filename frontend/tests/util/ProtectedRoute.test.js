@@ -2,6 +2,8 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { ProtectedRouteComponent } from '../../src/util/ProtectedRoute'
 
+ProtectedRouteComponent.propTypes = {}
+
 describe('ProtectedRoute', () => {
   let wrapper
 

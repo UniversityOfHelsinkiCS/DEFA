@@ -1,12 +1,11 @@
 import React from 'react'
+import { func } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography, Card, CardContent, Grid } from '@material-ui/core'
 import { parseClasses } from '../util/propTypes'
+import withLocalize from '../util/tieredLocalize'
 
 import toskaLogo from '../assets/toska.png'
-
-const TEACHER_TEXT = 'Once you\'ve received privileges from an administrator you can view and approve DEFA submissions.'
-const STUDENT_TEXT = 'Once you\'ve logged in you can submit a link to your published studies in Koski.'
 
 const styles = {
   header: {
@@ -23,14 +22,14 @@ const styles = {
   }
 }
 
-const Welcome = ({ classes }) => (
+const Welcome = ({ classes, translate }) => (
   <div>
     <Typography
       className={classes.header}
       align="center"
       variant="h2"
     >
-      Welcome to DEFA-tool
+      {translate('welcome_message')}
     </Typography>
     <Grid
       direction="row"
@@ -46,10 +45,10 @@ const Welcome = ({ classes }) => (
               align="center"
               variant="h4"
             >
-              Teacher
+              {translate('teacher')}
             </Typography>
             <Typography>
-              {TEACHER_TEXT}
+              {translate('teacher_text')}
             </Typography>
           </CardContent>
         </Card>
@@ -61,10 +60,10 @@ const Welcome = ({ classes }) => (
               align="center"
               variant="h4"
             >
-              Student
+              {translate('student')}
             </Typography>
             <Typography>
-              {STUDENT_TEXT}
+              {translate('student_text')}
             </Typography>
           </CardContent>
         </Card>
@@ -74,13 +73,16 @@ const Welcome = ({ classes }) => (
     <img
       className={classes.logo}
       src={toskaLogo}
-      alt="toska logo"
+      alt="TOSKA logo"
     />
   </div>
 )
 
 Welcome.propTypes = {
-  classes: parseClasses(styles).isRequired
+  classes: parseClasses(styles).isRequired,
+  translate: func.isRequired
 }
 
-export default withStyles(styles)(Welcome)
+export default withStyles(styles)(
+  withLocalize('Welcome')(Welcome)
+)

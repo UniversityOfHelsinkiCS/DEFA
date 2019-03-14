@@ -9,3 +9,8 @@ export const createSubmissionAction = submission => dispatch => dispatch({
   type: types.SUBMISSION_CREATE,
   submission
 })
+
+export const deleteSubmissionAction = id => dispatch => dispatch({
+  type: types.SUBMISSION_DELETE,
+  id
+})

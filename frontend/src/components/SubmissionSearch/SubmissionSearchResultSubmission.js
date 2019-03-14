@@ -1,10 +1,14 @@
 import React from 'react'
-import { shape, string } from 'prop-types'
+import { shape, string, func } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography, Card, CardContent, CardHeader } from '@material-ui/core'
 import SubmissionApproveMutation from './SubmissionApproveMutation'
+import SubmissionAutoParse, { context } from '../SubmissionAutoParse'
 import { parseClasses, ISODateString } from '../../util/propTypes'
 import parseDate from '../../util/parseDate'
+import withLocalize from '../../util/tieredLocalize'
+
+const { SUBMISSION_SEARCH } = context
 
 const styles = {
   card: {
@@ -12,14 +16,14 @@ const styles = {
   }
 }
 
-const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
+const SubmissionSearchResultSubmissionComponent = ({ submission, classes, translate }) => (
   <Card className={classes.card}>
     <CardHeader
       title={parseDate(submission.date)}
     />
     <CardContent>
+      <Typography variant="h6">{translate('url')}</Typography>
       <Typography>
-        <span>Koski url: </span>
         <a
           href={submission.url}
           target="_blank"
@@ -28,9 +32,16 @@ const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
           {submission.url}
         </a>
       </Typography>
+      <SubmissionAutoParse submissionID={submission.id} context={SUBMISSION_SEARCH} />
     </CardContent>
+    {submission.comment.length > 0 ? (
+      <CardContent>
+        <Typography variant="h6">{translate('comment')}</Typography>
+        <Typography>{submission.comment}</Typography>
+      </CardContent>
+    ) : null}
     <CardContent>
-      <Typography>Approval status</Typography>
+      <Typography variant="h6">{translate('approval')}</Typography>
       <SubmissionApproveMutation submission={submission} />
     </CardContent>
   </Card>
@@ -39,9 +50,13 @@ const SubmissionSearchResultSubmissionComponent = ({ submission, classes }) => (
 SubmissionSearchResultSubmissionComponent.propTypes = {
   submission: shape({
     url: string.isRequired,
+    comment: string.isRequired,
     date: ISODateString.isRequired
   }).isRequired,
-  classes: parseClasses(styles).isRequired
+  classes: parseClasses(styles).isRequired,
+  translate: func.isRequired
 }
 
-export default withStyles(styles)(SubmissionSearchResultSubmissionComponent)
+export default withStyles(styles)(
+  withLocalize('SubmissionSearch.SubmissionSearchResultSubmission')(SubmissionSearchResultSubmissionComponent)
+)

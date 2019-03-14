@@ -1,17 +1,21 @@
 import React from 'react'
+import { func } from 'prop-types'
 import CardContainer from './CardContainer'
 import StudentSubmissionList from './StudentSubmissionList'
 import StudentSubmissionAddForm from './StudentSubmissionAddForm'
+import withLocalize from '../../util/tieredLocalize'
 
-const CARD_TITLE = 'Your Submission'
-
-const StudentSubmissionContainer = () => (
+const StudentSubmissionContainerComponent = ({ translate }) => (
   <div>
-    <CardContainer title={CARD_TITLE}>
+    <CardContainer title={translate('card_title')}>
       <StudentSubmissionAddForm />
       <StudentSubmissionList />
     </CardContainer>
   </div>
 )
 
-export default StudentSubmissionContainer
+StudentSubmissionContainerComponent.propTypes = {
+  translate: func.isRequired
+}
+
+export default withLocalize('Student.StudentSubmissionContainer')(StudentSubmissionContainerComponent)

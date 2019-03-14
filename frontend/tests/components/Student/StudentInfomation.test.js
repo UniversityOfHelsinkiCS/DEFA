@@ -8,13 +8,7 @@ const user = {
   id: '11111111111111111111',
   name: 'Name Nameson',
   role: 'STUDENT',
-  attributes: {
-    cn: 'Name Nameson',
-    displayName: 'Name',
-    eduPersonPrincipalName: '????',
-    schacHomeOrganization: 'uni.fi',
-    schacPersonalUniqueCode: '012345678'
-  }
+  email: 'name@mail.test'
 }
 
 describe('StudentInformation component', () => {
@@ -22,6 +16,7 @@ describe('StudentInformation component', () => {
   beforeAll(() => {
     wrapper = mount(<StudentInformationComponent
       user={user}
+      translate={id => id}
     />)
   })
   afterAll(() => {
@@ -29,6 +24,9 @@ describe('StudentInformation component', () => {
   })
 
   it('Displays user\'s name', () => {
-    expect(findText(user.attributes.cn, wrapper)).toBeGreaterThan(0)
+    expect(findText(user.name, wrapper)).toBeGreaterThan(0)
+  })
+  it('Displays user\'s email', () => {
+    expect(findText(user.email, wrapper)).toBeGreaterThan(0)
   })
 })

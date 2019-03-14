@@ -1,45 +1,75 @@
 import React from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Select,
+  MenuItem
+} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import { shape, func } from 'prop-types'
 import { userProp, parseClasses } from '../util/propTypes'
-
-
+import { getLanguage, saveLanguage } from '../util/language'
 import Login from './Login'
 import LogOut from './LogOut'
+import withLocalize from '../util/tieredLocalize'
 
 const styles = {
   root: {
-    flexGrow: 1
+    display: 'flex'
   },
   grow: {
     flexGrow: 1
   },
   lastButton: {
     marginRight: '5px'
+  },
+  homeHeader: {
+    cursor: 'pointer'
+  },
+  languageContainer: {
+    marginLeft: '30px'
   }
 }
 
-const NavBar = ({ classes, history, user }) => {
+const NavBar = ({ classes, history, user, setActiveLanguage, translate }) => {
   const getRoutes = role => (
     <React.Fragment>
-      {role === 'ADMIN' ? <Button color="inherit" onClick={() => history.push('/admin')}>Admin</Button> : null}
-      {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/submissions')}>All Submissions</Button> : null}
-      <Button className={classes.lastButton} onClick={() => history.push('/student')}>My Submissions</Button>
+      {role === 'ADMIN' ? <Button color="inherit" onClick={() => history.push('/admin')}>{translate('admin')}</Button> : null}
+      {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/submissions')}>{translate('submissions')}</Button> : null}
+      <Button className={classes.lastButton} onClick={() => history.push('/student')}>{translate('student')}</Button>
     </React.Fragment>
   )
 
+  const changeLanguage = ({ target }) => {
+    const { value } = target
+    setActiveLanguage(value)
+    saveLanguage(value)
+  }
+
   return (
-    <div className={classes.root}>
+    <div>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" color="inherit" className={classes.grow} onClick={() => history.push('/')}>
-            DEFA
-          </Typography>
+          <div className={`${classes.grow} ${classes.root}`}>
+            <Typography className={classes.homeHeader} variant="h6" color="inherit" onClick={() => history.push('/')}>
+              DEFA
+            </Typography>
+            <div>
+              <Select
+                className={classes.languageContainer}
+                value={getLanguage() || 'eng'}
+                autoWidth
+                onChange={changeLanguage}
+              >
+                <MenuItem value="eng">English</MenuItem>
+                <MenuItem value="fin">suomi</MenuItem>
+              </Select>
+            </div>
+            <div className={classes.grow} />
+          </div>
           {user ? getRoutes(user.role) : null}
           <Login />
           <LogOut />
@@ -58,7 +88,13 @@ NavBar.propTypes = {
   history: shape({
     push: func.isRequired
   }).isRequired,
-  user: userProp
+  user: userProp,
+  setActiveLanguage: func.isRequired,
+  translate: func.isRequired
 }
 
-export default withRouter(withStyles(styles)(NavBar))
+export default withLocalize('NavBar')(
+  withRouter(
+    withStyles(styles)(NavBar)
+  )
+)

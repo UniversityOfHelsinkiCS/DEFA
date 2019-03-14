@@ -3,24 +3,25 @@ import {
   StudentSubmissionComponent
 } from '../../../src/components/Student/StudentSubmission'
 import { findText } from '../../testUtils'
-import parseDate from '../../../src/util/parseDate'
 
 StudentSubmissionComponent.propTypes = {}
 
 const submission = {
   url: 'https://defa.cs.helsinki.fi',
   date: (new Date()).toISOString(),
-  approval: 'APPROVED'
+  approval: 'APPROVED',
+  comment: 'Filled with filler text...'
 }
 
-describe('StudentInformation component', () => {
+describe('StudentSubmission component', () => {
   let wrapper
 
-  describe('When a submission has been submitted', () => {
+  describe('when a submission has been submitted', () => {
     beforeAll(() => {
-      wrapper = mount(<StudentSubmissionComponent
+      wrapper = shallow(<StudentSubmissionComponent
         submission={submission}
         classes={{}}
+        translate={id => id}
       />)
     })
     afterAll(() => {
@@ -31,12 +32,12 @@ describe('StudentInformation component', () => {
       expect(findText(submission.url, wrapper)).toBeGreaterThan(0)
     })
 
-    it('Renders the submission approval status.', () => {
-      expect(findText(submission.approval, wrapper)).toBeGreaterThan(0)
+    it('Doesnt render the submission approval status.', () => {
+      expect(findText(submission.approval, wrapper)).toBe(0)
     })
 
-    it('Renders the submission date.', () => {
-      expect(findText(parseDate(submission.date), wrapper)).toBeGreaterThan(0)
+    it('renders the comment.', () => {
+      expect(findText(submission.comment, wrapper)).toBeGreaterThan(0)
     })
   })
 })

@@ -8,6 +8,7 @@ import { editUser } from '../../util/queries/editUsers'
 import CardContainer from '../Student/CardContainer'
 import { editUserSuccess } from '../../util/actions/admin'
 import { parseClasses } from '../../util/propTypes'
+import withLocalize from '../../util/tieredLocalize'
 
 const ROWS = [
   { label: 'name', field: 'name' },
@@ -145,7 +146,7 @@ class AdminSearchResultItemComponent extends PureComponent {
   }
 
   notEditingButtons = () => {
-    const { classes } = this.props
+    const { classes, translate } = this.props
     return (
       <div>
         <Button
@@ -154,14 +155,14 @@ class AdminSearchResultItemComponent extends PureComponent {
           variant="contained"
           onClick={this.toggleEditing(true)}
         >
-          Edit
+          {translate('edit')}
         </Button>
       </div>
     )
   }
 
   editingButtons = () => {
-    const { user, token, classes } = this.props
+    const { user, token, classes, translate } = this.props
     const { values } = this.state
     return (
       <div>
@@ -171,7 +172,7 @@ class AdminSearchResultItemComponent extends PureComponent {
           variant="contained"
           onClick={this.toggleEditing(false)}
         >
-          Cancel
+          {translate('cancel')}
         </Button>
         <Mutation
           mutation={editUser}
@@ -189,7 +190,7 @@ class AdminSearchResultItemComponent extends PureComponent {
               variant="contained"
               onClick={this.saveChanges(mutate)}
             >
-              Save
+              {translate('save')}
             </Button>
           )}
         </Mutation>
@@ -230,7 +231,8 @@ AdminSearchResultItemComponent.propTypes = {
   }).isRequired,
   token: string.isRequired,
   dispatchEditUserSuccess: func.isRequired,
-  classes: parseClasses(styles).isRequired
+  classes: parseClasses(styles).isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = ({ user }) => ({
@@ -244,4 +246,6 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(styles)(AdminSearchResultItemComponent))
+)(withStyles(styles)(
+  withLocalize('Admin.AdminSearchResultItem')(AdminSearchResultItemComponent)
+))

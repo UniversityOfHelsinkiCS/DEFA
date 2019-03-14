@@ -1,11 +1,11 @@
 import React from 'react'
+import { func } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
 import SubmissionSearchForm from './SubmissionSearchForm'
 import { parseClasses } from '../../util/propTypes'
 import SubmissionSearchQuery from './SubmissionSearchQuery'
-
-export const HEADER_TEXT = 'View DEFA submissions'
+import withLocalize from '../../util/tieredLocalize'
 
 const styles = {
   header: {
@@ -13,14 +13,14 @@ const styles = {
   }
 }
 
-export const SubmissionSearchPageComponent = ({ classes }) => (
+export const SubmissionSearchPageComponent = ({ classes, translate }) => (
   <div>
     <Typography
       variant="h2"
       align="center"
       className={classes.header}
     >
-      {HEADER_TEXT}
+      {translate('page_header')}
     </Typography>
     <SubmissionSearchForm />
     <SubmissionSearchQuery />
@@ -28,7 +28,10 @@ export const SubmissionSearchPageComponent = ({ classes }) => (
 )
 
 SubmissionSearchPageComponent.propTypes = {
-  classes: parseClasses(styles).isRequired
+  classes: parseClasses(styles).isRequired,
+  translate: func.isRequired
 }
 
-export default withStyles(styles)(SubmissionSearchPageComponent)
+export default withStyles(styles)(
+  withLocalize('SubmissionSearch.SubmissionSearchPage')(SubmissionSearchPageComponent)
+)

@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
+import { bool, func } from 'prop-types'
 import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button'
 import { logout } from '../util/actions/user'
 import { primary } from '../common/colors'
+import withLocalize from '../util/tieredLocalize'
 
 class LogOut extends PureComponent {
   handleLogout = () => {
@@ -12,7 +13,7 @@ class LogOut extends PureComponent {
   }
 
   render() {
-    const { loggedIn } = this.props
+    const { loggedIn, translate } = this.props
     return (
       <nav>
         {loggedIn ? (
@@ -23,7 +24,7 @@ class LogOut extends PureComponent {
             }}
             onClick={() => this.handleLogout()}
           >
-            Log out
+            {translate('log_out')}
           </Button>
         ) : null}
       </nav>
@@ -32,8 +33,9 @@ class LogOut extends PureComponent {
 }
 
 LogOut.propTypes = {
-  loggedIn: PropTypes.bool.isRequired,
-  dispatchLogout: PropTypes.func.isRequired
+  loggedIn: bool.isRequired,
+  dispatchLogout: func.isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -44,4 +46,9 @@ const mapDispatchToProps = {
   dispatchLogout: logout
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogOut)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
+  withLocalize('LogOut')(LogOut)
+)

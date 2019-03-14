@@ -14,12 +14,13 @@ describe('authenticate resolvers', () => {
       describe('when no token is provided', () => {
         const args = {}
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not touch context.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           expect(context).toEqual({})
         })
@@ -33,12 +34,13 @@ describe('authenticate resolvers', () => {
           token: jwt.sign(user, 'WRONGSECRET')
         }
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not touch context.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           expect(context).toEqual({})
         })
@@ -75,12 +77,13 @@ describe('authenticate resolvers', () => {
       describe('when no token is provided', () => {
         const args = {}
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not touch context.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           expect(context).toEqual({})
         })
@@ -94,12 +97,13 @@ describe('authenticate resolvers', () => {
           token: jwt.sign(user, 'WRONGSECRET')
         }
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not touch context.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           expect(context).toEqual({})
         })

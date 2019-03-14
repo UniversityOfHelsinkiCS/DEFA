@@ -39,9 +39,51 @@ const checkAdmin = (context) => {
   }
 }
 
+const parseKoskiModel = json => {
+  switch (json.type) {
+    case 'object':
+      return json.value.properties.reduce(
+        (acc, property) => ({
+          ...acc,
+          [property.key]: parseKoskiModel(property.model)
+        }),
+        {}
+      )
+    case 'array':
+      return json.value.map(element => parseKoskiModel(element))
+    case 'enum':
+      if (!json.value.title) {
+        throw new Error('Enum without title')
+      }
+      return json.value.totle
+    case 'date':
+      return json.value.data
+    case 'string':
+      return json.value.data
+    case 'number':
+      return json.value.data
+    case 'boolean':
+      return json.value.data
+    default:
+      if (!json.optional) {
+        throw new Error(`Unknown model type: ${json.type}`)
+      }
+      return null
+  }
+}
+
+const parseKoskiName = name => {
+  if (name.fi) return name.fi
+  if (name.en) return name.en
+  if (name.sv) return name.sv
+  return name
+}
+
 module.exports = {
   roleValues,
   checkLoggedIn,
   checkPrivileged,
-  checkAdmin
+  checkAdmin,
+  parseKoskiModel,
+  parseKoskiName
 }

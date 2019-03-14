@@ -1,9 +1,10 @@
 import React from 'react'
-
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { BrowserRouter } from 'react-router-dom'
+import { LocalizeProvider } from 'react-localize-redux'
 import ApolloContainer from './ApolloContainer'
 import Main from './Main'
+import LocalizeWrapper from './LocalizeWrapper'
 
 const palette = {
   primary: {
@@ -24,9 +25,13 @@ const theme = createMuiTheme({ palette, themeName, typography: { useNextVariants
 const App = () => (
   <MuiThemeProvider theme={theme}>
     <ApolloContainer>
-      <BrowserRouter>
-        <Main />
-      </BrowserRouter>
+      <LocalizeProvider>
+        <LocalizeWrapper>
+          <BrowserRouter>
+            <Main />
+          </BrowserRouter>
+        </LocalizeWrapper>
+      </LocalizeProvider>
     </ApolloContainer>
   </MuiThemeProvider>
 )

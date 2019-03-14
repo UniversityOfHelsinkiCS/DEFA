@@ -5,6 +5,105 @@ const asymmetricMatcher = require('../testUtils/asymmetricMatcher')
 
 describe('submission resolvers', () => {
   describe('queries', () => {
+    describe('submission', () => {
+      const resolver = resolvers.Query.submission
+      const parent = null
+      const userData = {
+        username: 'testuser20',
+        name: 'Test User',
+        role: 'STUDENT',
+        cn: 'Test Test User',
+        studentNumber: '000000010',
+        email: 'test@test.test'
+      }
+      const submissionData = {
+        url: 'https://test.test',
+        date: Number(new Date())
+      }
+      const ids = {}
+      beforeAll(async () => {
+        const user = await UserModel.create(userData)
+        ids.user = user.id
+        const submission = await SubmissionModel.create({
+          ...submissionData,
+          user: user._id
+        })
+        ids.submission = submission.id
+      })
+      afterAll(async () => {
+        await SubmissionModel.findByIdAndDelete(ids.submission)
+        await UserModel.findByIdAndDelete(ids.user)
+      })
+
+      describe('when args.id points to nonexistent submission', () => {
+        const args = {}
+        const context = {
+          authorization: {
+            role: 'ADMIN'
+          }
+        }
+
+        it('returns null.', async () => {
+          const result = await resolver(parent, args, context)
+          expect(result).toBeNull()
+        })
+      })
+      describe('when args.id points to a submission', () => {
+        const args = {}
+        beforeAll(() => {
+          args.id = ids.submission
+        })
+
+        describe('when authorized as uploader', () => {
+          const context = {
+            authorization: {
+              role: 'STUDENT'
+            }
+          }
+          beforeAll(() => {
+            context.authorization.id = ids.user
+          })
+
+          it('returns the submission.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result).toMatchObject({
+              url: submissionData.url,
+              id: asymmetricMatcher(actual => actual === ids.submission)
+            })
+          })
+        })
+
+        describe('when authorized as privileged', () => {
+          const context = {
+            authorization: {
+              role: 'PRIVILEGED'
+            }
+          }
+
+          it('returns the submission.', async () => {
+            const result = await resolver(parent, args, context)
+            expect(result).toMatchObject({
+              url: submissionData.url,
+              id: asymmetricMatcher(actual => actual === ids.submission)
+            })
+          })
+        })
+
+        describe('when authorized as third party', () => {
+          const context = {
+            authorization: {
+              id: '0000000000000000',
+              role: 'STUDENT'
+            }
+          }
+
+          it('throws an error.', async () => {
+            const asyncResolver = async () => resolver(parent, args, context)
+            expect(asyncResolver()).rejects.toThrow()
+          })
+        })
+      })
+    })
     describe('submissions', () => {
       const resolver = resolvers.Query.submissions
       const parent = null
@@ -74,7 +173,7 @@ describe('submission resolvers', () => {
         const context = {}
         const args = {}
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
       })
@@ -88,7 +187,7 @@ describe('submission resolvers', () => {
           }
         })
         it('throws an error.', async () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
       })
@@ -138,11 +237,12 @@ describe('submission resolvers', () => {
     })
   })
   describe('mutations', () => {
-    const resolver = resolvers.Mutation.createSubmission
     const parent = null
     describe('createSubmission', () => {
+      const resolver = resolvers.Mutation.createSubmission
       const args = {
-        url: 'https://pepe.hands'
+        url: 'https://pepe.hands',
+        comment: 'Additional information.'
       }
       const userData = {
         username: 'testuser3',
@@ -163,26 +263,24 @@ describe('submission resolvers', () => {
           role: user.role
         }
       })
+      afterEach(async () => {
+        await SubmissionModel.findOneAndDelete(args)
+      })
       afterAll(async () => {
-        await Promise.all([
-          UserModel.findByIdAndDelete(ids.user),
-          SubmissionModel.deleteMany(args)
-        ])
+        await UserModel.findByIdAndDelete(ids.user)
       })
       describe('when not authenticated', () => {
         const context = notAuthenticatedContext
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not create a submission in the database.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
-          const created = await SubmissionModel.findOne({
-            ...args,
-            id: ids.user
-          })
+          const created = await SubmissionModel.findOne(args)
           expect(created).toBeNull()
         })
       })
@@ -301,12 +399,13 @@ describe('submission resolvers', () => {
         })
 
         it('throws an error.', () => {
-          const asyncResolver = async () => await resolver(parent, args, context)
+          const asyncResolver = async () => resolver(parent, args, context)
           expect(asyncResolver()).rejects.toThrow()
         })
         it('does not change the submission in the database.', async () => {
           try {
             await resolver(parent, args, context)
+          // eslint-disable-next-line no-empty
           } catch (e) {}
           const result = await SubmissionModel.findById(ids.submission)
           expect(result).toMatchObject({
@@ -318,13 +417,85 @@ describe('submission resolvers', () => {
       })
     })
   })
+  describe('deleteSubmission', () => {
+    const resolver = resolvers.Mutation.deleteSubmission
+    const parent = null
+    const userData = {
+      username: 'testuser12',
+      name: 'Test User',
+      role: 'STUDENT',
+      cn: 'Test Test User',
+      studentNumber: '000000010',
+      email: 'test@test.test'
+    }
+    const submissionData = {
+      url: 'https://test.test',
+      date: Number(new Date()),
+      approval: 'PENDING'
+    }
+    const authenticatedContext = {}
+    const argsStub = {}
+    const ids = {}
+    beforeAll(async () => {
+      const user = await UserModel.create(userData)
+      ids.user = user.id
+      authenticatedContext.authorization = {
+        id: user.id,
+        role: user.role
+      }
+      const submission = await SubmissionModel.create({
+        ...submissionData,
+        user: user._id
+      })
+      ids.submission = submission.id
+    })
+    // afterEach(async () => {
+    //   await SubmissionModel.findByIdAndUpdate(ids.submission, submissionData)
+    // })
+    afterAll(async () => {
+      await UserModel.findByIdAndDelete(ids.user)
+    })
+
+    describe('when authorized', () => {
+      const context = {
+        authorization: {
+          role: 'STUDENT'
+        }
+      }
+      describe('when args point to own submission', () => {
+        const args = { ...argsStub }
+        beforeAll(() => {
+          args.id = ids.submission
+        })
+
+
+        it('returns the deleted submissions Id.', async () => {
+          const result = await resolver(parent, args, authenticatedContext)
+          expect(result).toEqual(ids.submission)
+        })
+        it('removes the submission in the database.', async () => {
+          await resolver(parent, args, authenticatedContext)
+          const result = await SubmissionModel.findById(ids.submission)
+          expect(result).toBeNull()
+        })
+      })
+      describe('when args.submission points to no submission.', () => {
+        const args = { id: ids.user, ...argsStub }
+
+        it('returns null.', async () => {
+          const result = await resolver(parent, args, context)
+          expect(result).toBeNull()
+        })
+      })
+    })
+  })
   describe('children', () => {
     describe('user', () => {
       const resolver = resolvers.Submission.user
       const parent = {}
       const args = {}
       const context = {}
-      userData = {
+      const userData = {
         username: 'testuser4',
         name: 'Test User',
         role: 'STUDENT',
@@ -332,7 +503,7 @@ describe('submission resolvers', () => {
         studentNumber: '000000010',
         email: 'test@test.test'
       }
-      submissionData = {
+      const submissionData = {
         url: 'https://skeleton.doot'
       }
       const ids = {}

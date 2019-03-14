@@ -1,0 +1,232 @@
+{
+  "common": {
+    "yes": [
+      "Yes",
+      "Kyllä"
+    ],
+    "comment": [
+      "Additional information",
+      "Lisätietoja"
+    ],
+    "url": [
+      "Koski URL",
+      "Koski URL"
+    ],
+    "name": [
+      "name",
+      "nimi"
+    ],
+    "student_number": [
+      "student number",
+      "opiskelijanumero"
+    ],
+    "username": [
+      "username",
+      "käyttäjänimi"
+    ],
+    "error_header": [
+      "Error",
+      "Virhe"
+    ]
+  },
+  "NavBar": {
+    "admin": [
+      "Admin",
+      "Ylläpito"
+    ],
+    "submissions": [
+      "All Submissions",
+      "Kaikki Hakemukset"
+    ],
+    "student": [
+      "My Submissions",
+      "Minun Hakemukseni"
+    ]
+  },
+  "Welcome": {
+    "welcome_message": [
+      "Welcome to DEFA-tool",
+      "Tervetuloa DEFA-työkaluun"
+    ],
+    "teacher": [
+      "Teacher",
+      "Opettaja"
+    ],
+    "student": [
+      "Student",
+      "Opiskelija"
+    ],
+    "teacher_text": [
+      "Once you've received privileges from an administrator you can view students' DEFA submissions.",
+      "Kun olet saanut oikeudet ylläpitäjältä, voit tarkastaa opiskelijoiden DEFA suorituksia."
+    ],
+    "student_text": [
+      "Once you've logged in you can submit a link to your published studies in the Koski service.",
+      "Kun olet kirjautunut sisään, voit jättää linkin Koski-palvelussa julkaistuihin kurssisuorituksiisi."
+    ]
+  },
+  "Student": {
+    "DeleteSubmission": {
+      "delete": [
+        "Delete",
+        "Poista"
+      ],
+      "dialogTitle": [
+        "Delete this submission?",
+        "Poistetaanko tämä hakemus?"
+      ],
+      "no": [
+        "No wait",
+        "Ei, odotapas"
+      ]
+    },
+    "StudentInformation": {
+      "card_title": [
+        "Your Info",
+        "Omat tietosi"
+      ],
+      "email": [
+        "email",
+        "sähköposti"
+      ]
+    },
+    "StudentPage": {
+      "header": [
+        "Your Page",
+        "Oma Sivusi"
+      ],
+      "error_text": [
+        "Failed to load user data. Refresh the page to try again.",
+        "Käyttäjätietojen haku epäonnistui. Yritä uudestaan lataamalla sivu uudelleen."
+      ]
+    },
+    "StudentSubmissionAddForm": {
+      "url_helper": [
+        "Link to your published studies in Koski service. It should look like https://opintopolku.fi/koski/opinnot/{your unique code}",
+        "Linkki Koski-palvelussa julkaistuihin kurssisuorituksiisi. Sen tulisi olla muotoa https://opintopolku.fi/koski/opinnot/{uniikki koodisi}"
+      ],
+      "url_helper_whitespace": [
+        "Your input includes whitespace.",
+        "Syöte sisältää välilyöntejä."
+      ],
+      "add_submission": [
+        "Add a new submission",
+        "Luo uusi hakemus"
+      ],
+      "submit": [
+        "Submit",
+        "Lähetä"
+      ],
+      "submit_tooltip": [
+        "The URL you've provided is not valid.",
+        "Syöttämäsi URL osoite ei ole halutunlainen."
+      ]
+    },
+    "StudentSubmissionContainer": {
+      "card_title": [
+        "Your submissions",
+        "Omat hakemuksesi"
+      ]
+    }
+  },
+  "SubmissionSearch": {
+    "SubmissionApproveMutation": {
+      "pending": [
+        "PENDING",
+        "ODOTTAA"
+      ],
+      "approved": [
+        "APPROVED",
+        "HYVÄKSYTTY"
+      ],
+      "rejected": [
+        "REJECTED",
+        "HYLÄTTY"
+      ]
+    },
+    "SubmissionSearchPage": {
+      "page_header": [
+        "DEFA submissions",
+        "DEFA hakemukset"
+      ]
+    },
+    "SubmissionSearchQuery": {
+      "error_text": [
+        "Failed to load submission data. Refresh the page to try again.",
+        "Hakemuksen tietojen haku epäonnistui. Yritä uudestaan lataamalla sivu uudelleen."
+      ]
+    },
+    "SubmissionSearchResultSubmission": {
+      "approval": [
+        "Approval status",
+        "Hyväksymisen tila"
+      ]
+    }
+  },
+  "UserSearch": {
+    "UserSearchForm": {
+      "card_title": [
+        "Filter Users",
+        "Suodata käyttäjiä"
+      ]
+    }
+  },
+  "Admin": {
+    "AdminPage": {
+      "page_header": [
+        "User Management",
+        "Käyttäjien hallinta"
+      ]
+    },
+    "AdminSearchQuery": {
+      "search": [
+        "Search",
+        "Hae"
+      ]
+    },
+    "AdminSearchResultItem": {
+      "edit": [
+        "EDIT",
+        "MUOKKAA"
+      ],
+      "cancel": [
+        "CANCEL",
+        "PERU"
+      ],
+      "save": [
+        "SAVE",
+        "TALLENNA"
+      ]
+    }
+  },
+  "Login": {
+    "log_in": [
+      "Log In",
+      "Kirjaudu sisään"
+    ]
+  },
+  "LogOut": {
+    "log_out": [
+      "Log Out",
+      "Kirjaudu ulos"
+    ]
+  },
+  "SubmissionAutoParse": {
+    "parse": [
+      "Parse Courses",
+      "Jäsennä kurssit"
+    ],
+    "cr": [
+      "cr",
+      "op"
+    ],
+    "error_text": [
+      "Could not parse courses from provided URL address.",
+      "Kursseja ei voitu jäsentää annetusta URL osoitteesta."
+    ],
+    "loading_text": [
+      "Connecting to Koski service...",
+      "Yhdistetään Koski-palveluun..."
+    ]
+  }
+}

@@ -9,10 +9,22 @@ enum Role {
 
 scalar Date
 
+scalar KoskiURL
+
 enum Approval {
   PENDING
   APPROVED
   REJECTED
+}
+
+type KoskiUniversity {
+  name: String!
+  courses: [KoskiCourse]!
+}
+
+type KoskiCourse {
+  name: String!
+  credits: Int!
 }
 
 type User {
@@ -47,16 +59,19 @@ input UserEdit {
 
 type Submission {
   id: ID!
-  url: String!
+  url: KoskiURL!
   date: Date!
   approval: Approval!
+  comment: String!
   user: User!
+  koski: [KoskiUniversity]
 }
 
 type Query {
   authenticate(token: String!): Query
   me: User
   users(user: UserSearch): [User]!
+  submission(id: ID!): Submission
   submissions(user: UserSearch): [Submission]
   refreshToken(id: ID!): String
 }
@@ -71,7 +86,8 @@ type Mutation {
     cn: String!,
     email: String!
   ): String
-  createSubmission(url: String!): Submission
+  deleteSubmission(id: ID!): String
+  createSubmission(url: KoskiURL!, comment: String): Submission
   editUser(id: ID!, values: UserEdit!): User
   approveSubmission(
     submission: ID!

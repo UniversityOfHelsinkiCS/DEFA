@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import { func, string } from 'prop-types'
+import { withStyles } from '@material-ui/core/styles'
 import {
   Typography,
   CircularProgress,
@@ -7,26 +8,32 @@ import {
   Button,
   ExpansionPanel,
   ExpansionPanelSummary,
-  ExpansionPanelDetails
+  ExpansionPanelDetails,
+  Tooltip
 } from '@material-ui/core'
 import { Mutation } from 'react-apollo'
 import { connect } from 'react-redux'
 import { createSubmission } from '../../util/queries/createSubmission'
 import { createSubmissionAction } from '../../util/actions/submission'
+import { parseClasses } from '../../util/propTypes'
+import withLocalize from '../../util/tieredLocalize'
 
-export const AddSubmissionText = 'Add Submission'
+const styles = {
+  textFieldContainer: {
+    width: '100%'
+  }
+}
 
 const INITIAL_STATE = {
   expanded: false,
   loading: false,
-  disableSubmit: true,
   formData: {
-    url: ''
+    url: '',
+    comment: ''
   }
 }
 
 const KOSKI_URL_REGEXP = new RegExp('^(http://|https://|)(www\\.|)opintopolku\\.fi/koski/opinnot/[0-9a-f]+$')
-const TEXT_FIELD_HELPER_TEXT = 'Link to your published studies in Koski service. Should look like: https://opintopolku.fi/koski/opinnot/{your unique code}'
 
 export class StudentSubmissionAddFormComponent extends PureComponent {
   constructor(props) {
@@ -35,8 +42,6 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
   }
 
   onSubmit = mutate => () => {
-    const { disableSubmit } = this.state
-    if (disableSubmit) return
     this.setState({
       loading: true
     })
@@ -51,11 +56,12 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
   }
 
   onFormChange = event => {
-    const { value } = event.target
+    const { formData } = this.state
+    const { value, name } = event.target
     this.setState({
-      disableSubmit: value.length === 0,
       formData: {
-        url: value
+        ...formData,
+        [name]: value
       }
     })
   }
@@ -68,27 +74,51 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
   }
 
   render() {
-    const { formData, disableSubmit, loading, expanded } = this.state
-    const { token } = this.props
+    const { formData, loading, expanded } = this.state
+    const { token, classes, translate } = this.props
+    const urlIsValid = KOSKI_URL_REGEXP.test(formData.url)
     return (
       <ExpansionPanel
         expanded={expanded}
         onChange={this.toggleExpand}
       >
         <ExpansionPanelSummary>
-          <Typography>{AddSubmissionText}</Typography>
+          <Typography>{translate('add_submission')}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <div>
-            <div>
+            <div className={classes.textFieldContainer}>
               <TextField
-                error={!KOSKI_URL_REGEXP.test(formData.url)}
-                label="Koski URL"
-                helperText={TEXT_FIELD_HELPER_TEXT}
+                error={!urlIsValid}
+                label={translate('url')}
+                helperText={
+                  formData.url.includes(' ')
+                    ? [
+                      <div>
+                        {translate('url_helper')}
+                      </div>,
+                      <div>
+                        {translate('url_helper_whitespace')}
+                      </div>
+                    ] : translate('url_helper')
+                }
                 value={formData.url}
                 onChange={this.onFormChange}
                 margin="normal"
                 variant="outlined"
+                fullWidth
+                name="url"
+              />
+              <TextField
+                label={translate('comment')}
+                value={formData.comment}
+                onChange={this.onFormChange}
+                margin="normal"
+                variant="outlined"
+                multiline
+                fullWidth
+                rows={4}
+                name="comment"
               />
             </div>
             <div>
@@ -102,15 +132,24 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
                 onCompleted={this.onCompleted}
               >
                 {mutate => (
-                  <Button
-                    type="button"
-                    onClick={this.onSubmit(mutate)}
-                    disabled={disableSubmit}
-                    variant="contained"
-                    color="primary"
+                  <Tooltip
+                    title={translate('submit_tooltip')}
+                    disableHoverListener={urlIsValid}
+                    disableFocusListener={urlIsValid}
+                    disableTouchListener={urlIsValid}
                   >
-                    <Typography>Submit</Typography>
-                  </Button>
+                    <span>
+                      <Button
+                        type="button"
+                        onClick={this.onSubmit(mutate)}
+                        disabled={!urlIsValid}
+                        variant="contained"
+                        color="primary"
+                      >
+                        {translate('submit')}
+                      </Button>
+                    </span>
+                  </Tooltip>
                 )}
               </Mutation>
               {loading ? <CircularProgress /> : null}
@@ -124,7 +163,9 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
 
 StudentSubmissionAddFormComponent.propTypes = {
   dispatchCreateSubmission: func.isRequired,
-  token: string.isRequired
+  token: string.isRequired,
+  classes: parseClasses(styles).isRequired,
+  translate: func.isRequired
 }
 
 const mapStateToProps = ({ user }) => ({
@@ -135,4 +176,9 @@ const mapDispatchToProps = {
   dispatchCreateSubmission: createSubmissionAction
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StudentSubmissionAddFormComponent)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withStyles(styles)(
+  withLocalize('Student.StudentSubmissionAddForm')(StudentSubmissionAddFormComponent)
+))
