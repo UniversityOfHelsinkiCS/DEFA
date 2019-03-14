@@ -1,11 +1,15 @@
 const authenticate = require('./authenticate')
 const user = require('./user')
 const submission = require('./submission')
+const date = require('./date')
+const koskiURL = require('./koskiURL')
 
 const resolvers = [
   authenticate,
   user,
-  submission
+  submission,
+  date,
+  koskiURL
 ].reduce(
   (acc, typeResolver) => ({
     ...acc,

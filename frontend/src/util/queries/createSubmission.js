@@ -4,7 +4,7 @@ import { gql } from 'apollo-boost'
 export const createSubmission = gql`
 mutation createSubmission(
   $token: String!
-  $url: String!
+  $url: KoskiURL!
   $comment: String
 ) { 
   authenticate(
@@ -17,7 +17,6 @@ mutation createSubmission(
       id
       url
       date
-      approval
       comment
     }
   }

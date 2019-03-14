@@ -9,10 +9,7 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  Grid
+  Tooltip
 } from '@material-ui/core'
 import { Mutation } from 'react-apollo'
 import { connect } from 'react-redux'
@@ -30,8 +27,6 @@ const styles = {
 const INITIAL_STATE = {
   expanded: false,
   loading: false,
-  disableSubmit: true,
-  dialogOpen: false,
   formData: {
     url: '',
     comment: ''
@@ -61,12 +56,9 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
   }
 
   onFormChange = event => {
-    const { formData, disableSubmit } = this.state
+    const { formData } = this.state
     const { value, name } = event.target
     this.setState({
-      disableSubmit: name === 'url'
-        ? value.length === 0
-        : disableSubmit,
       formData: {
         ...formData,
         [name]: value
@@ -81,48 +73,8 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
     })
   }
 
-  toggleDialog = value => () => {
-    this.setState({
-      dialogOpen: value
-    })
-  }
-
-  dialog = mutate => {
-    const { dialogOpen, formData } = this.state
-    return (
-      <Dialog
-        open={dialogOpen}
-        onClose={this.toggleDialog(false)}
-      >
-        <DialogTitle>Confirm submit</DialogTitle>
-        <DialogContent>
-          <Grid container spacing={32}>
-            <Grid item xs={12}>
-              <Typography>
-                <span>The url you provided does not match the expected format. </span>
-                <span>Are you sure you want to make this submission anyway?</span>
-              </Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                <span>Your url: </span>
-                <span>{formData.url}</span>
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Button onClick={this.toggleDialog(false)} variant="contained">Cancel</Button>
-            </Grid>
-            <Grid item>
-              <Button onClick={this.onSubmit(mutate)} variant="contained" color="primary">Confirm</Button>
-            </Grid>
-          </Grid>
-        </DialogContent>
-      </Dialog>
-    )
-  }
-
   render() {
-    const { formData, disableSubmit, loading, expanded } = this.state
+    const { formData, loading, expanded } = this.state
     const { token, classes, translate } = this.props
     const urlIsValid = KOSKI_URL_REGEXP.test(formData.url)
     return (
@@ -139,7 +91,17 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
               <TextField
                 error={!urlIsValid}
                 label={translate('url')}
-                helperText={translate('url_helper')}
+                helperText={
+                  formData.url.includes(' ')
+                    ? [
+                      <div>
+                        {translate('url_helper')}
+                      </div>,
+                      <div>
+                        {translate('url_helper_whitespace')}
+                      </div>
+                    ] : translate('url_helper')
+                }
                 value={formData.url}
                 onChange={this.onFormChange}
                 margin="normal"
@@ -169,25 +131,26 @@ export class StudentSubmissionAddFormComponent extends PureComponent {
                 onError={() => undefined}
                 onCompleted={this.onCompleted}
               >
-                {mutate => {
-                  const onClick = urlIsValid
-                    ? this.onSubmit(mutate)
-                    : this.toggleDialog(true)
-                  return (
-                    <div>
-                      {this.dialog(mutate)}
+                {mutate => (
+                  <Tooltip
+                    title={translate('submit_tooltip')}
+                    disableHoverListener={urlIsValid}
+                    disableFocusListener={urlIsValid}
+                    disableTouchListener={urlIsValid}
+                  >
+                    <span>
                       <Button
                         type="button"
-                        onClick={onClick}
-                        disabled={disableSubmit}
+                        onClick={this.onSubmit(mutate)}
+                        disabled={!urlIsValid}
                         variant="contained"
-                        color={urlIsValid ? 'primary' : null}
+                        color="primary"
                       >
                         {translate('submit')}
                       </Button>
-                    </div>
-                  )
-                }}
+                    </span>
+                  </Tooltip>
+                )}
               </Mutation>
               {loading ? <CircularProgress /> : null}
             </div>

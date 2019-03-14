@@ -9,6 +9,8 @@ enum Role {
 
 scalar Date
 
+scalar KoskiURL
+
 enum Approval {
   PENDING
   APPROVED
@@ -57,7 +59,7 @@ input UserEdit {
 
 type Submission {
   id: ID!
-  url: String!
+  url: KoskiURL!
   date: Date!
   approval: Approval!
   comment: String!
@@ -85,7 +87,7 @@ type Mutation {
     email: String!
   ): String
   deleteSubmission(id: ID!): String
-  createSubmission(url: String!, comment: String): Submission
+  createSubmission(url: KoskiURL!, comment: String): Submission
   editUser(id: ID!, values: UserEdit!): User
   approveSubmission(
     submission: ID!
