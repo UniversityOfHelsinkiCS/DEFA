@@ -67,6 +67,24 @@ type Submission {
   koski: [KoskiUniversity!]
 }
 
+type DEFACourse {
+  id: ID!
+  name: MultilingualName!
+  required: Boolean!
+}
+
+type MultilingualName {
+  en: String!
+  fi: String!
+  sv: String!
+}
+
+input MultilingualNameInput {
+  en: String!
+  fi: String!
+  sv: String!
+}
+
 type Query {
   authenticate(token: String!): Query
   me: User
@@ -74,6 +92,7 @@ type Query {
   submission(id: ID!): Submission
   submissions(user: UserSearch): [Submission]
   refreshToken(id: ID!): String
+  DEFACourses: [DEFACourse!]!
 }
 
 type Mutation {
@@ -93,6 +112,16 @@ type Mutation {
     submission: ID!
     approval: Approval!
   ): Submission
+  createDEFACourse(
+    name: MultilingualNameInput!,
+    required: Boolean
+  ): DEFACourse!
+  deleteDEFACourse(id: ID!): DEFACourse
+  updateDEFACourse(
+    id: ID!,
+    name: MultilingualNameInput,
+    required: Boolean
+  ): DEFACourse!
 }
 
 schema {
