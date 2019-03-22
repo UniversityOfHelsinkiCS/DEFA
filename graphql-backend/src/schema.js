@@ -19,12 +19,12 @@ enum Approval {
 
 type KoskiUniversity {
   name: String!
-  courses: [KoskiCourse]!
+  courses: [KoskiCourse!]!
 }
 
 type KoskiCourse {
   name: String!
-  credits: Int!
+  credits: Float!
 }
 
 type User {
@@ -64,7 +64,7 @@ type Submission {
   approval: Approval!
   comment: String!
   user: User!
-  koski: [KoskiUniversity]
+  koski: [KoskiUniversity!]
 }
 
 type Query {

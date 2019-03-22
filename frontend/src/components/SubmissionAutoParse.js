@@ -14,7 +14,7 @@ import {
   CircularProgress
 } from '@material-ui/core'
 import { hexadecimal, parseClasses } from '../util/propTypes'
-import { getKoskiSuccess } from '../util/actions/submissionSearch'
+import { getKoskiSuccess, getKoskiFailure } from '../util/actions/submissionSearch'
 import { getSubmissionKoski } from '../util/queries/getSubmissions'
 import withLocalize from '../util/tieredLocalize'
 
@@ -45,18 +45,26 @@ class SubmissionAutoParseComponent extends PureComponent {
     this.setState({ loading: true })
   }
 
-  onCompleted = ({ data }) => {
-    const { submission, dispatchGetKoskiSuccess } = this.props
+  onCompleted = ({ data, errors }) => {
+    this.setState({ loading: false })
+    if (errors) {
+      this.onError()
+      return
+    }
+    const {
+      submission,
+      dispatchGetKoskiSuccess
+    } = this.props
     const { koski } = data.authenticate.submission
     dispatchGetKoskiSuccess({
       id: submission.id,
       koski
     })
-    this.setState({ loading: false })
   }
 
-  onError = error => {
-    console.log(error)
+  onError = () => {
+    const { submission, dispatchGetKoskiFailure } = this.props
+    dispatchGetKoskiFailure({ id: submission.id })
   }
 
   renderCourses = () => {
@@ -131,6 +139,7 @@ SubmissionAutoParseComponent.propTypes = {
     query: func.isRequired
   }).isRequired,
   dispatchGetKoskiSuccess: func.isRequired,
+  dispatchGetKoskiFailure: func.isRequired,
   token: string.isRequired,
   classes: parseClasses(styles).isRequired,
   translate: func.isRequired
@@ -162,7 +171,8 @@ const mapStateToProps = (
 }
 
 const mapDispatchToProps = {
-  dispatchGetKoskiSuccess: getKoskiSuccess
+  dispatchGetKoskiSuccess: getKoskiSuccess,
+  dispatchGetKoskiFailure: getKoskiFailure
 }
 
 export default connect(

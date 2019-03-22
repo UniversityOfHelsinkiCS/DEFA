@@ -57,10 +57,9 @@ const approveSubmission = async (parent, args, context) => {
 const user = (parent) => UserModel.findById(parent.user)
 
 const koski = async (parent) => {
-  const secret = parent.url.split('/').pop()
-  let response
   try {
-    response = await axios.post(
+    const secret = parent.url.split('/').pop()
+    const response = await axios.post(
       'https://opintopolku.fi/koski/api/suoritusjako/editor',
       { secret },
       {
@@ -69,29 +68,29 @@ const koski = async (parent) => {
         }
       }
     )
+    const json = parseKoskiModel(response.data)
+    return json.opiskeluoikeudet.reduce(
+      (acc, opiskeluoikeus) => acc.concat({
+        name: parseKoskiName(opiskeluoikeus.oppilaitos.nimi),
+        courses: opiskeluoikeus.opiskeluoikeudet.reduce(
+          (acc2, opiskeluoikeus2) => acc2.concat(opiskeluoikeus2.suoritukset
+            .filter(suoritus => suoritus.arviointi.reduce(
+              (acc3, arviointi) => acc3 || arviointi['hyväksytty'],
+              false
+            ))
+            .map(suoritus => ({
+              name: parseKoskiName(suoritus.koulutusmoduuli.nimi),
+              credits: suoritus.koulutusmoduuli.laajuus.arvo
+            }))
+          ),
+          []
+        )
+      }),
+      []
+    )
   } catch (e) {
     return null
   }
-  const json = parseKoskiModel(response.data)
-  return json.opiskeluoikeudet.reduce(
-    (acc, opiskeluoikeus) => acc.concat({
-      name: parseKoskiName(opiskeluoikeus.oppilaitos.nimi),
-      courses: opiskeluoikeus.opiskeluoikeudet.reduce(
-        (acc2, opiskeluoikeus2) => acc2.concat(opiskeluoikeus2.suoritukset
-          .filter(suoritus => suoritus.arviointi.reduce(
-            (acc3, arviointi) => acc3 || arviointi['hyväksytty'],
-            false
-          ))
-          .map(suoritus => ({
-            name: parseKoskiName(suoritus.koulutusmoduuli.nimi),
-            credits: suoritus.koulutusmoduuli.laajuus.arvo
-          }))
-        ),
-        []
-      )
-    }),
-    []
-  )
 }
 
 module.exports = {
