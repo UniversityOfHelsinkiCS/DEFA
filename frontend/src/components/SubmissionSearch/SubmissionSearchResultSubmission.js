@@ -1,10 +1,10 @@
 import React from 'react'
-import { shape, string, func } from 'prop-types'
+import { shape, string, func, number } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography, Card, CardContent, CardHeader } from '@material-ui/core'
 import SubmissionApproveMutation from './SubmissionApproveMutation'
 import SubmissionAutoParse, { context } from '../SubmissionAutoParse'
-import { parseClasses, ISODateString } from '../../util/propTypes'
+import { parseClasses } from '../../util/propTypes'
 import parseDate from '../../util/parseDate'
 import withLocalize from '../../util/tieredLocalize'
 
@@ -51,7 +51,7 @@ SubmissionSearchResultSubmissionComponent.propTypes = {
   submission: shape({
     url: string.isRequired,
     comment: string.isRequired,
-    date: ISODateString.isRequired
+    date: number.isRequired
   }).isRequired,
   classes: parseClasses(styles).isRequired,
   translate: func.isRequired

@@ -1,11 +1,11 @@
 import React from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { Typography, Card, CardHeader, CardContent } from '@material-ui/core'
-import { shape, string, bool, func } from 'prop-types'
+import { shape, string, bool, func, number } from 'prop-types'
 import DeleteSubmission from './DeleteSubmission'
 import SubmissionAutoParse, { context } from '../SubmissionAutoParse'
 import './StudentSubmission.css'
-import { parseClasses, ISODateString } from '../../util/propTypes'
+import { parseClasses } from '../../util/propTypes'
 import parseDate from '../../util/parseDate'
 import withLocalize from '../../util/tieredLocalize'
 
@@ -57,7 +57,7 @@ StudentSubmissionComponent.propTypes = {
   classes: parseClasses(styles).isRequired,
   submission: shape({
     url: string.isRequired,
-    date: ISODateString.isRequired,
+    date: number.isRequired,
     comment: string.isRequired,
     updated: bool
   }).isRequired,

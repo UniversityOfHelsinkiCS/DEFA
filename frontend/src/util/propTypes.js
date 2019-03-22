@@ -61,16 +61,6 @@ export const approval = propType((props, propName, componentName) => {
   return null
 })
 
-export const ISODateString = propType((props, propName, componentName) => {
-  // Credit to Brock Adams https://stackoverflow.com/questions/3143070/javascript-regex-iso-datetime
-  if (!/(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/.test(props[propName])) {
-    return new Error(
-      `'Invalid prop ${propName} supplied to ${componentName}. Validation failed.`
-    )
-  }
-  return null
-})
-
 export const userProp = shape({
   id: hexadecimal.isRequired,
   name: string,
