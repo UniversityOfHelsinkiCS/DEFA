@@ -9,7 +9,7 @@ const CoursesPageComponent = ({
   translate
 }) => (
   <div>
-    <Typography variant="h2">
+    <Typography variant="h2" align="center">
       {translate('page_header')}
     </Typography>
     <CoursesCreateForm />

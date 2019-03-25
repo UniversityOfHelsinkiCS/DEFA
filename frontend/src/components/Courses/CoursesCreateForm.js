@@ -2,7 +2,14 @@ import React, { useState } from 'react'
 import { func, string, shape } from 'prop-types'
 import { connect } from 'react-redux'
 import { withApollo } from 'react-apollo'
-import { TextField, Typography, Button } from '@material-ui/core'
+import {
+  TextField,
+  Typography,
+  Button,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails
+} from '@material-ui/core'
 import withLocalize from '../../util/tieredLocalize'
 import { createDEFACourse } from '../../util/actions/DEFACourse'
 import { CREATE_DEFA_COURSE } from '../../util/queries/DEFACourses'
@@ -36,37 +43,44 @@ const CoursesCreateFormComponent = ({
   }
 
   return (
-    <div>
-      <div>
-        <Typography>{translate('name')}</Typography>
+    <ExpansionPanel>
+      <ExpansionPanelSummary>
+        <Typography>{translate('add_course')}</Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails>
         <div>
-          <TextField
-            label="en"
-            onChange={onChange('en')}
-            variant="outlined"
-          />
+          <Typography variant="h6">{translate('name')}</Typography>
+          <div>
+            <TextField
+              label="en"
+              onChange={onChange('en')}
+              variant="outlined"
+            />
+          </div>
+          <div>
+            <TextField
+              label="fi"
+              onChange={onChange('fi')}
+              variant="outlined"
+            />
+          </div>
+          <div>
+            <TextField
+              label="sv"
+              onChange={onChange('sv')}
+              variant="outlined"
+            />
+          </div>
+          <Button
+            type="button"
+            onClick={submit}
+            variant="contained"
+          >
+            {translate('create')}
+          </Button>
         </div>
-        <div>
-          <TextField
-            label="fi"
-            onChange={onChange('fi')}
-            variant="outlined"
-          />
-        </div>
-        <div>
-          <TextField
-            label="sv"
-            onChange={onChange('sv')}
-            variant="outlined"
-          />
-        </div>
-      </div>
-      <div>
-        <Button type="button" onClick={submit}>
-          {translate('create')}
-        </Button>
-      </div>
-    </div>
+      </ExpansionPanelDetails>
+    </ExpansionPanel>
   )
 }
 

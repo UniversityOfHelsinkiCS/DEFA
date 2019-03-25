@@ -27,6 +27,22 @@
     "error_header": [
       "Error",
       "Virhe"
+    ],
+    "edit": [
+      "EDIT",
+      "MUOKKAA"
+    ],
+    "cancel": [
+      "CANCEL",
+      "PERU"
+    ],
+    "save": [
+      "SAVE",
+      "TALLENNA"
+    ],
+    "delete": [
+      "Delete",
+      "Poista"
     ]
   },
   "NavBar": {
@@ -67,10 +83,6 @@
   },
   "Student": {
     "DeleteSubmission": {
-      "delete": [
-        "Delete",
-        "Poista"
-      ],
       "dialogTitle": [
         "Delete this submission?",
         "Poistetaanko tämä hakemus?"
@@ -183,20 +195,6 @@
         "Search",
         "Hae"
       ]
-    },
-    "AdminSearchResultItem": {
-      "edit": [
-        "EDIT",
-        "MUOKKAA"
-      ],
-      "cancel": [
-        "CANCEL",
-        "PERU"
-      ],
-      "save": [
-        "SAVE",
-        "TALLENNA"
-      ]
     }
   },
   "Login": {
@@ -228,5 +226,33 @@
       "Connecting to Koski service...",
       "Yhdistetään Koski-palveluun..."
     ]
+  },
+  "Courses": {
+    "common": {
+      "required": [
+        "required",
+        "vaadittu"
+      ],
+      "not_required": [
+        "not required",
+        "ei vaadittu"
+      ]
+    },
+    "CoursesPage": {
+      "page_header": [
+        "Define DEFA courses",
+        "Määrittele DEFA kurssit"
+      ]
+    },
+    "CoursesCreateForm": {
+      "create": [
+        "CREATE",
+        "LUO"
+      ],
+      "add_course": [
+        "Add Course",
+        "Lisää kurssi"
+      ]
+    }
   }
 }

@@ -3,7 +3,7 @@ import { shape, string, func, arrayOf } from 'prop-types'
 import { connect } from 'react-redux'
 import { withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/core/styles'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress, Grid } from '@material-ui/core'
 import { getDEFACourses } from '../../util/actions/DEFACourse'
 import { GET_ALL_DEFA_COURSES } from '../../util/queries/DEFACourses'
 import CoursesCourse from './CoursesCourse'
@@ -43,12 +43,23 @@ const CoursesListComponent = ({
     )
   }
 
+  const minWidth = courses.length > 0 ? 12 / courses.length : 12
+
   return (
-    <div>
+    <Grid container>
       {courses.map(course => (
-        <CoursesCourse key={course.id} course={course} />
+        <Grid
+          key={course.id}
+          item
+          xs={12}
+          lg={Math.max(minWidth, 3)}
+          md={Math.max(minWidth, 6)}
+          sm={12}
+        >
+          <CoursesCourse key={course.id} course={course} />
+        </Grid>
       ))}
-    </div>
+    </Grid>
   )
 }
 

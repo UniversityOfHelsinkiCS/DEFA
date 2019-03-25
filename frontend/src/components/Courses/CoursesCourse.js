@@ -1,34 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { shape, string, func, bool } from 'prop-types'
-import { Typography, Card, CardContent } from '@material-ui/core'
+import { Typography, Card, CardContent, Button } from '@material-ui/core'
 import withLocalize from '../../util/tieredLocalize'
+import CoursesEditForm from './CoursesEditForm'
+import CoursesDeleteForm from './CoursesDeleteForm'
 
 const CoursesCourseComponent = ({
   course,
   translate
-}) => (
-  <Card>
-    <CardContent>
-      <Typography variant="h6">{translate('name')}</Typography>
-      <div>
+}) => {
+  const [editing, setEditing] = useState(false)
+
+  if (editing) {
+    return (
+      <CoursesEditForm
+        course={course}
+        setEditing={setEditing}
+      />
+    )
+  }
+
+  return (
+    <Card>
+      <CardContent>
+        <Typography variant="h6">{translate('name')}</Typography>
         <div>
-          <Typography>{`en: ${course.name.en}`}</Typography>
+          <div>
+            <Typography>{`en: ${course.name.en}`}</Typography>
+          </div>
+          <div>
+            <Typography>{`fi: ${course.name.fi}`}</Typography>
+          </div>
+          <div>
+            <Typography>{`sv: ${course.name.sv}`}</Typography>
+          </div>
         </div>
+        {course.required ? (
+          <Typography>{translate('required')}</Typography>
+        ) : (
+          <Typography>{translate('not_required')}</Typography>
+        )}
         <div>
-          <Typography>{`fi: ${course.name.fi}`}</Typography>
+          <Button
+            color="primary"
+            onClick={() => setEditing(true)}
+            variant="contained"
+          >
+            {translate('edit')}
+          </Button>
+          <CoursesDeleteForm course={course} />
         </div>
-        <div>
-          <Typography>{`sv: ${course.name.sv}`}</Typography>
-        </div>
-      </div>
-      {course.required ? (
-        <Typography>{translate('required')}</Typography>
-      ) : (
-        <Typography>{translate('not_required')}</Typography>
-      )}
-    </CardContent>
-  </Card>
-)
+      </CardContent>
+    </Card>
+  )
+}
 
 CoursesCourseComponent.propTypes = {
   course: shape({
