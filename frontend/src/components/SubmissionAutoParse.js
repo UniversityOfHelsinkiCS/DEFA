@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { shape, func, object, oneOfType, arrayOf, string } from 'prop-types'
+import { shape, func, object, string } from 'prop-types'
 import { connect } from 'react-redux'
 import { withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/core/styles'
@@ -17,6 +17,7 @@ import { hexadecimal, parseClasses } from '../util/propTypes'
 import { getKoskiSuccess, getKoskiFailure } from '../util/actions/submissionSearch'
 import { getSubmissionKoski } from '../util/queries/getSubmissions'
 import withLocalize from '../util/tieredLocalize'
+import SubmissionAutoParseMatch from './SubmissionAutoParse/SubmissionAutoParseMatch'
 
 export const context = {
   SUBMISSION_SEARCH: 0,
@@ -75,26 +76,42 @@ class SubmissionAutoParseComponent extends PureComponent {
       )
     }
     return (
-      <List>
-        {submission.koski.map(({ name, courses }) => (
-          <ListItem key={name}>
-            <ExpansionPanel>
-              <ExpansionPanelSummary>
-                <Typography>{name}</Typography>
-              </ExpansionPanelSummary>
-              <ExpansionPanelDetails>
-                <List>
-                  {courses.map(course => (
-                    <ListItem key={course.name}>
-                      <Typography>{`${course.name} (${course.credits} ${translate('cr')})`}</Typography>
-                    </ListItem>
-                  ))}
-                </List>
-              </ExpansionPanelDetails>
-            </ExpansionPanel>
-          </ListItem>
-        ))}
-      </List>
+      <div>
+        <List>
+          {submission.koski.universities.map(({ name, courses }) => (
+            <ListItem key={name}>
+              <ExpansionPanel>
+                <ExpansionPanelSummary>
+                  <Typography>{name}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <List>
+                    {courses.map(course => (
+                      <ListItem key={course.name}>
+                        <Typography>{`${course.name} (${course.credits} ${translate('cr')})`}</Typography>
+                      </ListItem>
+                    ))}
+                  </List>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </ListItem>
+          ))}
+        </List>
+        <ExpansionPanel>
+          <ExpansionPanelSummary>
+            <Typography>{translate('DEFA courses')}</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            <List>
+              {submission.koski.matches.map(match => (
+                <ListItem key={match.DEFACourse.id}>
+                  <SubmissionAutoParseMatch match={match} />
+                </ListItem>
+              ))}
+            </List>
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      </div>
     )
   }
 
@@ -133,7 +150,7 @@ class SubmissionAutoParseComponent extends PureComponent {
 SubmissionAutoParseComponent.propTypes = {
   submission: shape({
     id: hexadecimal,
-    koski: oneOfType([object, arrayOf(shape({}))])
+    koski: object
   }).isRequired,
   client: shape({
     query: func.isRequired

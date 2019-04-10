@@ -17,6 +17,11 @@ enum Approval {
   REJECTED
 }
 
+type Koski {
+  matches: [DEFACourseMatch!]!
+  universities: [KoskiUniversity!]!
+}
+
 type KoskiUniversity {
   name: String!
   courses: [KoskiCourse!]!
@@ -27,6 +32,12 @@ type KoskiCourse {
   credits: Float!
 }
 
+type DEFACourseMatch {
+  DEFACourse: DEFACourse!
+  distance: Int
+  bestMatch: String
+}
+
 type User {
   id: ID!
   name: String!
@@ -35,7 +46,7 @@ type User {
   username: String!
   cn: String!
   email: String!
-  submissions: [Submission]
+  submissions: [Submission!]!
 }
 
 input UserSearch {
@@ -64,7 +75,7 @@ type Submission {
   approval: Approval!
   comment: String!
   user: User!
-  koski: [KoskiUniversity!]
+  koski: Koski
 }
 
 type DEFACourse {

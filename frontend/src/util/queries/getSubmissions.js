@@ -8,10 +8,24 @@ export const getSubmissionKoski = gql`
     authenticate(token: $token) {
       submission(id: $id) {
         koski {
-          name
-          courses {
+          matches {
+            DEFACourse {
+              id
+              name {
+                en
+                fi
+              }
+              required
+            }
+            distance
+            bestMatch
+          }
+          universities {
             name
-            credits
+            courses {
+              name
+              credits
+            }
           }
         }
       }
