@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { shape, func, object, oneOfType, arrayOf, string } from 'prop-types'
+import { shape, func, object, string } from 'prop-types'
 import { connect } from 'react-redux'
 import { withApollo } from 'react-apollo'
 import { withStyles } from '@material-ui/core/styles'
@@ -14,9 +14,10 @@ import {
   CircularProgress
 } from '@material-ui/core'
 import { hexadecimal, parseClasses } from '../util/propTypes'
-import { getKoskiSuccess } from '../util/actions/submissionSearch'
+import { getKoskiSuccess, getKoskiFailure } from '../util/actions/submissionSearch'
 import { getSubmissionKoski } from '../util/queries/getSubmissions'
 import withLocalize from '../util/tieredLocalize'
+import SubmissionAutoParseMatch from './SubmissionAutoParse/SubmissionAutoParseMatch'
 
 export const context = {
   SUBMISSION_SEARCH: 0,
@@ -45,18 +46,26 @@ class SubmissionAutoParseComponent extends PureComponent {
     this.setState({ loading: true })
   }
 
-  onCompleted = ({ data }) => {
-    const { submission, dispatchGetKoskiSuccess } = this.props
+  onCompleted = ({ data, errors }) => {
+    this.setState({ loading: false })
+    if (errors) {
+      this.onError()
+      return
+    }
+    const {
+      submission,
+      dispatchGetKoskiSuccess
+    } = this.props
     const { koski } = data.authenticate.submission
     dispatchGetKoskiSuccess({
       id: submission.id,
       koski
     })
-    this.setState({ loading: false })
   }
 
-  onError = error => {
-    console.log(error)
+  onError = () => {
+    const { submission, dispatchGetKoskiFailure } = this.props
+    dispatchGetKoskiFailure({ id: submission.id })
   }
 
   renderCourses = () => {
@@ -67,26 +76,44 @@ class SubmissionAutoParseComponent extends PureComponent {
       )
     }
     return (
-      <List>
-        {submission.koski.map(({ name, courses }) => (
-          <ListItem key={name}>
+      <div>
+        <List>
+          {submission.koski.universities.map(({ name, courses }) => (
+            <ListItem key={name}>
+              <ExpansionPanel>
+                <ExpansionPanelSummary>
+                  <Typography>{name}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                  <List>
+                    {courses.map(course => (
+                      <ListItem key={course.name}>
+                        <Typography>{`${course.name} (${course.credits} ${translate('cr')})`}</Typography>
+                      </ListItem>
+                    ))}
+                  </List>
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            </ListItem>
+          ))}
+          <ListItem>
             <ExpansionPanel>
               <ExpansionPanelSummary>
-                <Typography>{name}</Typography>
+                <Typography>{translate('DEFA courses')}</Typography>
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
                 <List>
-                  {courses.map(course => (
-                    <ListItem key={course.name}>
-                      <Typography>{`${course.name} (${course.credits} ${translate('cr')})`}</Typography>
+                  {submission.koski.matches.map(match => (
+                    <ListItem key={match.DEFACourse.id}>
+                      <SubmissionAutoParseMatch match={match} />
                     </ListItem>
                   ))}
                 </List>
               </ExpansionPanelDetails>
             </ExpansionPanel>
           </ListItem>
-        ))}
-      </List>
+        </List>
+      </div>
     )
   }
 
@@ -125,12 +152,13 @@ class SubmissionAutoParseComponent extends PureComponent {
 SubmissionAutoParseComponent.propTypes = {
   submission: shape({
     id: hexadecimal,
-    koski: oneOfType([object, arrayOf(shape({}))])
+    koski: object
   }).isRequired,
   client: shape({
     query: func.isRequired
   }).isRequired,
   dispatchGetKoskiSuccess: func.isRequired,
+  dispatchGetKoskiFailure: func.isRequired,
   token: string.isRequired,
   classes: parseClasses(styles).isRequired,
   translate: func.isRequired
@@ -162,7 +190,8 @@ const mapStateToProps = (
 }
 
 const mapDispatchToProps = {
-  dispatchGetKoskiSuccess: getKoskiSuccess
+  dispatchGetKoskiSuccess: getKoskiSuccess,
+  dispatchGetKoskiFailure: getKoskiFailure
 }
 
 export default connect(

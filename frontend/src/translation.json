@@ -12,6 +12,10 @@
       "Koski URL",
       "Koski URL"
     ],
+    "DEFA courses": [
+      "DEFA courses",
+      "DEFA-kurssit"
+    ],
     "name": [
       "name",
       "nimi"
@@ -27,6 +31,22 @@
     "error_header": [
       "Error",
       "Virhe"
+    ],
+    "edit": [
+      "EDIT",
+      "MUOKKAA"
+    ],
+    "cancel": [
+      "CANCEL",
+      "PERU"
+    ],
+    "save": [
+      "SAVE",
+      "TALLENNA"
+    ],
+    "delete": [
+      "Delete",
+      "Poista"
     ]
   },
   "NavBar": {
@@ -37,6 +57,10 @@
     "submissions": [
       "All Submissions",
       "Kaikki Hakemukset"
+    ],
+    "courses": [
+      "Courses",
+      "Kurssit"
     ],
     "student": [
       "My Submissions",
@@ -67,10 +91,6 @@
   },
   "Student": {
     "DeleteSubmission": {
-      "delete": [
-        "Delete",
-        "Poista"
-      ],
       "dialogTitle": [
         "Delete this submission?",
         "Poistetaanko tämä hakemus?"
@@ -183,20 +203,6 @@
         "Search",
         "Hae"
       ]
-    },
-    "AdminSearchResultItem": {
-      "edit": [
-        "EDIT",
-        "MUOKKAA"
-      ],
-      "cancel": [
-        "CANCEL",
-        "PERU"
-      ],
-      "save": [
-        "SAVE",
-        "TALLENNA"
-      ]
     }
   },
   "Login": {
@@ -212,6 +218,10 @@
     ]
   },
   "SubmissionAutoParse": {
+    "SubmissionAutoParseMatch" : {
+      "required_warning": ["Required course", "Pakollinen kurssi"],
+      "best_match": ["Best match", "Lähin osuma"]
+    },
     "parse": [
       "Parse Courses",
       "Jäsennä kurssit"
@@ -228,5 +238,37 @@
       "Connecting to Koski service...",
       "Yhdistetään Koski-palveluun..."
     ]
+  },
+  "Courses": {
+    "common": {
+      "required": [
+        "required",
+        "vaadittu"
+      ],
+      "not_required": [
+        "not required",
+        "ei vaadittu"
+      ]
+    },
+    "CoursesPage": {
+      "page_header": [
+        "Define DEFA courses",
+        "Määrittele DEFA kurssit"
+      ],
+      "courses_info_text": [
+        "Here you can define DEFA-courses that you can automatically parse from the Koski URL.",
+        "Täällä voit määritellä DEFAan kuuluvat kurssit jotka voidaan automaattisesti tulkita Koskesta."
+      ]
+    },
+    "CoursesCreateForm": {
+      "create": [
+        "CREATE",
+        "LUO"
+      ],
+      "add_course": [
+        "Add Course",
+        "Lisää kurssi"
+      ]
+    }
   }
 }

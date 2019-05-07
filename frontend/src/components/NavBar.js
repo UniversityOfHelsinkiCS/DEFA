@@ -39,6 +39,7 @@ const NavBar = ({ classes, history, user, setActiveLanguage, translate }) => {
     <React.Fragment>
       {role === 'ADMIN' ? <Button color="inherit" onClick={() => history.push('/admin')}>{translate('admin')}</Button> : null}
       {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/submissions')}>{translate('submissions')}</Button> : null}
+      {role === 'ADMIN' || role === 'PRIVILEGED' ? <Button color="inherit" onClick={() => history.push('/courses')}>{translate('courses')}</Button> : null}
       <Button className={classes.lastButton} onClick={() => history.push('/student')}>{translate('student')}</Button>
     </React.Fragment>
   )
@@ -65,7 +66,7 @@ const NavBar = ({ classes, history, user, setActiveLanguage, translate }) => {
                 onChange={changeLanguage}
               >
                 <MenuItem value="eng">English</MenuItem>
-                <MenuItem value="fin">suomi</MenuItem>
+                <MenuItem value="fin">Suomi</MenuItem>
               </Select>
             </div>
             <div className={classes.grow} />

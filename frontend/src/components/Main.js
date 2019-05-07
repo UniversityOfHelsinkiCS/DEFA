@@ -13,6 +13,7 @@ import StudentPage from './Student/StudentPage'
 import ProtectedRoute from '../util/ProtectedRoute'
 import SubmissionSearchPage from './SubmissionSearch/SubmissionSearchPage'
 import AdminPage from './Admin/AdminPage'
+import CoursesPage from './Courses/CoursesPage'
 
 class Main extends React.PureComponent {
   render() {
@@ -44,6 +45,7 @@ class Main extends React.PureComponent {
         <Switch>
           <ProtectedRoute requiredRole={['ADMIN']} exact path="/admin" component={AdminPage} />
           <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/submissions" component={SubmissionSearchPage} />
+          <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED']} exact path="/courses" component={CoursesPage} />
           <ProtectedRoute requiredRole={['ADMIN', 'PRIVILEGED', 'STUDENT']} exact path="/student" component={StudentPage} />
           <Route exact path="/" component={Welcome} />
         </Switch>

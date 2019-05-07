@@ -19,3 +19,8 @@ export const getKoskiSuccess = submission => dispatch => dispatch({
   type: types.SUBMISSION_GET_KOSKI_SUCCESS,
   submission
 })
+
+export const getKoskiFailure = submission => dispatch => dispatch({
+  type: types.SUBMISSION_GET_KOSKI_FAILURE,
+  submission
+})

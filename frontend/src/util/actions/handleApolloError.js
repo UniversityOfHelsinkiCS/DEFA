@@ -2,8 +2,8 @@ import { toast } from 'react-toastify'
 import * as types from '../actionTypes'
 import { logout } from './user'
 
-export const DEFAULT_NETWORK_ERROR_MESSAGE = 'An unhandled error occured.'
-export const DEFAULT_GRAPHQL_ERROR_MESSAGE = 'Invalid input(s) provided in query.'
+export const DEFAULT_NETWORK_ERROR_MESSAGE = 'Odottamaton virhe tapahtui yhteyttä luodessa..'
+export const DEFAULT_GRAPHQL_ERROR_MESSAGE = 'Palvelimelle lähetetyt tiedot olivat virheellisiä.'
 
 export const errorActions = {
   TokenError: logout({ displayToast: false })

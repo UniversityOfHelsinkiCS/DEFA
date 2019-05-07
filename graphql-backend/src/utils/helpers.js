@@ -1,3 +1,4 @@
+const Levenshtein = require('levenshtein')
 const UnauthorizedError = require('./errors/UnauthorizedError')
 
 const roleValues = {
@@ -72,6 +73,16 @@ const parseKoskiModel = json => {
   }
 }
 
+const levenshteinMatch = (string, matcher) => ['en', 'fi', 'sv'].reduce(
+  (acc, key) => (
+    Math.min(
+      (new Levenshtein(string, matcher[key])).distance,
+      acc === null ? Number.MAX_SAFE_INTEGER : acc
+    )
+  ),
+  null
+)
+
 const parseKoskiName = name => {
   if (name.fi) return name.fi
   if (name.en) return name.en
@@ -85,5 +96,6 @@ module.exports = {
   checkPrivileged,
   checkAdmin,
   parseKoskiModel,
-  parseKoskiName
+  parseKoskiName,
+  levenshteinMatch
 }

@@ -17,14 +17,25 @@ enum Approval {
   REJECTED
 }
 
+type Koski {
+  matches: [DEFACourseMatch!]!
+  universities: [KoskiUniversity!]!
+}
+
 type KoskiUniversity {
   name: String!
-  courses: [KoskiCourse]!
+  courses: [KoskiCourse!]!
 }
 
 type KoskiCourse {
   name: String!
-  credits: Int!
+  credits: Float!
+}
+
+type DEFACourseMatch {
+  DEFACourse: DEFACourse!
+  distance: Int
+  bestMatch: String
 }
 
 type User {
@@ -35,7 +46,7 @@ type User {
   username: String!
   cn: String!
   email: String!
-  submissions: [Submission]
+  submissions: [Submission!]!
 }
 
 input UserSearch {
@@ -64,7 +75,25 @@ type Submission {
   approval: Approval!
   comment: String!
   user: User!
-  koski: [KoskiUniversity]
+  koski: Koski
+}
+
+type DEFACourse {
+  id: ID!
+  name: MultilingualName!
+  required: Boolean!
+}
+
+type MultilingualName {
+  en: String!
+  fi: String!
+  sv: String!
+}
+
+input MultilingualNameInput {
+  en: String!
+  fi: String!
+  sv: String!
 }
 
 type Query {
@@ -74,6 +103,7 @@ type Query {
   submission(id: ID!): Submission
   submissions(user: UserSearch): [Submission]
   refreshToken(id: ID!): String
+  DEFACourses: [DEFACourse!]!
 }
 
 type Mutation {
@@ -93,6 +123,16 @@ type Mutation {
     submission: ID!
     approval: Approval!
   ): Submission
+  createDEFACourse(
+    name: MultilingualNameInput!,
+    required: Boolean
+  ): DEFACourse!
+  deleteDEFACourse(id: ID!): DEFACourse
+  updateDEFACourse(
+    id: ID!,
+    name: MultilingualNameInput,
+    required: Boolean
+  ): DEFACourse!
 }
 
 schema {
