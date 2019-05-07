@@ -12,6 +12,10 @@
       "Koski URL",
       "Koski URL"
     ],
+    "DEFA courses": [
+      "DEFA courses",
+      "DEFA-kurssit"
+    ],
     "name": [
       "name",
       "nimi"
@@ -53,6 +57,10 @@
     "submissions": [
       "All Submissions",
       "Kaikki Hakemukset"
+    ],
+    "courses": [
+      "Courses",
+      "Kurssit"
     ],
     "student": [
       "My Submissions",
@@ -210,6 +218,10 @@
     ]
   },
   "SubmissionAutoParse": {
+    "SubmissionAutoParseMatch" : {
+      "required_warning": ["Required course", "Pakollinen kurssi"],
+      "best_match": ["Best match", "Lähin osuma"]
+    },
     "parse": [
       "Parse Courses",
       "Jäsennä kurssit"
@@ -242,6 +254,10 @@
       "page_header": [
         "Define DEFA courses",
         "Määrittele DEFA kurssit"
+      ],
+      "courses_info_text": [
+        "Here you can define DEFA-courses that you can automatically parse from the Koski URL.",
+        "Täällä voit määritellä DEFAan kuuluvat kurssit jotka voidaan automaattisesti tulkita Koskesta."
       ]
     },
     "CoursesCreateForm": {

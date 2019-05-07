@@ -96,21 +96,23 @@ class SubmissionAutoParseComponent extends PureComponent {
               </ExpansionPanel>
             </ListItem>
           ))}
+          <ListItem>
+            <ExpansionPanel>
+              <ExpansionPanelSummary>
+                <Typography>{translate('DEFA courses')}</Typography>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <List>
+                  {submission.koski.matches.map(match => (
+                    <ListItem key={match.DEFACourse.id}>
+                      <SubmissionAutoParseMatch match={match} />
+                    </ListItem>
+                  ))}
+                </List>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          </ListItem>
         </List>
-        <ExpansionPanel>
-          <ExpansionPanelSummary>
-            <Typography>{translate('DEFA courses')}</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <List>
-              {submission.koski.matches.map(match => (
-                <ListItem key={match.DEFACourse.id}>
-                  <SubmissionAutoParseMatch match={match} />
-                </ListItem>
-              ))}
-            </List>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
       </div>
     )
   }

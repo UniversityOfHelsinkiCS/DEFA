@@ -144,7 +144,7 @@ describe('submission resolvers', () => {
         const submissions = await Promise.all(submissionsData.map((
           (submissionData, index) => SubmissionModel.create({
             ...submissionData,
-            user: users[(index % 2)]._id
+            user: users[(index % 2)]._id //eslint-disable-line
           })
         )))
         ids.users = users.map(user => user.id)
@@ -311,7 +311,6 @@ describe('submission resolvers', () => {
     })
     describe('approveSubmission', () => {
       const resolver = resolvers.Mutation.approveSubmission
-      const parent = null
       const userData = {
         username: 'testuser12',
         name: 'Test User',

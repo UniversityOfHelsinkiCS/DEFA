@@ -29,17 +29,24 @@ const CoursesCreateFormComponent = ({
     ...name,
     [field]: target.value
   })
+
+  const notReady = () => name.fi.length === 0 && name.sv.length === 0 && name.en.length === 0
+
   const submit = () => {
-    client.mutate({
-      mutation: CREATE_DEFA_COURSE,
-      variables: {
-        token,
-        name
-      }
-    }).then(({ data }) => {
-      const created = data.authenticate.createDEFACourse
-      dispatchCreateDEFACourse(created)
-    })
+    if (notReady()) {
+      console.log('no')
+    } else {
+      client.mutate({
+        mutation: CREATE_DEFA_COURSE,
+        variables: {
+          token,
+          name
+        }
+      }).then(({ data }) => {
+        const created = data.authenticate.createDEFACourse
+        dispatchCreateDEFACourse(created)
+      })
+    }
   }
 
   return (
@@ -72,6 +79,7 @@ const CoursesCreateFormComponent = ({
             />
           </div>
           <Button
+            disabled={notReady()}
             type="button"
             onClick={submit}
             variant="contained"

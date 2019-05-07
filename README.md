@@ -6,6 +6,41 @@ trunk:[![Build Status](https://travis-ci.org/UniversityOfHelsinkiCS/DEFA.svg?bra
 
 ## Development
 
+### Services
+
+#### DB
+
+To access the local db from command line run: 
+
+```
+docker exec -it mongodb mongo -u user -p pass --authenticationDatabase admin
+```
+#### GraphQl web UI
+
+graphQL web UI can be found in http://localhost:3001/graphql . To use it, first run 
+
+```
+cd graphql-backend
+npm run login_service_token
+```
+
+The token printed from the request needs to be wrapped for each request to use the ui, for example:
+
+```
+query {
+  authenticate(
+    token: "longGeneratedTokenWithinQuotes"
+  ) {
+    users(user: {}) {
+      id
+      name
+  	}
+  }
+}
+
+```
+
+
 ### Init
 
 run:
