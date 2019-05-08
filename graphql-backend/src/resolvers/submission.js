@@ -1,7 +1,13 @@
 const { Types } = require('mongoose')
 const axios = require('axios')
-const { UserModel, SubmissionModel } = require('../models')
-const { checkLoggedIn, checkPrivileged, parseKoskiModel, parseKoskiName } = require('../utils/helpers')
+const { UserModel, SubmissionModel, DEFACourseModel } = require('../models')
+const {
+  checkLoggedIn,
+  checkPrivileged,
+  parseKoskiModel,
+  parseKoskiName,
+  levenshteinMatch
+} = require('../utils/helpers')
 
 const submission = async (parent, args, context) => {
   const databaseSubmission = await SubmissionModel.findById(args.id)
@@ -59,17 +65,20 @@ const user = (parent) => UserModel.findById(parent.user)
 const koski = async (parent) => {
   try {
     const secret = parent.url.split('/').pop()
-    const response = await axios.post(
-      'https://opintopolku.fi/koski/api/suoritusjako/editor',
-      { secret },
-      {
-        headers: {
-          'Content-Type': 'application/json'
+    const [response, DEFACourses] = await Promise.all([
+      axios.post(
+        'https://opintopolku.fi/koski/api/suoritusjako/editor',
+        { secret },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
-      }
-    )
+      ),
+      DEFACourseModel.find({})
+    ])
     const json = parseKoskiModel(response.data)
-    return json.opiskeluoikeudet.reduce(
+    const universities = json.opiskeluoikeudet.reduce(
       (acc, opiskeluoikeus) => acc.concat({
         name: parseKoskiName(opiskeluoikeus.oppilaitos.nimi),
         courses: opiskeluoikeus.opiskeluoikeudet.reduce(
@@ -88,7 +97,39 @@ const koski = async (parent) => {
       }),
       []
     )
+    const matches = DEFACourses.map(DEFACourse => universities.reduce(
+      (acc, university) => acc.concat(university.courses),
+      []
+    ).reduce(
+      (acc, course) => {
+        const distance = levenshteinMatch(course.name, DEFACourse.name)
+        console.log(distance, acc.distance)
+        if (acc.distance === null) {
+          return {
+            DEFACourse,
+            distance,
+            bestMatch: course.name
+          }
+        }
+        if (distance >= acc.distance) return acc
+        return {
+          DEFACourse,
+          distance,
+          bestMatch: course.name
+        }
+      },
+      {
+        DEFACourse,
+        distance: null,
+        bestMatch: null
+      }
+    ))
+    return {
+      universities,
+      matches
+    }
   } catch (e) {
+    console.log(e)
     return null
   }
 }
